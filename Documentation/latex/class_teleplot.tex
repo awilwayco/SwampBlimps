@@ -1,0 +1,140 @@
+\hypertarget{class_teleplot}{}\doxysection{Teleplot Class Reference}
+\label{class_teleplot}\index{Teleplot@{Teleplot}}
+
+
+{\ttfamily \#include $<$Teleplot.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}{Teleplot}} (std\+::string address, unsigned int buffering\+Frequency\+Hz=30)
+\item 
+\mbox{\hyperlink{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}{$\sim$\+Teleplot}} ()=default
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{class_teleplot_abd39931adbebf26da9b9953b53e0b974}{update}} (std\+::string const \&key, T const \&value, unsigned int max\+Frequency\+Hz=0, std\+::string \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_abf7a03a1c05a074ee4ee8c884f6abf8b}{flags}}=\mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_ab2c55382a95791b408c7d9f3f336be8e}{TELEPLOT\+\_\+\+FLAG\+\_\+\+DEFAULT}})
+\item 
+{\footnotesize template$<$typename T1 , typename T2 $>$ }\\void \mbox{\hyperlink{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}{update2D}} (std\+::string const \&key, T1 const \&valueX, T2 const \&valueY, unsigned int max\+Frequency\+Hz=0, std\+::string \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_abf7a03a1c05a074ee4ee8c884f6abf8b}{flags}}=\mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_a05eb94093b410a9772679cccd8b95500}{TELEPLOT\+\_\+\+FLAG\+\_\+2D}})
+\item 
+void \mbox{\hyperlink{class_teleplot_ab6e82338dc79476514500865a976d180}{log}} (std\+::string const \&log)
+\item 
+bool \mbox{\hyperlink{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}{should\+Update\+Data}} (std\+::string const \&key, unsigned int frequency)
+\item 
+\mbox{\hyperlink{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}{Teleplot}} (std\+::string address, unsigned int buffering\+Frequency\+Hz=30)
+\item 
+\mbox{\hyperlink{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}{$\sim$\+Teleplot}} ()=default
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{class_teleplot_abd39931adbebf26da9b9953b53e0b974}{update}} (std\+::string const \&key, T const \&value, unsigned int max\+Frequency\+Hz=0, std\+::string \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_abf7a03a1c05a074ee4ee8c884f6abf8b}{flags}}=\mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_ab2c55382a95791b408c7d9f3f336be8e}{TELEPLOT\+\_\+\+FLAG\+\_\+\+DEFAULT}})
+\item 
+{\footnotesize template$<$typename T1 , typename T2 $>$ }\\void \mbox{\hyperlink{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}{update2D}} (std\+::string const \&key, T1 const \&valueX, T2 const \&valueY, unsigned int max\+Frequency\+Hz=0, std\+::string \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_abf7a03a1c05a074ee4ee8c884f6abf8b}{flags}}=\mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_a05eb94093b410a9772679cccd8b95500}{TELEPLOT\+\_\+\+FLAG\+\_\+2D}})
+\item 
+void \mbox{\hyperlink{class_teleplot_ab6e82338dc79476514500865a976d180}{log}} (std\+::string const \&log)
+\item 
+bool \mbox{\hyperlink{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}{should\+Update\+Data}} (std\+::string const \&key, unsigned int frequency)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_teleplot}{Teleplot}} \& \mbox{\hyperlink{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}{localhost}} ()
+\item 
+static \mbox{\hyperlink{class_teleplot}{Teleplot}} \& \mbox{\hyperlink{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}{localhost}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}\label{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}} 
+\index{Teleplot@{Teleplot}!Teleplot@{Teleplot}}
+\index{Teleplot@{Teleplot}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{Teleplot()}{Teleplot()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Teleplot\+::\+Teleplot (\begin{DoxyParamCaption}\item[{std\+::string}]{address,  }\item[{unsigned int}]{buffering\+Frequency\+Hz = {\ttfamily 30} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}\label{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}} 
+\index{Teleplot@{Teleplot}!````~Teleplot@{$\sim$Teleplot}}
+\index{````~Teleplot@{$\sim$Teleplot}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{$\sim$Teleplot()}{~Teleplot()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Teleplot\+::$\sim$\+Teleplot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}\label{class_teleplot_afe3e9a0809ba658a358fbc1f64901f74}} 
+\index{Teleplot@{Teleplot}!Teleplot@{Teleplot}}
+\index{Teleplot@{Teleplot}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{Teleplot()}{Teleplot()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Teleplot\+::\+Teleplot (\begin{DoxyParamCaption}\item[{std\+::string}]{address,  }\item[{unsigned int}]{buffering\+Frequency\+Hz = {\ttfamily 30} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}\label{class_teleplot_a340f8db50d74ff224e66a6f51f1cf44d}} 
+\index{Teleplot@{Teleplot}!````~Teleplot@{$\sim$Teleplot}}
+\index{````~Teleplot@{$\sim$Teleplot}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{$\sim$Teleplot()}{~Teleplot()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Teleplot\+::$\sim$\+Teleplot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}\label{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}} 
+\index{Teleplot@{Teleplot}!localhost@{localhost}}
+\index{localhost@{localhost}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{localhost()}{localhost()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_teleplot}{Teleplot}} \& Teleplot\+::localhost (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}\label{class_teleplot_abd70d8a60b4644ae27c9bcc5ae555a2d}} 
+\index{Teleplot@{Teleplot}!localhost@{localhost}}
+\index{localhost@{localhost}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{localhost()}{localhost()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_teleplot}{Teleplot}} \& Teleplot\+::localhost (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_teleplot_ab6e82338dc79476514500865a976d180}\label{class_teleplot_ab6e82338dc79476514500865a976d180}} 
+\index{Teleplot@{Teleplot}!log@{log}}
+\index{log@{log}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Teleplot\+::log (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{log }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_ab6e82338dc79476514500865a976d180}\label{class_teleplot_ab6e82338dc79476514500865a976d180}} 
+\index{Teleplot@{Teleplot}!log@{log}}
+\index{log@{log}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Teleplot\+::log (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{log }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}\label{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}} 
+\index{Teleplot@{Teleplot}!shouldUpdateData@{shouldUpdateData}}
+\index{shouldUpdateData@{shouldUpdateData}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{shouldUpdateData()}{shouldUpdateData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool Teleplot\+::should\+Update\+Data (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{unsigned int}]{frequency }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}\label{class_teleplot_a7f4e4f418c09ade9acda58fc3c4e8ee4}} 
+\index{Teleplot@{Teleplot}!shouldUpdateData@{shouldUpdateData}}
+\index{shouldUpdateData@{shouldUpdateData}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{shouldUpdateData()}{shouldUpdateData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool Teleplot\+::should\+Update\+Data (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{unsigned int}]{frequency }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_abd39931adbebf26da9b9953b53e0b974}\label{class_teleplot_abd39931adbebf26da9b9953b53e0b974}} 
+\index{Teleplot@{Teleplot}!update@{update}}
+\index{update@{update}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Teleplot\+::update (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{T const \&}]{value,  }\item[{unsigned int}]{max\+Frequency\+Hz = {\ttfamily 0},  }\item[{std\+::string}]{flags = {\ttfamily \mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_ab2c55382a95791b408c7d9f3f336be8e}{TELEPLOT\+\_\+\+FLAG\+\_\+\+DEFAULT}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_abd39931adbebf26da9b9953b53e0b974}\label{class_teleplot_abd39931adbebf26da9b9953b53e0b974}} 
+\index{Teleplot@{Teleplot}!update@{update}}
+\index{update@{update}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Teleplot\+::update (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{T const \&}]{value,  }\item[{unsigned int}]{max\+Frequency\+Hz = {\ttfamily 0},  }\item[{std\+::string}]{flags = {\ttfamily \mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_ab2c55382a95791b408c7d9f3f336be8e}{TELEPLOT\+\_\+\+FLAG\+\_\+\+DEFAULT}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}\label{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}} 
+\index{Teleplot@{Teleplot}!update2D@{update2D}}
+\index{update2D@{update2D}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{update2D()}{update2D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T1 , typename T2 $>$ \\
+void Teleplot\+::update2D (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{T1 const \&}]{valueX,  }\item[{T2 const \&}]{valueY,  }\item[{unsigned int}]{max\+Frequency\+Hz = {\ttfamily 0},  }\item[{std\+::string}]{flags = {\ttfamily \mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_a05eb94093b410a9772679cccd8b95500}{TELEPLOT\+\_\+\+FLAG\+\_\+2D}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}\label{class_teleplot_a50dc7f94d57275c87a4dfc419df19fab}} 
+\index{Teleplot@{Teleplot}!update2D@{update2D}}
+\index{update2D@{update2D}!Teleplot@{Teleplot}}
+\doxysubsubsection{\texorpdfstring{update2D()}{update2D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T1 , typename T2 $>$ \\
+void Teleplot\+::update2D (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{T1 const \&}]{valueX,  }\item[{T2 const \&}]{valueY,  }\item[{unsigned int}]{max\+Frequency\+Hz = {\ttfamily 0},  }\item[{std\+::string}]{flags = {\ttfamily \mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h_a05eb94093b410a9772679cccd8b95500}{TELEPLOT\+\_\+\+FLAG\+\_\+2D}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+pi\+Offboard\+Stereo\+Vision/src/\mbox{\hyperlink{pi_offboard_stereo_vision_2src_2_teleplot_8h}{Teleplot.\+h}}\item 
+pi\+Stereo\+Vision/pi\+Stereo\+Vision\+Src/\mbox{\hyperlink{pi_stereo_vision_2pi_stereo_vision_src_2_teleplot_8h}{Teleplot.\+h}}\end{DoxyCompactItemize}

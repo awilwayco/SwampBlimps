@@ -1,0 +1,631 @@
+\hypertarget{take_images_calibrate_8cpp}{}\doxysection{take\+Images\+Calibrate/take\+Images\+Calibrate.cpp File Reference}
+\label{take_images_calibrate_8cpp}\index{takeImagesCalibrate/takeImagesCalibrate.cpp@{takeImagesCalibrate/takeImagesCalibrate.cpp}}
+{\ttfamily \#include $<$opencv2/opencv.\+hpp$>$}\newline
+{\ttfamily \#include $<$opencv2/highgui/highgui.\+hpp$>$}\newline
+{\ttfamily \#include \char`\"{}opencv2/ximgproc.\+hpp\char`\"{}}\newline
+{\ttfamily \#include $<$opencv2/viz.\+hpp$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$ctime$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ab311f23e23b415a3738a0bb7fb1fd3dc}{CAMERA\+\_\+\+INDEX}}~2
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a48447a9f1224dfc39abebc6a6d920d36}{CAMERA\+\_\+\+WIDTH}}~2560
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a6ffdd1d90debad0734331c202651c0bc}{CAMERA\+\_\+\+HEIGHT}}~960
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a0fc638cf15a53fef674578820744b730}{CAMERA\+\_\+\+API}}~CAP\+\_\+\+V4\+L2
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a9bff5ca3313f142a5e806cb1e5c2dd97}{CAMERA\+\_\+\+READ\+\_\+\+WIDTH}}~640
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a2902885cdf49452a9e2c1feb0b33c250}{CAMERA\+\_\+\+READ\+\_\+\+HEIGHT}}~480
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a42e575cfc7eb478a2795a11d44c69012}{AVOIDENCE\+\_\+\+SIZE}}~30
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a1b163d5d2ae933e10b9e7a97d47dbdd7}{GOAL\+\_\+\+CONFIRM}}~50
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a61f0b7b1c48748f8c63c93ba9bb6f66f}{CV\+\_\+\+WINDOW\+\_\+\+AUTOSIZE}}~cv\+::\+WINDOW\+\_\+\+NORMAL
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aaa1f54c8e582cfd4b850874539359473}{RECT\+\_\+\+WIDTH}}~640
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a8a2d6d58576815a2a0a42ba81b5e5930}{RECT\+\_\+\+HEIGHT}}~480
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a895152e89a26d775212c88dafb8c50ca}{DISPLAY\+\_\+H}}~240
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a78f89e91b5365676ca7a0d937946b854}{DISPLAY\+\_\+W}}~320
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aa178c3409ca0030215244c7f5ab05d4f}{DISP\+\_\+\+WIDTH}}~160
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a14033ba98194beb2c6e319c7c08b0ac7}{DISP\+\_\+\+HEIGHT}}~120
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ac77e842fc7621b73be8dc3bbaeb8e5cb}{LAB\+\_\+\+MAP\+\_\+\+ADDRESS}}~\char`\"{}stereo\+\_\+rectify\+\_\+maps.\+xml\char`\"{}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ad820857fef61e135567a7f082ac55d36}{HOME\+\_\+\+MAP\+\_\+\+ADDRESS}}~\char`\"{}stereo\+\_\+rectify\+\_\+maps.\+xml\char`\"{}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aa452bdb78e9a94c59b1d22970c9d4568}{INTERPOLATION}}~INTER\+\_\+\+AREA
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aa85ca2eb462e275c600f4d86febfda22}{CAMERA\+\_\+\+FLAGS}}~cv\+::\+CALIB\+\_\+\+USE\+\_\+\+INTRINSIC\+\_\+\+GUESS $\vert$ cv\+::\+CALIB\+\_\+\+RATIONAL\+\_\+\+MODEL $\vert$ cv\+::\+CALIB\+\_\+\+THIN\+\_\+\+PRISM\+\_\+\+MODEL
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a46a249f6f52342e5dc86b0b7adeb4157}{STEREO\+\_\+\+FLAGS}}~cv\+::\+CALIB\+\_\+\+USE\+\_\+\+INTRINSIC\+\_\+\+GUESS $\vert$ cv\+::\+CALIB\+\_\+\+RATIONAL\+\_\+\+MODEL $\vert$ cv\+::\+CALIB\+\_\+\+THIN\+\_\+\+PRISM\+\_\+\+MODEL
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a805a2ca514f6b7c8d9d15bcb7b74c255}{RECTIFY\+\_\+\+FLAGS}}~cv\+::\+CALIB\+\_\+\+ZERO\+\_\+\+DISPARITY
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aca4957ab38a6c5bb570dc91e4d88fa62}{ALPHA\+\_\+\+CAMERA}}~0.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a2145d0d4cb460df3d6ff033d6a18d142}{ALPHA\+\_\+\+STEREO}}~0.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aef72fe86b7c60b1a86920496456edeac}{WAIT}}~10
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a7f75e0f0b14506d1bb91cdcb6516daed}{BASELINE}}~50.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ae365f696bae4010008cba6be060efb8b}{FOCAL}}~650.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a738607799d6938e1b15f463688029cd5}{LAMBDA}}~0.\+5
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ab899f53048f1f06a224b5eb1fa369750}{SIGMA}}~0.\+5
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ac03e6b6f8344afddb3e652e2d27703c7}{VIS\+\_\+\+MULT}}~255.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a64890450c1d6434ef913b67156e61355}{CHECKERBOARD\+\_\+\+SIZE\+\_\+\+WIDTH}}~30.\+0$\ast$0.\+9
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aabad9661ac3e8c161835ddb42db45048}{CHECKERBOARD\+\_\+\+SIZE\+\_\+\+HEIGHT}}~30.\+0$\ast$0.\+9
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_abf9a100a2cc43f857bc3bfecff80c751}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+HORIZONTAL}}~18
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ac95d8866132bd66a6990bda9c8dfdfdc}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+VERTICAL}}~13
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ae5b3852d7cb6389d9b43a9391ac70e72}{PATHL}}~\char`\"{}temp\+Images/img\+L\char`\"{}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a82775f16784c218a73bf8b50999aabbb}{PATHR}}~\char`\"{}temp\+Images/img\+R\char`\"{}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a1577f330d529e3846afa462dabfe56e7}{IMGEXTENSION}}~\char`\"{}.jpg\char`\"{}
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a0f44f402ff8b02e40da04fe2e4bd3105}{CORRECT\+\_\+\+COLOR}}~false
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a219641476df0dab81032f3300b787494}{B\+\_\+\+CORRECTION}}~Scalar(29,7,15)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a98c08c1639f1034818ab3890e8d105c5}{R\+\_\+\+Correction}}~Scalar(0,0,0)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a0994c684a9ee3b93e60cb228b2842512}{G\+\_\+\+CORRECTION}}~Scalar(0,0,0)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aee79048b157ba88e895ec7aa6fbfcd53}{B\+\_\+\+MIN}}~Scalar(46,0,0)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a91f9fc76288a0520677dfbe3dfc952a6}{B\+\_\+\+MAX}}~Scalar(96,74,213)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a58cacf232e018f6c32af1f496a7a9aa0}{R\+\_\+\+MIN}}~Scalar(0,0,81)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a44d864c7ff8bf7f56435a1226c9e8a99}{R\+\_\+\+MAX}}~Scalar(87,78,255)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ac2b0eed0f97fde7f1f9b11768d4e662e}{G\+\_\+\+MIN}}~Scalar(0,61,155)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a44291415d82158c84e78ea8558ed90b2}{G\+\_\+\+MAX}}~Scalar(20,196,255)
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a0e36f408730fed41c65ff0045c025d94}{G\+\_\+\+POLY\+\_\+\+APPROX\+\_\+E}}~0.\+01
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ac6e0ef1978093a93221b44d7d3abe5a1}{GOAL\+\_\+\+INNER\+\_\+\+CONTOUR\+\_\+\+SCALE}}~0.\+6
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a332b8133ef1f77020d8947b15910b0fe}{GOAL\+\_\+\+CONFIDENCE}}~0.\+40
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aa637ca99e2e8b6a736d0910e0f1713bf}{MIN\+\_\+\+AREA}}~50.\+0
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a7403b6f895f1fb7a06148501cfdae5e9}{SIZE\+\_\+\+RATIO}}~1.\+5
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a362a4cf79f7a84f9f839aaafc0e62688}{E\+\_\+\+ITER}}~1
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_a60cf436feb2899cf4b4088838bdab228}{D\+\_\+\+ITER}}~1
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_aab29ffc7041be0373d0f621f6eec071d}{E\+\_\+\+SIZE}}~1
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_ae5e1daed2535fb5511ca618871a6ae68}{D\+\_\+\+SIZE}}~1
+\item 
+\#define \mbox{\hyperlink{take_images_calibrate_8cpp_af2ccf5b286a0967056907f977096e4af}{GOAL\+\_\+\+DILATION\+\_\+\+ADJUST}}~3
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6}{modes}} \{ \mbox{\hyperlink{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6ad7c3f8ef84d2609ca16050cf64b7428d}{detect\+Ball}}
+, \mbox{\hyperlink{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6a5311a69b06089143644229b0d8baff6b}{detect\+Goal}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ Point $>$ \mbox{\hyperlink{take_images_calibrate_8cpp_a0f336ffd47aa056a5f4619360ad26d70}{scale\+Contour}} (vector$<$ Point $>$ contour, double scale)
+\item 
+string \mbox{\hyperlink{take_images_calibrate_8cpp_ab9bd4216c45242517655318874855592}{type2str}} (int type)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_aaac144f383c1c38139c49744172958d3}{delay}} (double delay\+Seconds)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_a02ccd007d45cb8bba7402a2662633ce7}{benchmark\+First}} (string flag)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_ad1914fc7fe8357a748f7d1f9e3bd5aba}{benchmark}} (string flag)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_a229645b67d0ec624737e6cd4819612c1}{benchmark\+Print}} ()
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_a45b627b0d763cc4f777f7308c92b87f6}{take\+Stereo\+Images}} (bool auto\+Cap=false)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_a6413f0c2d9dc4cc2f9a9b9f0616ba198}{undistort\+Cameras\+Calibrate\+Stereo}} (bool auto\+Cap=false)
+\item 
+void \mbox{\hyperlink{take_images_calibrate_8cpp_ab64e2f5b1f8fd2b0aca6643af1113853}{test\+Stereo\+Lab}} ()
+\item 
+int \mbox{\hyperlink{take_images_calibrate_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\item 
+double \mbox{\hyperlink{take_images_calibrate_8cpp_a21d6b07fa73ef7d2d70b95b48b0cc6ad}{time\+Diff}} (chrono\+::system\+\_\+clock\+::time\+\_\+point a, chrono\+::system\+\_\+clock\+::time\+\_\+point b)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{take_images_calibrate_8cpp_aece83ccb3f4986442a2be8edf283244a}{render3\+DProjection}} = true
+\item 
+int \mbox{\hyperlink{take_images_calibrate_8cpp_a1ea5d0cb93f22f7d0fdf804bd68c3326}{mode}} = \mbox{\hyperlink{pi_blimp_vision_8cpp_a4d9e1be36b546257ba57cb7d182754edad7c3f8ef84d2609ca16050cf64b7428d}{detect\+Ball}}
+\item 
+int \mbox{\hyperlink{take_images_calibrate_8cpp_a6efbc045dd661d6771880315f70e85f1}{CHECKERBOARD}} \mbox{[}2\mbox{]} \{\mbox{\hyperlink{take_images_calibrate_8cpp_abf9a100a2cc43f857bc3bfecff80c751}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+HORIZONTAL}},\mbox{\hyperlink{take_images_calibrate_8cpp_ac95d8866132bd66a6990bda9c8dfdfdc}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+VERTICAL}}\}
+\item 
+vector$<$ chrono\+::system\+\_\+clock\+::time\+\_\+point $>$ \mbox{\hyperlink{take_images_calibrate_8cpp_aa5920ddee34cd54886557861362ca93a}{times}}
+\item 
+vector$<$ string $>$ \mbox{\hyperlink{take_images_calibrate_8cpp_a977e0b3f76a565c4abe255e28ec7ce68}{flags}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aca4957ab38a6c5bb570dc91e4d88fa62}\label{take_images_calibrate_8cpp_aca4957ab38a6c5bb570dc91e4d88fa62}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!ALPHA\_CAMERA@{ALPHA\_CAMERA}}
+\index{ALPHA\_CAMERA@{ALPHA\_CAMERA}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{ALPHA\_CAMERA}{ALPHA\_CAMERA}}
+{\footnotesize\ttfamily \#define ALPHA\+\_\+\+CAMERA~0.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a2145d0d4cb460df3d6ff033d6a18d142}\label{take_images_calibrate_8cpp_a2145d0d4cb460df3d6ff033d6a18d142}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!ALPHA\_STEREO@{ALPHA\_STEREO}}
+\index{ALPHA\_STEREO@{ALPHA\_STEREO}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{ALPHA\_STEREO}{ALPHA\_STEREO}}
+{\footnotesize\ttfamily \#define ALPHA\+\_\+\+STEREO~0.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a42e575cfc7eb478a2795a11d44c69012}\label{take_images_calibrate_8cpp_a42e575cfc7eb478a2795a11d44c69012}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!AVOIDENCE\_SIZE@{AVOIDENCE\_SIZE}}
+\index{AVOIDENCE\_SIZE@{AVOIDENCE\_SIZE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{AVOIDENCE\_SIZE}{AVOIDENCE\_SIZE}}
+{\footnotesize\ttfamily \#define AVOIDENCE\+\_\+\+SIZE~30}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a219641476df0dab81032f3300b787494}\label{take_images_calibrate_8cpp_a219641476df0dab81032f3300b787494}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!B\_CORRECTION@{B\_CORRECTION}}
+\index{B\_CORRECTION@{B\_CORRECTION}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{B\_CORRECTION}{B\_CORRECTION}}
+{\footnotesize\ttfamily \#define B\+\_\+\+CORRECTION~Scalar(29,7,15)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a91f9fc76288a0520677dfbe3dfc952a6}\label{take_images_calibrate_8cpp_a91f9fc76288a0520677dfbe3dfc952a6}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!B\_MAX@{B\_MAX}}
+\index{B\_MAX@{B\_MAX}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{B\_MAX}{B\_MAX}}
+{\footnotesize\ttfamily \#define B\+\_\+\+MAX~Scalar(96,74,213)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aee79048b157ba88e895ec7aa6fbfcd53}\label{take_images_calibrate_8cpp_aee79048b157ba88e895ec7aa6fbfcd53}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!B\_MIN@{B\_MIN}}
+\index{B\_MIN@{B\_MIN}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{B\_MIN}{B\_MIN}}
+{\footnotesize\ttfamily \#define B\+\_\+\+MIN~Scalar(46,0,0)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a7f75e0f0b14506d1bb91cdcb6516daed}\label{take_images_calibrate_8cpp_a7f75e0f0b14506d1bb91cdcb6516daed}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!BASELINE@{BASELINE}}
+\index{BASELINE@{BASELINE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{BASELINE}{BASELINE}}
+{\footnotesize\ttfamily \#define BASELINE~50.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a0fc638cf15a53fef674578820744b730}\label{take_images_calibrate_8cpp_a0fc638cf15a53fef674578820744b730}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_API@{CAMERA\_API}}
+\index{CAMERA\_API@{CAMERA\_API}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_API}{CAMERA\_API}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+API~CAP\+\_\+\+V4\+L2}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aa85ca2eb462e275c600f4d86febfda22}\label{take_images_calibrate_8cpp_aa85ca2eb462e275c600f4d86febfda22}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_FLAGS@{CAMERA\_FLAGS}}
+\index{CAMERA\_FLAGS@{CAMERA\_FLAGS}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_FLAGS}{CAMERA\_FLAGS}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+FLAGS~cv\+::\+CALIB\+\_\+\+USE\+\_\+\+INTRINSIC\+\_\+\+GUESS $\vert$ cv\+::\+CALIB\+\_\+\+RATIONAL\+\_\+\+MODEL $\vert$ cv\+::\+CALIB\+\_\+\+THIN\+\_\+\+PRISM\+\_\+\+MODEL}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a6ffdd1d90debad0734331c202651c0bc}\label{take_images_calibrate_8cpp_a6ffdd1d90debad0734331c202651c0bc}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_HEIGHT@{CAMERA\_HEIGHT}}
+\index{CAMERA\_HEIGHT@{CAMERA\_HEIGHT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_HEIGHT}{CAMERA\_HEIGHT}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+HEIGHT~960}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ab311f23e23b415a3738a0bb7fb1fd3dc}\label{take_images_calibrate_8cpp_ab311f23e23b415a3738a0bb7fb1fd3dc}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_INDEX@{CAMERA\_INDEX}}
+\index{CAMERA\_INDEX@{CAMERA\_INDEX}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_INDEX}{CAMERA\_INDEX}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+INDEX~2}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a2902885cdf49452a9e2c1feb0b33c250}\label{take_images_calibrate_8cpp_a2902885cdf49452a9e2c1feb0b33c250}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_READ\_HEIGHT@{CAMERA\_READ\_HEIGHT}}
+\index{CAMERA\_READ\_HEIGHT@{CAMERA\_READ\_HEIGHT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_READ\_HEIGHT}{CAMERA\_READ\_HEIGHT}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+READ\+\_\+\+HEIGHT~480}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a9bff5ca3313f142a5e806cb1e5c2dd97}\label{take_images_calibrate_8cpp_a9bff5ca3313f142a5e806cb1e5c2dd97}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_READ\_WIDTH@{CAMERA\_READ\_WIDTH}}
+\index{CAMERA\_READ\_WIDTH@{CAMERA\_READ\_WIDTH}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_READ\_WIDTH}{CAMERA\_READ\_WIDTH}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+READ\+\_\+\+WIDTH~640}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a48447a9f1224dfc39abebc6a6d920d36}\label{take_images_calibrate_8cpp_a48447a9f1224dfc39abebc6a6d920d36}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CAMERA\_WIDTH@{CAMERA\_WIDTH}}
+\index{CAMERA\_WIDTH@{CAMERA\_WIDTH}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CAMERA\_WIDTH}{CAMERA\_WIDTH}}
+{\footnotesize\ttfamily \#define CAMERA\+\_\+\+WIDTH~2560}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_abf9a100a2cc43f857bc3bfecff80c751}\label{take_images_calibrate_8cpp_abf9a100a2cc43f857bc3bfecff80c751}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CHECKERBOARD\_NUM\_HORIZONTAL@{CHECKERBOARD\_NUM\_HORIZONTAL}}
+\index{CHECKERBOARD\_NUM\_HORIZONTAL@{CHECKERBOARD\_NUM\_HORIZONTAL}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECKERBOARD\_NUM\_HORIZONTAL}{CHECKERBOARD\_NUM\_HORIZONTAL}}
+{\footnotesize\ttfamily \#define CHECKERBOARD\+\_\+\+NUM\+\_\+\+HORIZONTAL~18}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ac95d8866132bd66a6990bda9c8dfdfdc}\label{take_images_calibrate_8cpp_ac95d8866132bd66a6990bda9c8dfdfdc}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CHECKERBOARD\_NUM\_VERTICAL@{CHECKERBOARD\_NUM\_VERTICAL}}
+\index{CHECKERBOARD\_NUM\_VERTICAL@{CHECKERBOARD\_NUM\_VERTICAL}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECKERBOARD\_NUM\_VERTICAL}{CHECKERBOARD\_NUM\_VERTICAL}}
+{\footnotesize\ttfamily \#define CHECKERBOARD\+\_\+\+NUM\+\_\+\+VERTICAL~13}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aabad9661ac3e8c161835ddb42db45048}\label{take_images_calibrate_8cpp_aabad9661ac3e8c161835ddb42db45048}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CHECKERBOARD\_SIZE\_HEIGHT@{CHECKERBOARD\_SIZE\_HEIGHT}}
+\index{CHECKERBOARD\_SIZE\_HEIGHT@{CHECKERBOARD\_SIZE\_HEIGHT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECKERBOARD\_SIZE\_HEIGHT}{CHECKERBOARD\_SIZE\_HEIGHT}}
+{\footnotesize\ttfamily \#define CHECKERBOARD\+\_\+\+SIZE\+\_\+\+HEIGHT~30.\+0$\ast$0.\+9}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a64890450c1d6434ef913b67156e61355}\label{take_images_calibrate_8cpp_a64890450c1d6434ef913b67156e61355}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CHECKERBOARD\_SIZE\_WIDTH@{CHECKERBOARD\_SIZE\_WIDTH}}
+\index{CHECKERBOARD\_SIZE\_WIDTH@{CHECKERBOARD\_SIZE\_WIDTH}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECKERBOARD\_SIZE\_WIDTH}{CHECKERBOARD\_SIZE\_WIDTH}}
+{\footnotesize\ttfamily \#define CHECKERBOARD\+\_\+\+SIZE\+\_\+\+WIDTH~30.\+0$\ast$0.\+9}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a0f44f402ff8b02e40da04fe2e4bd3105}\label{take_images_calibrate_8cpp_a0f44f402ff8b02e40da04fe2e4bd3105}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CORRECT\_COLOR@{CORRECT\_COLOR}}
+\index{CORRECT\_COLOR@{CORRECT\_COLOR}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CORRECT\_COLOR}{CORRECT\_COLOR}}
+{\footnotesize\ttfamily \#define CORRECT\+\_\+\+COLOR~false}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a61f0b7b1c48748f8c63c93ba9bb6f66f}\label{take_images_calibrate_8cpp_a61f0b7b1c48748f8c63c93ba9bb6f66f}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CV\_WINDOW\_AUTOSIZE@{CV\_WINDOW\_AUTOSIZE}}
+\index{CV\_WINDOW\_AUTOSIZE@{CV\_WINDOW\_AUTOSIZE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CV\_WINDOW\_AUTOSIZE}{CV\_WINDOW\_AUTOSIZE}}
+{\footnotesize\ttfamily \#define CV\+\_\+\+WINDOW\+\_\+\+AUTOSIZE~cv\+::\+WINDOW\+\_\+\+NORMAL}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a60cf436feb2899cf4b4088838bdab228}\label{take_images_calibrate_8cpp_a60cf436feb2899cf4b4088838bdab228}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!D\_ITER@{D\_ITER}}
+\index{D\_ITER@{D\_ITER}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{D\_ITER}{D\_ITER}}
+{\footnotesize\ttfamily \#define D\+\_\+\+ITER~1}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ae5e1daed2535fb5511ca618871a6ae68}\label{take_images_calibrate_8cpp_ae5e1daed2535fb5511ca618871a6ae68}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!D\_SIZE@{D\_SIZE}}
+\index{D\_SIZE@{D\_SIZE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{D\_SIZE}{D\_SIZE}}
+{\footnotesize\ttfamily \#define D\+\_\+\+SIZE~1}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a14033ba98194beb2c6e319c7c08b0ac7}\label{take_images_calibrate_8cpp_a14033ba98194beb2c6e319c7c08b0ac7}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!DISP\_HEIGHT@{DISP\_HEIGHT}}
+\index{DISP\_HEIGHT@{DISP\_HEIGHT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{DISP\_HEIGHT}{DISP\_HEIGHT}}
+{\footnotesize\ttfamily \#define DISP\+\_\+\+HEIGHT~120}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aa178c3409ca0030215244c7f5ab05d4f}\label{take_images_calibrate_8cpp_aa178c3409ca0030215244c7f5ab05d4f}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!DISP\_WIDTH@{DISP\_WIDTH}}
+\index{DISP\_WIDTH@{DISP\_WIDTH}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{DISP\_WIDTH}{DISP\_WIDTH}}
+{\footnotesize\ttfamily \#define DISP\+\_\+\+WIDTH~160}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a895152e89a26d775212c88dafb8c50ca}\label{take_images_calibrate_8cpp_a895152e89a26d775212c88dafb8c50ca}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!DISPLAY\_H@{DISPLAY\_H}}
+\index{DISPLAY\_H@{DISPLAY\_H}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{DISPLAY\_H}{DISPLAY\_H}}
+{\footnotesize\ttfamily \#define DISPLAY\+\_\+H~240}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a78f89e91b5365676ca7a0d937946b854}\label{take_images_calibrate_8cpp_a78f89e91b5365676ca7a0d937946b854}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!DISPLAY\_W@{DISPLAY\_W}}
+\index{DISPLAY\_W@{DISPLAY\_W}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{DISPLAY\_W}{DISPLAY\_W}}
+{\footnotesize\ttfamily \#define DISPLAY\+\_\+W~320}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a362a4cf79f7a84f9f839aaafc0e62688}\label{take_images_calibrate_8cpp_a362a4cf79f7a84f9f839aaafc0e62688}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!E\_ITER@{E\_ITER}}
+\index{E\_ITER@{E\_ITER}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{E\_ITER}{E\_ITER}}
+{\footnotesize\ttfamily \#define E\+\_\+\+ITER~1}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aab29ffc7041be0373d0f621f6eec071d}\label{take_images_calibrate_8cpp_aab29ffc7041be0373d0f621f6eec071d}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!E\_SIZE@{E\_SIZE}}
+\index{E\_SIZE@{E\_SIZE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{E\_SIZE}{E\_SIZE}}
+{\footnotesize\ttfamily \#define E\+\_\+\+SIZE~1}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ae365f696bae4010008cba6be060efb8b}\label{take_images_calibrate_8cpp_ae365f696bae4010008cba6be060efb8b}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!FOCAL@{FOCAL}}
+\index{FOCAL@{FOCAL}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{FOCAL}{FOCAL}}
+{\footnotesize\ttfamily \#define FOCAL~650.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a0994c684a9ee3b93e60cb228b2842512}\label{take_images_calibrate_8cpp_a0994c684a9ee3b93e60cb228b2842512}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!G\_CORRECTION@{G\_CORRECTION}}
+\index{G\_CORRECTION@{G\_CORRECTION}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{G\_CORRECTION}{G\_CORRECTION}}
+{\footnotesize\ttfamily \#define G\+\_\+\+CORRECTION~Scalar(0,0,0)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a44291415d82158c84e78ea8558ed90b2}\label{take_images_calibrate_8cpp_a44291415d82158c84e78ea8558ed90b2}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!G\_MAX@{G\_MAX}}
+\index{G\_MAX@{G\_MAX}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{G\_MAX}{G\_MAX}}
+{\footnotesize\ttfamily \#define G\+\_\+\+MAX~Scalar(20,196,255)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ac2b0eed0f97fde7f1f9b11768d4e662e}\label{take_images_calibrate_8cpp_ac2b0eed0f97fde7f1f9b11768d4e662e}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!G\_MIN@{G\_MIN}}
+\index{G\_MIN@{G\_MIN}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{G\_MIN}{G\_MIN}}
+{\footnotesize\ttfamily \#define G\+\_\+\+MIN~Scalar(0,61,155)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a0e36f408730fed41c65ff0045c025d94}\label{take_images_calibrate_8cpp_a0e36f408730fed41c65ff0045c025d94}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!G\_POLY\_APPROX\_E@{G\_POLY\_APPROX\_E}}
+\index{G\_POLY\_APPROX\_E@{G\_POLY\_APPROX\_E}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{G\_POLY\_APPROX\_E}{G\_POLY\_APPROX\_E}}
+{\footnotesize\ttfamily \#define G\+\_\+\+POLY\+\_\+\+APPROX\+\_\+E~0.\+01}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a332b8133ef1f77020d8947b15910b0fe}\label{take_images_calibrate_8cpp_a332b8133ef1f77020d8947b15910b0fe}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!GOAL\_CONFIDENCE@{GOAL\_CONFIDENCE}}
+\index{GOAL\_CONFIDENCE@{GOAL\_CONFIDENCE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{GOAL\_CONFIDENCE}{GOAL\_CONFIDENCE}}
+{\footnotesize\ttfamily \#define GOAL\+\_\+\+CONFIDENCE~0.\+40}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a1b163d5d2ae933e10b9e7a97d47dbdd7}\label{take_images_calibrate_8cpp_a1b163d5d2ae933e10b9e7a97d47dbdd7}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!GOAL\_CONFIRM@{GOAL\_CONFIRM}}
+\index{GOAL\_CONFIRM@{GOAL\_CONFIRM}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{GOAL\_CONFIRM}{GOAL\_CONFIRM}}
+{\footnotesize\ttfamily \#define GOAL\+\_\+\+CONFIRM~50}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_af2ccf5b286a0967056907f977096e4af}\label{take_images_calibrate_8cpp_af2ccf5b286a0967056907f977096e4af}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!GOAL\_DILATION\_ADJUST@{GOAL\_DILATION\_ADJUST}}
+\index{GOAL\_DILATION\_ADJUST@{GOAL\_DILATION\_ADJUST}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{GOAL\_DILATION\_ADJUST}{GOAL\_DILATION\_ADJUST}}
+{\footnotesize\ttfamily \#define GOAL\+\_\+\+DILATION\+\_\+\+ADJUST~3}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ac6e0ef1978093a93221b44d7d3abe5a1}\label{take_images_calibrate_8cpp_ac6e0ef1978093a93221b44d7d3abe5a1}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!GOAL\_INNER\_CONTOUR\_SCALE@{GOAL\_INNER\_CONTOUR\_SCALE}}
+\index{GOAL\_INNER\_CONTOUR\_SCALE@{GOAL\_INNER\_CONTOUR\_SCALE}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{GOAL\_INNER\_CONTOUR\_SCALE}{GOAL\_INNER\_CONTOUR\_SCALE}}
+{\footnotesize\ttfamily \#define GOAL\+\_\+\+INNER\+\_\+\+CONTOUR\+\_\+\+SCALE~0.\+6}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ad820857fef61e135567a7f082ac55d36}\label{take_images_calibrate_8cpp_ad820857fef61e135567a7f082ac55d36}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!HOME\_MAP\_ADDRESS@{HOME\_MAP\_ADDRESS}}
+\index{HOME\_MAP\_ADDRESS@{HOME\_MAP\_ADDRESS}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{HOME\_MAP\_ADDRESS}{HOME\_MAP\_ADDRESS}}
+{\footnotesize\ttfamily \#define HOME\+\_\+\+MAP\+\_\+\+ADDRESS~\char`\"{}stereo\+\_\+rectify\+\_\+maps.\+xml\char`\"{}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a1577f330d529e3846afa462dabfe56e7}\label{take_images_calibrate_8cpp_a1577f330d529e3846afa462dabfe56e7}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!IMGEXTENSION@{IMGEXTENSION}}
+\index{IMGEXTENSION@{IMGEXTENSION}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{IMGEXTENSION}{IMGEXTENSION}}
+{\footnotesize\ttfamily \#define IMGEXTENSION~\char`\"{}.jpg\char`\"{}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aa452bdb78e9a94c59b1d22970c9d4568}\label{take_images_calibrate_8cpp_aa452bdb78e9a94c59b1d22970c9d4568}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!INTERPOLATION@{INTERPOLATION}}
+\index{INTERPOLATION@{INTERPOLATION}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{INTERPOLATION}{INTERPOLATION}}
+{\footnotesize\ttfamily \#define INTERPOLATION~INTER\+\_\+\+AREA}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ac77e842fc7621b73be8dc3bbaeb8e5cb}\label{take_images_calibrate_8cpp_ac77e842fc7621b73be8dc3bbaeb8e5cb}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!LAB\_MAP\_ADDRESS@{LAB\_MAP\_ADDRESS}}
+\index{LAB\_MAP\_ADDRESS@{LAB\_MAP\_ADDRESS}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{LAB\_MAP\_ADDRESS}{LAB\_MAP\_ADDRESS}}
+{\footnotesize\ttfamily \#define LAB\+\_\+\+MAP\+\_\+\+ADDRESS~\char`\"{}stereo\+\_\+rectify\+\_\+maps.\+xml\char`\"{}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a738607799d6938e1b15f463688029cd5}\label{take_images_calibrate_8cpp_a738607799d6938e1b15f463688029cd5}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!LAMBDA@{LAMBDA}}
+\index{LAMBDA@{LAMBDA}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{LAMBDA}{LAMBDA}}
+{\footnotesize\ttfamily \#define LAMBDA~0.\+5}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aa637ca99e2e8b6a736d0910e0f1713bf}\label{take_images_calibrate_8cpp_aa637ca99e2e8b6a736d0910e0f1713bf}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!MIN\_AREA@{MIN\_AREA}}
+\index{MIN\_AREA@{MIN\_AREA}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{MIN\_AREA}{MIN\_AREA}}
+{\footnotesize\ttfamily \#define MIN\+\_\+\+AREA~50.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ae5b3852d7cb6389d9b43a9391ac70e72}\label{take_images_calibrate_8cpp_ae5b3852d7cb6389d9b43a9391ac70e72}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!PATHL@{PATHL}}
+\index{PATHL@{PATHL}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{PATHL}{PATHL}}
+{\footnotesize\ttfamily \#define PATHL~\char`\"{}temp\+Images/img\+L\char`\"{}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a82775f16784c218a73bf8b50999aabbb}\label{take_images_calibrate_8cpp_a82775f16784c218a73bf8b50999aabbb}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!PATHR@{PATHR}}
+\index{PATHR@{PATHR}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{PATHR}{PATHR}}
+{\footnotesize\ttfamily \#define PATHR~\char`\"{}temp\+Images/img\+R\char`\"{}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a98c08c1639f1034818ab3890e8d105c5}\label{take_images_calibrate_8cpp_a98c08c1639f1034818ab3890e8d105c5}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!R\_Correction@{R\_Correction}}
+\index{R\_Correction@{R\_Correction}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{R\_Correction}{R\_Correction}}
+{\footnotesize\ttfamily \#define R\+\_\+\+Correction~Scalar(0,0,0)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a44d864c7ff8bf7f56435a1226c9e8a99}\label{take_images_calibrate_8cpp_a44d864c7ff8bf7f56435a1226c9e8a99}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!R\_MAX@{R\_MAX}}
+\index{R\_MAX@{R\_MAX}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{R\_MAX}{R\_MAX}}
+{\footnotesize\ttfamily \#define R\+\_\+\+MAX~Scalar(87,78,255)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a58cacf232e018f6c32af1f496a7a9aa0}\label{take_images_calibrate_8cpp_a58cacf232e018f6c32af1f496a7a9aa0}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!R\_MIN@{R\_MIN}}
+\index{R\_MIN@{R\_MIN}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{R\_MIN}{R\_MIN}}
+{\footnotesize\ttfamily \#define R\+\_\+\+MIN~Scalar(0,0,81)}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a8a2d6d58576815a2a0a42ba81b5e5930}\label{take_images_calibrate_8cpp_a8a2d6d58576815a2a0a42ba81b5e5930}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!RECT\_HEIGHT@{RECT\_HEIGHT}}
+\index{RECT\_HEIGHT@{RECT\_HEIGHT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{RECT\_HEIGHT}{RECT\_HEIGHT}}
+{\footnotesize\ttfamily \#define RECT\+\_\+\+HEIGHT~480}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aaa1f54c8e582cfd4b850874539359473}\label{take_images_calibrate_8cpp_aaa1f54c8e582cfd4b850874539359473}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!RECT\_WIDTH@{RECT\_WIDTH}}
+\index{RECT\_WIDTH@{RECT\_WIDTH}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{RECT\_WIDTH}{RECT\_WIDTH}}
+{\footnotesize\ttfamily \#define RECT\+\_\+\+WIDTH~640}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a805a2ca514f6b7c8d9d15bcb7b74c255}\label{take_images_calibrate_8cpp_a805a2ca514f6b7c8d9d15bcb7b74c255}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!RECTIFY\_FLAGS@{RECTIFY\_FLAGS}}
+\index{RECTIFY\_FLAGS@{RECTIFY\_FLAGS}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{RECTIFY\_FLAGS}{RECTIFY\_FLAGS}}
+{\footnotesize\ttfamily \#define RECTIFY\+\_\+\+FLAGS~cv\+::\+CALIB\+\_\+\+ZERO\+\_\+\+DISPARITY}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ab899f53048f1f06a224b5eb1fa369750}\label{take_images_calibrate_8cpp_ab899f53048f1f06a224b5eb1fa369750}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!SIGMA@{SIGMA}}
+\index{SIGMA@{SIGMA}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{SIGMA}{SIGMA}}
+{\footnotesize\ttfamily \#define SIGMA~0.\+5}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a7403b6f895f1fb7a06148501cfdae5e9}\label{take_images_calibrate_8cpp_a7403b6f895f1fb7a06148501cfdae5e9}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!SIZE\_RATIO@{SIZE\_RATIO}}
+\index{SIZE\_RATIO@{SIZE\_RATIO}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{SIZE\_RATIO}{SIZE\_RATIO}}
+{\footnotesize\ttfamily \#define SIZE\+\_\+\+RATIO~1.\+5}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a46a249f6f52342e5dc86b0b7adeb4157}\label{take_images_calibrate_8cpp_a46a249f6f52342e5dc86b0b7adeb4157}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!STEREO\_FLAGS@{STEREO\_FLAGS}}
+\index{STEREO\_FLAGS@{STEREO\_FLAGS}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{STEREO\_FLAGS}{STEREO\_FLAGS}}
+{\footnotesize\ttfamily \#define STEREO\+\_\+\+FLAGS~cv\+::\+CALIB\+\_\+\+USE\+\_\+\+INTRINSIC\+\_\+\+GUESS $\vert$ cv\+::\+CALIB\+\_\+\+RATIONAL\+\_\+\+MODEL $\vert$ cv\+::\+CALIB\+\_\+\+THIN\+\_\+\+PRISM\+\_\+\+MODEL}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ac03e6b6f8344afddb3e652e2d27703c7}\label{take_images_calibrate_8cpp_ac03e6b6f8344afddb3e652e2d27703c7}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!VIS\_MULT@{VIS\_MULT}}
+\index{VIS\_MULT@{VIS\_MULT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{VIS\_MULT}{VIS\_MULT}}
+{\footnotesize\ttfamily \#define VIS\+\_\+\+MULT~255.\+0}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aef72fe86b7c60b1a86920496456edeac}\label{take_images_calibrate_8cpp_aef72fe86b7c60b1a86920496456edeac}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!WAIT@{WAIT}}
+\index{WAIT@{WAIT}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{WAIT}{WAIT}}
+{\footnotesize\ttfamily \#define WAIT~10}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6}\label{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!modes@{modes}}
+\index{modes@{modes}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{modes}{modes}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6}{modes}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{detectBall@{detectBall}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!detectBall@{detectBall}}}\mbox{\Hypertarget{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6ad7c3f8ef84d2609ca16050cf64b7428d}\label{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6ad7c3f8ef84d2609ca16050cf64b7428d}} 
+detect\+Ball&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{detectGoal@{detectGoal}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!detectGoal@{detectGoal}}}\mbox{\Hypertarget{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6a5311a69b06089143644229b0d8baff6b}\label{take_images_calibrate_8cpp_a811fe196a5d9d37857c2f8adeeaac3c6a5311a69b06089143644229b0d8baff6b}} 
+detect\+Goal&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ad1914fc7fe8357a748f7d1f9e3bd5aba}\label{take_images_calibrate_8cpp_ad1914fc7fe8357a748f7d1f9e3bd5aba}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!benchmark@{benchmark}}
+\index{benchmark@{benchmark}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{benchmark()}{benchmark()}}
+{\footnotesize\ttfamily void benchmark (\begin{DoxyParamCaption}\item[{string}]{flag }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a02ccd007d45cb8bba7402a2662633ce7}\label{take_images_calibrate_8cpp_a02ccd007d45cb8bba7402a2662633ce7}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!benchmarkFirst@{benchmarkFirst}}
+\index{benchmarkFirst@{benchmarkFirst}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{benchmarkFirst()}{benchmarkFirst()}}
+{\footnotesize\ttfamily void benchmark\+First (\begin{DoxyParamCaption}\item[{string}]{flag }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a229645b67d0ec624737e6cd4819612c1}\label{take_images_calibrate_8cpp_a229645b67d0ec624737e6cd4819612c1}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!benchmarkPrint@{benchmarkPrint}}
+\index{benchmarkPrint@{benchmarkPrint}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{benchmarkPrint()}{benchmarkPrint()}}
+{\footnotesize\ttfamily void benchmark\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aaac144f383c1c38139c49744172958d3}\label{take_images_calibrate_8cpp_aaac144f383c1c38139c49744172958d3}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!delay@{delay}}
+\index{delay@{delay}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{delay()}{delay()}}
+{\footnotesize\ttfamily void delay (\begin{DoxyParamCaption}\item[{double}]{delay\+Seconds }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{take_images_calibrate_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!main@{main}}
+\index{main@{main}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a0f336ffd47aa056a5f4619360ad26d70}\label{take_images_calibrate_8cpp_a0f336ffd47aa056a5f4619360ad26d70}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!scaleContour@{scaleContour}}
+\index{scaleContour@{scaleContour}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{scaleContour()}{scaleContour()}}
+{\footnotesize\ttfamily vector$<$ Point $>$ scale\+Contour (\begin{DoxyParamCaption}\item[{vector$<$ Point $>$}]{contour,  }\item[{double}]{scale }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a45b627b0d763cc4f777f7308c92b87f6}\label{take_images_calibrate_8cpp_a45b627b0d763cc4f777f7308c92b87f6}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!takeStereoImages@{takeStereoImages}}
+\index{takeStereoImages@{takeStereoImages}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{takeStereoImages()}{takeStereoImages()}}
+{\footnotesize\ttfamily void take\+Stereo\+Images (\begin{DoxyParamCaption}\item[{bool}]{auto\+Cap = {\ttfamily false} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ab64e2f5b1f8fd2b0aca6643af1113853}\label{take_images_calibrate_8cpp_ab64e2f5b1f8fd2b0aca6643af1113853}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!testStereoLab@{testStereoLab}}
+\index{testStereoLab@{testStereoLab}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{testStereoLab()}{testStereoLab()}}
+{\footnotesize\ttfamily void test\+Stereo\+Lab (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a21d6b07fa73ef7d2d70b95b48b0cc6ad}\label{take_images_calibrate_8cpp_a21d6b07fa73ef7d2d70b95b48b0cc6ad}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!timeDiff@{timeDiff}}
+\index{timeDiff@{timeDiff}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{timeDiff()}{timeDiff()}}
+{\footnotesize\ttfamily double time\+Diff (\begin{DoxyParamCaption}\item[{chrono\+::system\+\_\+clock\+::time\+\_\+point}]{a,  }\item[{chrono\+::system\+\_\+clock\+::time\+\_\+point}]{b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_ab9bd4216c45242517655318874855592}\label{take_images_calibrate_8cpp_ab9bd4216c45242517655318874855592}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!type2str@{type2str}}
+\index{type2str@{type2str}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{type2str()}{type2str()}}
+{\footnotesize\ttfamily string type2str (\begin{DoxyParamCaption}\item[{int}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a6413f0c2d9dc4cc2f9a9b9f0616ba198}\label{take_images_calibrate_8cpp_a6413f0c2d9dc4cc2f9a9b9f0616ba198}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!undistortCamerasCalibrateStereo@{undistortCamerasCalibrateStereo}}
+\index{undistortCamerasCalibrateStereo@{undistortCamerasCalibrateStereo}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{undistortCamerasCalibrateStereo()}{undistortCamerasCalibrateStereo()}}
+{\footnotesize\ttfamily void undistort\+Cameras\+Calibrate\+Stereo (\begin{DoxyParamCaption}\item[{bool}]{auto\+Cap = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a6efbc045dd661d6771880315f70e85f1}\label{take_images_calibrate_8cpp_a6efbc045dd661d6771880315f70e85f1}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!CHECKERBOARD@{CHECKERBOARD}}
+\index{CHECKERBOARD@{CHECKERBOARD}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECKERBOARD}{CHECKERBOARD}}
+{\footnotesize\ttfamily int CHECKERBOARD\mbox{[}2\mbox{]} \{\mbox{\hyperlink{take_images_calibrate_8cpp_abf9a100a2cc43f857bc3bfecff80c751}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+HORIZONTAL}},\mbox{\hyperlink{take_images_calibrate_8cpp_ac95d8866132bd66a6990bda9c8dfdfdc}{CHECKERBOARD\+\_\+\+NUM\+\_\+\+VERTICAL}}\}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a977e0b3f76a565c4abe255e28ec7ce68}\label{take_images_calibrate_8cpp_a977e0b3f76a565c4abe255e28ec7ce68}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!flags@{flags}}
+\index{flags@{flags}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{flags}{flags}}
+{\footnotesize\ttfamily vector$<$string$>$ flags}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_a1ea5d0cb93f22f7d0fdf804bd68c3326}\label{take_images_calibrate_8cpp_a1ea5d0cb93f22f7d0fdf804bd68c3326}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!mode@{mode}}
+\index{mode@{mode}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{mode}{mode}}
+{\footnotesize\ttfamily int mode = \mbox{\hyperlink{pi_blimp_vision_8cpp_a4d9e1be36b546257ba57cb7d182754edad7c3f8ef84d2609ca16050cf64b7428d}{detect\+Ball}}}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aece83ccb3f4986442a2be8edf283244a}\label{take_images_calibrate_8cpp_aece83ccb3f4986442a2be8edf283244a}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!render3DProjection@{render3DProjection}}
+\index{render3DProjection@{render3DProjection}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{render3DProjection}{render3DProjection}}
+{\footnotesize\ttfamily bool render3\+DProjection = true}
+
+\mbox{\Hypertarget{take_images_calibrate_8cpp_aa5920ddee34cd54886557861362ca93a}\label{take_images_calibrate_8cpp_aa5920ddee34cd54886557861362ca93a}} 
+\index{takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}!times@{times}}
+\index{times@{times}!takeImagesCalibrate.cpp@{takeImagesCalibrate.cpp}}
+\doxysubsubsection{\texorpdfstring{times}{times}}
+{\footnotesize\ttfamily vector$<$chrono\+::system\+\_\+clock\+::time\+\_\+point$>$ times}
+

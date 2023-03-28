@@ -1,0 +1,227 @@
+\hypertarget{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_source}{}\doxysection{pi\+Offboard\+Stereo\+Vision.\+hpp}
+\label{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_source}\index{piStereoStreamer/piOffboardStereoVision.hpp@{piStereoStreamer/piOffboardStereoVision.hpp}}
+\mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ piOffboardStereoVision.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ Nov\ 10,\ 2022}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ willie}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ PIOFFBOARDSTEREOVISION\_HPP\_}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ PIOFFBOARDSTEREOVISION\_HPP\_}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//====================\ CONSTANTS\ ====================}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ HEARTBEAT\_PERIOD\ \ \ \ 0.1}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//Video\ streaming}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a5aac8bccf913eb3647856071c79f8c7b}{stream\_server\_ip}}\ =\ \textcolor{stringliteral}{"{}192.168.0.202"{}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a81873e35a9aea11f42ba252aa424196a}{stream\_server\_port}}\ =\ 12345;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//Communication}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ UDP\_IP\ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}239.255.255.250"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ UDP\_PORT\ \ \ \ \ \ \ \ \ \ \ \ 1900}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ UDPTimeout\ \ \ \ \ \ \ \ \ \ 5}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ac85891cb292f9444d7de9ed0843faa26}{MAX\_DGRAM}}\ =\ pow(2,\ 16);}
+\DoxyCodeLine{00023\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a9d92d45ffedc20c21a3b3109b4221b71}{MAX\_IMAGE\_DGRAM}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ac85891cb292f9444d7de9ed0843faa26}{MAX\_DGRAM}}\ -\/\ 64;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a0639529aadf9a95c347a77076b920340}{stereo\_cal\_path}}\ =\ \textcolor{stringliteral}{"{}/home/pi/piOffboardStereoVision/stereo\_rectify\_maps240p.xml"{}};}
+\DoxyCodeLine{00026\ \textcolor{comment}{//const\ char\ *stereo\_cal\_path\ =\ "{}/home/willie/CatchingBlimp/blimp-\/workspace/piOffboardStereoVision/src/stereo\_rectify\_maps240p.xml"{};}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ MAXLINE\ 1024}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//Camera}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ CAMERA\_WIDTH\ \ \ \ 320}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ CAMERA\_HEIGHT\ \ \ 240}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ CV\_WIDTH\ \ \ \ \ \ \ \ 320}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ CV\_HEIGHT\ \ \ \ \ \ \ 240}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ RECT\_WIDTH\ \ \ \ \ \ 320}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ RECT\_HEIGHT\ \ \ \ \ 240}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//Stereo}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ DISP\_WIDTH\ \ \ \ \ \ 160}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ DISP\_HEIGHT\ \ \ \ \ 120}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ CONVERSION\ \ \ \ \ \ 0.15}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ PRE\_FILTER\_SIZE\ 7}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ PRE\_FILTER\_CAP\ \ 2}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ UNIQUENESS\_RATIO\ \ \ \ 5}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ LAMBDA\ \ \ \ \ \ \ \ \ \ 17.8}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ SIGMA\ \ \ \ \ \ \ \ \ \ \ 5.0}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{//Colors}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ B\_CORRECTION\ \ \ \ Scalar(29,7,15)}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ B\_MIN\ \ \ \ \ \ \ \ \ \ \ Scalar(46,0,0)}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ B\_MAX\ \ \ \ \ \ \ \ \ \ \ Scalar(96,74,213)}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ ORANGE\_G\_CORRECTION\ \ \ \ Scalar(0,47,0)}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ ORANGE\_G\_MIN\ \ \ \ \ \ \ \ \ \ \ Scalar(13,0,0)}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ ORANGE\_G\_MAX\ \ \ \ \ \ \ \ \ \ \ Scalar(24,255,255)}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ YELLOW\_G\_CORRECTION\ \ \ \ \ Scalar(48,0,0)}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ YELLOW\_G\_MIN\ \ \ \ \ \ \ \ \ \ \ \ Scalar(25,0,0)}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ YELLOW\_G\_MAX\ \ \ \ \ \ \ \ \ \ \ \ Scalar(63,\ 255,\ 255)}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ G\_POLY\_APPROX\_E\ \ \ \ \ \ \ \ \ \ 0.01}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ GOAL\_INNER\_CONTOUR\_SCALE\ 0.7}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ GOAL\_CONFIRM\ \ \ \ \ \ \ \ \ \ \ \ \ 6000}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ E\_ITER\ 1}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ D\_ITER\ 1}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ E\_SIZE\ 1}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ D\_SIZE\ 1}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#define\ GOAL\_DILATION\_ADJUST\ 4}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#define\ MIN\_AREA\ \ \ \ \ \ \ \ 50}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ SIZE\_RATIO\ \ \ \ \ \ 3}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#define\ AVOID\_DIST\ \ \ \ \ \ 70}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#define\ AVOID\_AREA\ \ \ \ \ \ 6000}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#define\ ML\_CLASS\_BALLOON\ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ ML\_CLASS\_ORANGEGOAL\ \ \ \ \ 1}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#define\ ML\_CLASS\_YELLOWGOAL\ \ \ \ \ 2}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{//====================\ GLOBAL\ VARIABLES\ (GOD\ FORBID)\ ====================//}}
+\DoxyCodeLine{00089\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aac88e30a8ce5bdd92cde3d7526a23426}{blimpID}}\ =\ -\/1;}
+\DoxyCodeLine{00090\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a687c81b035d9b4ab5cc8eb9aca03adcd}{cap\_device\_id}}\ =\ 0;}
+\DoxyCodeLine{00091\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad677bcdfd64213366a22afafb4d71e5e}{teensyState}};}
+\DoxyCodeLine{00092\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a9552a24cb76aa7936ee6189f6d52a38b}{program\_running}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00093\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a21fa2d48e8cc929b725c9618fb4f81f5}{autonomous}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ clock\_t\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aff0d1de78e1bf3cf1c803534b444518e}{lastReceivedTargetsTime}};}
+\DoxyCodeLine{00096\ clock\_t\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a9d4e8735c00693c7fc6e82bfd015cdda}{lastReceivedTargetsTimeCopy}};}
+\DoxyCodeLine{00097\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a0bc023372d41891b65081572d572d4ca}{lastReceivedIsNew}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00098\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a0afa4df7d04ba788f3845cf475f3863e}{receivedTargetTimeout}}\ =\ 1;\ \textcolor{comment}{//seconds}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a00e48345e3e42f662bc124933a028f68}{scoreInOrange}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00101\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a1e8c121b053561cf4a584655c9c064f0}{selfIsBlue}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{comment}{//Running\ modes}}
+\DoxyCodeLine{00104\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aa3cee5bb562891fe08f778861a9a3b8d}{debugMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00105\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a170a7b1c2d7332ef430240621cc20489}{verboseMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aae8fea58c1220e059b7121f82c7927c9}{streamOnlyMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aca5264d762d82382c5320a60c91ca0b6}{annotatedMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00108\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad11881e4f6b2c50b610578f7173d893d}{disableSerialMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00109\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ab11372fd5880d2f4c2336cb7c6d31116}{printJSONMode}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ cv::Mat\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ab2e02c2747521420b6915aab2a31ca4e}{annotatedFrame}};}
+\DoxyCodeLine{00112\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a66e2e85e54fd744741ea1978d3fd84c2}{annotatedFrameReady}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ std::string\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a8bc099dc2bfa25c89d5d3b6e21c2a1ad}{msgTemp}}\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a0b518974a012dffd3670328b3ff57ac3}{barometerData}}\ =\ 0;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ std::vector<float>\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_afddfe2eecd829121e7db9c9546d2b50a}{recentMotorCommands}};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{//Low\ res\ frames\ for\ stereo\ processing}}
+\DoxyCodeLine{00121\ cv::Mat\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_aa7eae56f39b478a9e0b563cb64ed3fff}{lt\_frame\_lowres}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_af3b5e6d727b8a00a93da07f18a34864d}{rt\_frame\_lowres}};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a2aaca79078ccd924c6acc2ec1a0e0684}{stream\_socket\_fd}};}
+\DoxyCodeLine{00124\ \textcolor{keyword}{struct\ }sockaddr\_in\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_abb49ca8626f377c0a66c927442f52e58}{stream\_server\_addr}};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ pthread\_t\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a3ab34728cca91a102f65cfbd3a188780}{bs\_udp\_thread}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a90fef3272d1a792dc232e42d5bf23a4c}{stream\_thread}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a698ce27d77265de841255e8c87a839d7}{stream\_fb\_thread}};}
+\DoxyCodeLine{00127\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a1a746ddace841d4a68971a33803035c2}{bs\_udp\_thread\_id}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a9535acde9401511f4ff071583cec5d27}{stream\_thread\_id}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ab83d8c25dcf90323774df70f86284c63}{stream\_fb\_thread\_id}};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{comment}{//Timing}}
+\DoxyCodeLine{00130\ clock\_t\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad4670945df4fe32c578deb64685f1d6e}{lastTP}}\ =\ 0;}
+\DoxyCodeLine{00131\ std::vector<clock\_t>\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a3359562edfa03c01b20aed3c95b4361b}{times}};}
+\DoxyCodeLine{00132\ std::vector<std::string>\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_abf7a03a1c05a074ee4ee8c884f6abf8b}{flags}};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ clock\_t\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a6cdd1a3bb77044df3c0672c0c6b014a9}{lastUDPReceived}}\ =\ 0;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \textcolor{comment}{//Video\ recording}}
+\DoxyCodeLine{00137\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ae59f109bbd5544a01cfb1f06796fcd5d}{framesLeftToRecord}};}
+\DoxyCodeLine{00138\ std::string\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a3a3e17c3b0bc4203860958830be70f77}{outputVideo\_fileName}}\ =\ \textcolor{stringliteral}{"{}outputVideo.avi"{}};}
+\DoxyCodeLine{00139\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a92dbf8d6276c39d81e04c5a9098b7fe6}{outputVideo\_fps}}\ =\ 30;}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a311b60f0d17a3340438cdb01da64400b}{lastBaroMessageTime}}\ =\ 0.0;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{comment}{//Teleplot\ teleplot("{}127.0.0.1"{});}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ std::string\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a44485884c2220d83f1a8a4de752cd456}{groupAddress}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_af84d72a1e590c46c284e4f8028f84580}{UDP\_IP}};}
+\DoxyCodeLine{00146\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a443519726cbe3c4f2b2fe1d42ce2fd2f}{group}}\ =\ \&\mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a44485884c2220d83f1a8a4de752cd456}{groupAddress}}[0];}
+\DoxyCodeLine{00147\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a63c89c04d1feae07ca35558055155ffb}{port}}\ =\ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a7342deb9bd9ebf195e550e2d8e7c38b4}{UDP\_PORT}};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a302643f40181497071d93b3db242fa9c}{recSocketFD}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_acf741088259c10d9fb4ff31c343d13d2}{sendSocketFD}};}
+\DoxyCodeLine{00150\ \textcolor{keyword}{struct\ }sockaddr\_in\ \mbox{\hyperlink{pi_stereo_vision_8cpp_a703c25535093863dcd0bcb73a5e0b336}{addrRec}},\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a62c1fe7dc1e65693bd84846e10e18c2c}{addrSend}};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{comment}{//State\ machine\ enums}}
+\DoxyCodeLine{00153\ \textcolor{keyword}{enum}\ \textcolor{keywordtype}{object}\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9a0b544c79016d9376a53170ae3bb8ac79}{balloon}},}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9afe4e7acd9865b77ec2f327ccf73244a8}{blimpB}},}
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9a36c95078e958a4ee688d1ab44379b695}{blimpR}},}
+\DoxyCodeLine{00157\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9ab3dfcd4260f16ac48e78b9cc495ac793}{goalO}},}
+\DoxyCodeLine{00158\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9a1bb08690010e185f1ac0300f15b53c51}{goalY}},}
+\DoxyCodeLine{00159\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9aa4500e61db092c2e1719b5d68b047ec3}{first}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9a0b544c79016d9376a53170ae3bb8ac79}{balloon}},}
+\DoxyCodeLine{00160\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9aa1a074a72eb46dfdde53e589d946ab98}{last}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_ad03408aabe16bb53c780fae6cf3910f9a1bb08690010e185f1ac0300f15b53c51}{goalY}}}
+\DoxyCodeLine{00161\ \};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842}{autoState}}\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842aac58231499b144a574c422c7aab25049}{searching}},}
+\DoxyCodeLine{00165\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842a27285c28a4ce02b5d81572f9b39d90c3}{approach}},}
+\DoxyCodeLine{00166\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842a201c91ff99e57b49b4f6f727071e499e}{catching}},}
+\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842af7256addd26dcc39e1df1be3e6d97ea1}{caught}},}
+\DoxyCodeLine{00168\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842ac90f0558baae8563ce6861fb1be26a8f}{goalSearch}},}
+\DoxyCodeLine{00169\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842af66ec9297217d7c885bebf888ccc84be}{approachGoal}},}
+\DoxyCodeLine{00170\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842a7e7ecbd867f551ff0ec291a416040898}{scoringStart}},}
+\DoxyCodeLine{00171\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842a8abc3b6f5d5778719949d03b0a48d0da}{shooting}},}
+\DoxyCodeLine{00172\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842a63b9200199cc2615088a639fced8201c}{scored}}}
+\DoxyCodeLine{00173\ \};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_a20a52e936d19eb9b4c23cf30bbc22f8f}{blimpType}}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a20a52e936d19eb9b4c23cf30bbc22f8fa8f5fa6b484ac7e2a97943d915cf224e2}{blue}},}
+\DoxyCodeLine{00177\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a20a52e936d19eb9b4c23cf30bbc22f8faace9033470c7bfe9523c814271251908}{red}}}
+\DoxyCodeLine{00178\ \};}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{pi_offboard_stereo_vision_2src_2pi_offboard_stereo_vision_8hpp_a99f7caf87d7b4d99a2d1a3dc20f31d1d}{goalType}}\ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a99f7caf87d7b4d99a2d1a3dc20f31d1daa2b3d8856786dbe594751820bc1ff2e5}{orange}},}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a99f7caf87d7b4d99a2d1a3dc20f31d1dab31edea3fab8c488c7a8f78545e7f5a9}{yellow}}}
+\DoxyCodeLine{00183\ \};}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a96f6d991afec90ab3ca82879a425a57d}{blimpColor}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a20a52e936d19eb9b4c23cf30bbc22f8fa8f5fa6b484ac7e2a97943d915cf224e2}{blue}};}
+\DoxyCodeLine{00186\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a71d1f9e72108645ae4a5e82883fa49d2}{goalColor}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a99f7caf87d7b4d99a2d1a3dc20f31d1daa2b3d8856786dbe594751820bc1ff2e5}{orange}};}
+\DoxyCodeLine{00187\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a1ea5d0cb93f22f7d0fdf804bd68c3326}{mode}}\ =\ \mbox{\hyperlink{pi_stereo_streamer_2pi_offboard_stereo_vision_8hpp_a496bee82153bd12213a151fdfd292842aac58231499b144a574c422c7aab25049}{searching}};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \textcolor{comment}{//====================\ FUNCTION\ HEADERS\ ====================}}
+\DoxyCodeLine{00190\ \textcolor{comment}{//cv::VideoCapture\ openCamera(int\ camIndex,\ int\ camWidth,\ int\ camHeight);}}
+\DoxyCodeLine{00191\ \textcolor{comment}{//bool\ parseArguments(int\ argc,\ char**\ argv);}}
+\DoxyCodeLine{00192\ \textcolor{comment}{//std::vector<cv::Point>\ scaleContour(std::vector<cv::Point>\ contour,\ float\ scale);}}
+\DoxyCodeLine{00193\ \textcolor{comment}{//std::vector<std::vector<float>\ >\ getObjects(int\ type,\ cv::Mat\ mask);}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{comment}{//bool\ initPython();}}
+\DoxyCodeLine{00196\ \textcolor{comment}{//string\ runYolo(Mat\&\ frame);}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \textcolor{comment}{//====================\ COMMUNICATION\ FUNCTION\ HEADERS\ ====================}}
+\DoxyCodeLine{00199\ \textcolor{comment}{//void\ initSerial();}}
+\DoxyCodeLine{00200\ \textcolor{comment}{//void\ sendSerial(std::string\ message);}}
+\DoxyCodeLine{00201\ \textcolor{comment}{//char\ readSerial();}}
+\DoxyCodeLine{00202\ \textcolor{comment}{//void\ initUDPReceiver();}}
+\DoxyCodeLine{00203\ \textcolor{comment}{//void\ initUDPSender();}}
+\DoxyCodeLine{00204\ \textcolor{comment}{//bool\ readUDP(std::string*\ retMessage\ =\ nullptr,\ std::string*\ target\ =\ nullptr,\ std::string*\ source\ =\ nullptr,\ std::string*\ flag\ =\ nullptr);}}
+\DoxyCodeLine{00205\ \textcolor{comment}{//void\ sendUDPRaw(std::string\ target,\ std::string\ source,\ std::string\ flag,\ std::string\ message);}}
+\DoxyCodeLine{00206\ \textcolor{comment}{//void\ sendUDP(std::string\ flag,\ std::string\ message);}}
+\DoxyCodeLine{00207\ \textcolor{comment}{//void\ sendUDP(std::string\ message);}}
+\DoxyCodeLine{00208\ \textcolor{comment}{//void\ establishBlimpID();}}
+\DoxyCodeLine{00209\ \textcolor{comment}{//void\ plotUDP(std::string\ varName,\ float\ varValue);}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \textcolor{comment}{//====================\ HELPER\ FUNCTION\ HEADERS\ ====================}}
+\DoxyCodeLine{00212\ \textcolor{comment}{//float\ getFPS();}}
+\DoxyCodeLine{00213\ \textcolor{comment}{//void\ benchmarkFirst(std::string\ flag);}}
+\DoxyCodeLine{00214\ \textcolor{comment}{//void\ benchmark(std::string\ flag);}}
+\DoxyCodeLine{00215\ \textcolor{comment}{//void\ benchmarkPrint();}}
+\DoxyCodeLine{00216\ \textcolor{comment}{//void\ delay(double\ delaySeconds);}}
+\DoxyCodeLine{00217\ \textcolor{comment}{//void\ saveToVideo(cv::Mat\ frame);}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \textcolor{comment}{//====================\ GLOBAL\ VARIABLES\ (GOD\ FORBID)\ ====================}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ PIOFFBOARDSTEREOVISION\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

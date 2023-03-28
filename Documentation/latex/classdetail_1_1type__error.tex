@@ -1,0 +1,90 @@
+\hypertarget{classdetail_1_1type__error}{}\doxysection{detail\+::type\+\_\+error Class Reference}
+\label{classdetail_1_1type__error}\index{detail::type\_error@{detail::type\_error}}
+
+
+exception indicating executing a member function with a wrong type  
+
+
+
+
+{\ttfamily \#include $<$json.\+hpp$>$}
+
+Inheritance diagram for detail\+::type\+\_\+error\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classdetail_1_1type__error}
+\end{center}
+\end{figure}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Basic\+Json\+Context , \mbox{\hyperlink{namespacedetail_a66bbcd629c83a87ba9cbc72a675cf84a}{enable\+\_\+if\+\_\+t}}$<$ \mbox{\hyperlink{structdetail_1_1is__basic__json__context}{is\+\_\+basic\+\_\+json\+\_\+context}}$<$ Basic\+Json\+Context $>$\mbox{\hyperlink{namespacedetail_a47b1bb0bbd3596589ed9187059c312efa2063c1608d6e0baf80249c42e2be5804}{\+::value}}, int $>$  = 0$>$ }\\static \mbox{\hyperlink{classdetail_1_1type__error}{type\+\_\+error}} \mbox{\hyperlink{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}{create}} (int id\+\_\+, const std\+::string \&what\+\_\+arg, Basic\+Json\+Context context)
+\item 
+{\footnotesize template$<$typename Basic\+Json\+Context , \mbox{\hyperlink{namespacedetail_a66bbcd629c83a87ba9cbc72a675cf84a}{enable\+\_\+if\+\_\+t}}$<$ \mbox{\hyperlink{structdetail_1_1is__basic__json__context}{is\+\_\+basic\+\_\+json\+\_\+context}}$<$ Basic\+Json\+Context $>$\mbox{\hyperlink{namespacedetail_a47b1bb0bbd3596589ed9187059c312efa2063c1608d6e0baf80249c42e2be5804}{\+::value}}, int $>$  = 0$>$ }\\static \mbox{\hyperlink{classdetail_1_1type__error}{type\+\_\+error}} \mbox{\hyperlink{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}{create}} (int id\+\_\+, const std\+::string \&what\+\_\+arg, Basic\+Json\+Context context)
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{classdetail_1_1exception}{detail\+::exception}}}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \mbox{\hyperlink{classdetail_1_1exception_ae75d7315f5f2d85958da6d961375caf0}{what}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em returns the explanatory string \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{classdetail_1_1exception_ae75d7315f5f2d85958da6d961375caf0}{what}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em returns the explanatory string \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{classdetail_1_1exception}{detail\+::exception}}}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{classdetail_1_1exception_a63b819fbb2ef34df9dad1e309207fa24}{id}}
+\begin{DoxyCompactList}\small\item\em the id of the exception \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classdetail_1_1exception}{detail\+::exception}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdetail_1_1exception_a528d6bc77e88490bbb84cde2222b7ff0}{exception}} (int id\+\_\+, const char $\ast$what\+\_\+arg)
+\item 
+\mbox{\hyperlink{classdetail_1_1exception_a528d6bc77e88490bbb84cde2222b7ff0}{exception}} (int id\+\_\+, const char $\ast$what\+\_\+arg)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Member Functions inherited from \mbox{\hyperlink{classdetail_1_1exception}{detail\+::exception}}}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::string \mbox{\hyperlink{classdetail_1_1exception_a8f1eb56b9964c8dd84d89d0da98d883b}{name}} (const std\+::string \&ename, int id\+\_\+)
+\item 
+static std\+::string \mbox{\hyperlink{classdetail_1_1exception_a6b4a786b5c1c25dd3edaceb1bf2d5120}{diagnostics}} (std\+::nullptr\+\_\+t)
+\item 
+{\footnotesize template$<$typename Basic\+Json\+Type $>$ }\\static std\+::string \mbox{\hyperlink{classdetail_1_1exception_af3739c53fe56a1712754d13dfa561f80}{diagnostics}} (const Basic\+Json\+Type $\ast$leaf\+\_\+element)
+\item 
+static std\+::string \mbox{\hyperlink{classdetail_1_1exception_a8f1eb56b9964c8dd84d89d0da98d883b}{name}} (const std\+::string \&ename, int id\+\_\+)
+\item 
+static std\+::string \mbox{\hyperlink{classdetail_1_1exception_a6b4a786b5c1c25dd3edaceb1bf2d5120}{diagnostics}} (std\+::nullptr\+\_\+t)
+\item 
+{\footnotesize template$<$typename Basic\+Json\+Type $>$ }\\static std\+::string \mbox{\hyperlink{classdetail_1_1exception_af3739c53fe56a1712754d13dfa561f80}{diagnostics}} (const Basic\+Json\+Type $\ast$leaf\+\_\+element)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+exception indicating executing a member function with a wrong type 
+
+\begin{DoxySeeAlso}{See also}
+\href{https://json.nlohmann.me/api/basic_json/type_error/}{\texttt{ https\+://json.\+nlohmann.\+me/api/basic\+\_\+json/type\+\_\+error/}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}\label{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}} 
+\index{detail::type\_error@{detail::type\_error}!create@{create}}
+\index{create@{create}!detail::type\_error@{detail::type\_error}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Basic\+Json\+Context , \mbox{\hyperlink{namespacedetail_a66bbcd629c83a87ba9cbc72a675cf84a}{enable\+\_\+if\+\_\+t}}$<$ \mbox{\hyperlink{structdetail_1_1is__basic__json__context}{is\+\_\+basic\+\_\+json\+\_\+context}}$<$ Basic\+Json\+Context $>$\mbox{\hyperlink{namespacedetail_a47b1bb0bbd3596589ed9187059c312efa2063c1608d6e0baf80249c42e2be5804}{\+::value}}, int $>$  = 0$>$ \\
+static \mbox{\hyperlink{classdetail_1_1type__error}{type\+\_\+error}} detail\+::type\+\_\+error\+::create (\begin{DoxyParamCaption}\item[{int}]{id\+\_\+,  }\item[{const std\+::string \&}]{what\+\_\+arg,  }\item[{Basic\+Json\+Context}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}\label{classdetail_1_1type__error_a2d25372628cf1e09ec67718f4bc42762}} 
+\index{detail::type\_error@{detail::type\_error}!create@{create}}
+\index{create@{create}!detail::type\_error@{detail::type\_error}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Basic\+Json\+Context , \mbox{\hyperlink{namespacedetail_a66bbcd629c83a87ba9cbc72a675cf84a}{enable\+\_\+if\+\_\+t}}$<$ \mbox{\hyperlink{structdetail_1_1is__basic__json__context}{is\+\_\+basic\+\_\+json\+\_\+context}}$<$ Basic\+Json\+Context $>$\mbox{\hyperlink{namespacedetail_a47b1bb0bbd3596589ed9187059c312efa2063c1608d6e0baf80249c42e2be5804}{\+::value}}, int $>$  = 0$>$ \\
+static \mbox{\hyperlink{classdetail_1_1type__error}{type\+\_\+error}} detail\+::type\+\_\+error\+::create (\begin{DoxyParamCaption}\item[{int}]{id\+\_\+,  }\item[{const std\+::string \&}]{what\+\_\+arg,  }\item[{Basic\+Json\+Context}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+pi\+Offboard\+Stereo\+Vision/src/\mbox{\hyperlink{pi_offboard_stereo_vision_2src_2json_8hpp}{json.\+hpp}}\item 
+udp\+\_\+client/src/\mbox{\hyperlink{udp__client_2src_2json_8hpp}{json.\+hpp}}\end{DoxyCompactItemize}
