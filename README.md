@@ -1,5 +1,8 @@
 # Swamp Blimps
 
+#Pre-Alpha Build Video Link
+- https://youtu.be/ogv464oKUCc
+
 # Completed Work
 - Shift towards a robust and secure list of active blimps to avoid the phantom blimp bug.
 - Evaluation and recommendation of components to team leads.
