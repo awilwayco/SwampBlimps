@@ -40,3 +40,10 @@ Catching Blimp's Raspberry Pi is not recognized by the base station.
 
 ESP32 Microcontroller cannot establish a persistent connection with the base station.
 - This is likely due to a mishandling of the UDP message from the Attacking Blimp side. (Note: May not be necessary to fix due to decision to change Attacking Blimp over to the Teensy Microcontroller and a WiFi card).
+
+# How to view Documentation folder
+1. Download zip file
+2. Unzip file
+3. Enter into the desired file
+4. Enter into the html folder
+5. Open the index.html file within the html folder. This should open the file in a local web browser
