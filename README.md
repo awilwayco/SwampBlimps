@@ -35,6 +35,7 @@ Camera communication with Raspberry
 Depth Calibration Issue
 - Improper calculations occurring on depth are resulting in inconsistent results during catching of balloons and approaching goals.
 - Issue would be in either the PyStereoVision or PyBlimpVision files.
+- (RESOLVED on 4/11/2023) New masking and application of SIFT algorithm seems to have provided acceptable results for competition
 
 Catching Blimp's Raspberry Pi is not recognized by the base station. 
 - Raspberry Pi appears as "New Blimp" on Display despite already being assigned a static local IP address.
@@ -43,6 +44,10 @@ Catching Blimp's Raspberry Pi is not recognized by the base station.
 
 ESP32 Microcontroller cannot establish a persistent connection with the base station.
 - This is likely due to a mishandling of the UDP message from the Attacking Blimp side. (Note: May not be necessary to fix due to decision to change Attacking Blimp over to the Teensy Microcontroller and a WiFi card).
+- (Resolved on 4/12/2023) Transitioned over to Teensy and ESP 01 instead.
+
+Raspberry Pi does not accept Wi-Fi outside of laboratory’s secure router
+- Attempted SSH, ethernet cable, unzipping tar.gz files, using sudo raspi-config, and setting internet directly in wpa_supplicant.cnf file, to connect to the internet, but does not accept any Wi-Fi outside of the lab's Wi-Fi
 
 # How to view Documentation folder
 1. Download zip file
