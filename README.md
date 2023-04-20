@@ -10,6 +10,7 @@
 - Learned and applied process to define static IP address to Raspberry Pi.
 - (Implemented Lost State)
 - (Assessment of potential software and circuit bugs in regards to controller issue).
+- Created Prototype of New Basestation using Flask and HTML.
 
 # Project Architecture
 Attacking Blimp
