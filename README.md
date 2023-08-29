@@ -3,7 +3,7 @@
 ## Pre-Alpha Build Video Link
 - https://youtu.be/ogv464oKUCc
 
-# Completed Work
+## Completed Work
 - Shift towards a robust and secure list of active blimps to avoid the phantom blimp bug.
 - Evaluation and recommendation of components to team leads.
 - Learned and applied process to flash and program Raspberry Pi.
@@ -13,7 +13,7 @@
 - Implemented Goal Alignment Detection using OpenCV.
 - Created Prototype of New Basestation using Flask and HTML.
 
-# Project Architecture
+## Project Architecture
 Attacking Blimp
 - Ultrasonic Sensor sends ultrasonic wave data used for height calculations through wires to Open Wide Angle Lens Camera. Ultrasonic Sensor is configured to use the universal asynchronous receiver / transmitter (UART) protocol for communication to Camera. Camera sends image processing and target recognition data through UART protocol to Teensy Microcontroller. Camera receives both power and ground from Electronic Speed Control (ESC) organized on a circuit board through wiring. Inertial Measurement Unit (IMU) collects gyroscope and accelerometer data and sends results to Teensy Microcontroller through the serial peripheral interface (SPI) protocol. ESC divides voltage passed in to 5 DC V for voltage regulation. ESC also sends direct current pulse width modulation (DC PWM) to ESP32 Microcontroller to control motor speed through wiring on circuit board. Teensy Microcontroller receives data from various components through pins connected to circuit board. The data is then used for internal calculations through programming. These include control calculations, filters, and state machines. ESP01 Microcontroller is used for Wi-Fi connectivity to connect to the router and communicate with the base station, the catching blimp, and other attacking blimps.
 
@@ -26,7 +26,7 @@ Network Architecture
 UDP Architecture
 - UDP Packet containing required data that is being sent both between the blimps and basestation and among the blimps themselves. Identifier indicates the message comes from an expected device. TargetID is the ID that transmits the message (based off the IP address’ assigned host ID). SourceID operates as a buffer between the TargetID, flags, and message. The flag section indicates how a device should receive the data, the options being as a data packet, a state change, or a barometer reading. Data indicates parameter message codes which verifies whether the device used to grab balloons is active or not and whether the blimp is in autonomous mode or not. 
 
-# Known Bugs
+## Known Bugs
 Phantom Blimp Bug
 - A blimp that the user cannot connect to appears.
 - System that uses maps for verifying, adding, and removing blimps should offer a robust and secure list of active blimps, removing this bug from potentially occurring.
@@ -51,7 +51,7 @@ ESP32 Microcontroller cannot establish a persistent connection with the base sta
 Raspberry Pi does not accept Wi-Fi outside of laboratory’s secure router
 - Attempted SSH, ethernet cable, unzipping tar.gz files, using sudo raspi-config, and setting internet directly in wpa_supplicant.cnf file, to connect to the internet, but does not accept any Wi-Fi outside of the lab's Wi-Fi
 
-# How to view Documentation folder
+## How to view Documentation folder
 1. Download zip file
 2. Unzip file
 3. Enter into the desired file
