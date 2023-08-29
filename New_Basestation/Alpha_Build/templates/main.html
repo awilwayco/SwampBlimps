@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SWAMP Blimps</title>
+    <style>
+        body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          height: 100vh;
+          margin: 1%;
+          font-family: Arial, sans-serif;
+        }
+        h1 {
+          text-align: center;
+          font-size: 50px;
+          margin-top: 20px;
+        }
+        button {
+          width: 50px;
+          height: 50px;
+          border: 1px solid black;
+          margin-top: 20px;
+        }
+        table {
+          margin-top: 20px;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        th, td {
+          padding: 10px;
+          border: 1px solid black;
+        }
+        .column-container {
+          display: flex;
+          flex-wrap: wrap; /* Allow columns to wrap to a new line if needed */
+          /* justify-content: space-evenly; */
+          align-items: flex-start;
+        }
+        .column {
+          min-width: calc(100vw / 7); /* Each column is one-sixth of the page width */
+          flex-wrap: wrap; /* Allow columns to wrap to a new line if needed */
+          text-transform: uppercase; /* Capitalize the header name */
+          /* height: 50px; /* Adjust this height as needed */
+          flex-direction: column;
+        }
+        .inputs-column {
+          flex-basis: 100%; /* Take up the full width of other columns */
+          text-transform: uppercase; /* Capitalize the header name */
+        }
+        th {
+          font-size: 25px; /* Increase the text size of the column headers */
+        }
+        .input-display {
+          display: flex;
+          justify-content: center;
+        }
+        .grid-container {
+          display: flex;
+          justify-content: flex-start;
+          margin-top: 1px;
+        }
+        #grid1, #grid2, #grid3, #grid4 {
+            position: relative;
+            height: 125px;
+            width: 125px;
+            border: 1px solid black;
+            box-sizing: border-box;
+        }
+        #grid2, #grid4 {
+            margin-left: -1px;
+            border-left: none;
+        }
+        #dot1, #dot2, #dot3, #dot4 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 15px;
+            width: 15px;
+            background: black;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #x-axis1, #y-axis1, #x-axis2, #y-axis2, #x-axis3, #y-axis3, #x-axis4, #y-axis4 {
+            position: absolute;
+            background: black;
+        }
+        #x-axis1, #x-axis2, #x-axis3, #x-axis4 {
+            top: 50%;
+            width: 100%;
+            height: 1px;
+        }
+        #y-axis1, #y-axis2, #y-axis3, #y-axis4 {
+            left: 50%;
+            height: 100%;
+            width: 1px;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 1px;
+        }
+        h2 {
+          text-align: center;
+          font-size: 20px;
+          /* text-transform: none; */
+        }
+        h3 {
+          text-align: center;
+          font-size: 27px;
+          margin-top: 35px;
+          margin-bottom: 35px;
+        }
+        #goalButton {
+          width: 50px;
+          height: 50px;
+          border: 1px solid black;
+          /* background-color: {{ goal_color }}; */
+        }
+        #targetButton {
+          width: 50px;
+          height: 50px;
+          border: 1px solid black;
+          /* background-color: {{ target1_color }}; */
+        }
+        #targetButton2 {
+          width: 50px;
+          height: 50px;
+          border: 1px solid black;
+          /* background-color: {{ target2_color }}; */
+        }
+      </style>
+    <!-- Include the SocketIO script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>SWAMP Blimps</h1>
+  <div class="column-container">
+    <div class="column">
+      <table>
+        <tr>
+          <th>Inputs</th>
+        </tr>
+      </table>
+      <div class="center">
+          <h2>WASD</h2>
+      </div>
+      <div class="grid-container">
+        <div id="grid1">
+          <div id="dot1"></div>
+          <div id="x-axis1"></div>
+          <div id="y-axis1"></div>
+        </div>
+        <div id="grid2">
+          <div id="dot2"></div>
+          <div id="x-axis2"></div>
+          <div id="y-axis2"></div>
+        </div>
+      </div>
+      <div class="center">
+          <h2>Controller 1</h2>
+      </div>
+      <div class="grid-container">
+          <div id="grid3">
+              <div id="dot3"></div>
+              <div id="x-axis3"></div>
+              <div id="y-axis3"></div>
+          </div>
+          <div id="grid4">
+              <div id="dot4"></div>
+              <div id="x-axis4"></div>
+              <div id="y-axis4"></div>
+          </div>
+        </div>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Blimps</th>
+        </tr>
+        <tbody id="blimpsTableBody">
+          <!-- Blimp names will be added here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>State</th>
+        </tr>
+      </table>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Target</th>
+        </tr>
+      </table>
+      <div class="center">
+          <!-- Dynamic target buttons will be appended here -->
+      </div>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Goal</th>
+        </tr>
+      </table>
+      <div class="center">
+        <div class="goalButtonsContainer">
+          <!-- Dynamic goal buttons will be appended here -->
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Stream</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+    <!-- JavaScript code -->
+    <script>
+
+        // Connect to SocketIO server
+        const socket = io();
+
+        // Timeout
+        const TIMEOUT = 1000;
+
+        // Timers
+        const blimp_name_timers = {};
+        const goal_color_timers = {};
+
+        // IP Address Allowed
+        ip_allowed = '128.227.7.19';
+
+        // Client IP Address
+        let client_ip;
+        
+        // Get Client IP Address
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://api.ipify.org?format=json", true);
+        xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
+            client_ip = response.ip;
+            console.log("Client IP Address:", client_ip);
+        }
+        };
+        xhr.send();
+
+        // Receive Connection
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        // Receive Blimp Name
+        socket.on('blimp_name', (data) => {
+            update_blimp_name(data.node_name, data.blimp_name);
+        });
+
+        // Receive Goal Color
+        socket.on('goal_color', (data) => {
+            update_goal_color(data.node_name, data.goal_color);
+        });
+
+        socket.on('update', (data) => {
+            update_basestation(data.node_name, data.blimp_name, data.goal_color_data);
+        });
+
+        var blimpOrder = ["Blimp 1", "Blimp 2", "Burn Cream Blimp"];
+
+        // Create a mapping of blimp names to their corresponding rows in the table
+        var blimpList = [];
+
+        var blimpRows = {}
+
+        var goal_color;
+
+        function update_basestation(node_name, blimp_name, goal_color_data) {
+            // Clear the timers
+            clearTimeout(blimp_name_timers[blimp_name]);
+            clearTimeout(goal_color_timers[node_name]);
+
+            // Get the blimpsTableBody
+            var blimpsTableBody = document.getElementById('blimpsTableBody');
+            var goalButtonsContainer = document.querySelector('.goalButtonsContainer');
+
+            // Get the goal color button for the specific blimp
+            let goal_color_button = document.getElementById(`goal_color_button_${node_name}`);
+
+            // Get goal color from the data
+            if (goal_color_data === 0) {
+                goal_color = 'orange';
+            } else {
+                goal_color = 'yellow';
+            }
+
+            // Only proceed if the name is not in the table
+            if (!(blimpList.includes(blimp_name))) {
+                // Create a new row and cell for the blimp name
+                var newRow = document.createElement('h3');
+                var newCell = document.createElement('h3');
+                newCell.textContent = blimp_name;
+                newRow.appendChild(newCell);
+                blimpsTableBody.appendChild(newRow);
+
+                // Store the row in the blimpList
+                blimpList.push(blimp_name);
+
+                // Sort the rows based on your desired order
+                var sortedRows = Array.from(blimpsTableBody.getElementsByTagName('h3'));
+                sortedRows.sort(function(a, b) {
+                    return blimpOrder.indexOf(a.textContent) - blimpOrder.indexOf(b.textContent);
+                });
+                blimpsTableBody.innerHTML = ''; // Clear the table
+                sortedRows.forEach(function(row) {
+                    blimpsTableBody.appendChild(row);
+                    blimpRows[blimp_name] = row;
+
+                    // Goal Color Button does not exist
+                    if (!goal_color_button) {
+                        // Create new button
+                        goal_color_button = document.createElement('button');
+                        goal_color_button.id = `goal_color_button_${node_name}`;
+                        goal_color_button.style.backgroundColor = goal_color;
+                        
+                        // Attach the click event listener to the button
+                        goal_color_button.addEventListener('click', (event) => {
+                            if (client_ip === ip_allowed) {
+                              // Change the goal color and the data
+                              if (goal_color === 'orange') {
+                                  goal_color = 'yellow';
+                                  goal_color_data = 1;
+                              } else {
+                                  goal_color = 'orange';
+                                  goal_color_data = 0;
+                              }
+
+                              console.log(node_name, 'has a goal color:', goal_color)
+
+                              // Set goal color of the button
+                              goal_color_button.style.backgroundColor = goal_color;
+                              
+                              const data = {
+                                  node_name: node_name,
+                                  goal_color_data: goal_color_data
+                              };
+
+                              // Send the data to the backend to update over ROS
+                              socket.emit('update_goal_color', data);
+                            }
+                        });
+
+                      // Create a div element that will be used to wrap the button and force it to a new line
+                      const buttonWrapper = document.createElement('div');
+                      buttonWrapper.appendChild(goal_color_button);
+
+                      goalButtonsContainer.appendChild(buttonWrapper);
+                    } else {
+                      goal_color_button.style.backgroundColor = goal_color;
+                    }
+                });
+            }
+
+            goal_color_button.style.backgroundColor = goal_color;
+
+            // Set a new timer for this blimp name
+            blimp_name_timers[blimp_name] = setTimeout(() => {
+                // Check if the blimp name is in the list
+                if (blimpRows[blimp_name]) {
+
+                    blimpRows[blimp_name].textContent = ''; // Clear the content of the cell
+
+                    // Remove the specified blimp name using the filter method
+                    blimpList = blimpList.filter(function(blimpName) {
+                        return blimpName !== blimp_name;
+                    });
+
+                    console.log(blimpList)
+
+                    // Remove goal color button
+                    let goal_color_button = document.getElementById(`goal_color_button_${node_name}`);
+                    if (goal_color_button) {
+                        goal_color_button.remove();
+                    }
+                }
+
+                // Clear the timer entry
+                delete blimp_name_timers[blimp_name];
+                delete goal_color_timers[node_name]
+
+            }, TIMEOUT);
+        }
+
+        // Update Blimp Name
+        function update_blimp_name(node_name, blimp_name) {
+            // Clear the blimp name timer
+            clearTimeout(blimp_name_timers[blimp_name]);
+
+            // Get the blimpsTableBody
+            var tableBody = document.getElementById('blimpsTableBody');
+
+            // Only proceed if the name is not in the table
+            if (!(blimpList.includes(blimp_name))) {
+                // Create a new row and cell for the blimp name
+                var newRow = document.createElement('h3');
+                var newCell = document.createElement('h3');
+                newCell.textContent = blimp_name;
+                newRow.appendChild(newCell);
+                tableBody.appendChild(newRow);
+
+                // Store the row in the blimpList
+                blimpList.push(blimp_name);
+
+                // Store the row in the blimpRows mapping
+                // blimpRows[blimp_name] = newRow;
+
+                // Sort the rows based on your desired order
+                var sortedRows = Array.from(tableBody.getElementsByTagName('h3'));
+                sortedRows.sort(function(a, b) {
+                    return blimpOrder.indexOf(a.textContent) - blimpOrder.indexOf(b.textContent);
+                });
+                tableBody.innerHTML = ''; // Clear the table
+                sortedRows.forEach(function(row) {
+                    tableBody.appendChild(row);
+                    blimpRows[blimp_name] = row;
+                });
+            }
+
+            // Set a new timer for this blimp name
+            blimp_name_timers[blimp_name] = setTimeout(() => {
+                // Check if the blimp name is in the list
+                if (blimpRows[blimp_name]) {
+                    //console.log(blimp_name)
+
+                    blimpRows[blimp_name].textContent = ''; // Clear the content of the cell
+
+                    // Remove the specified blimp name using the filter method
+                    blimpList = blimpList.filter(function(blimpName) {
+                        return blimpName !== blimp_name;
+                    });
+
+                    // Remove goal color button
+                    let goal_color_button = document.getElementById(`goal_color_button_${node_name}`);
+                    if (goal_color_button) {
+                        goal_color_button.remove();
+                    }
+                }
+
+                // Clear the timer entry
+                delete blimp_name_timers[blimp_name];
+                delete goal_color_timers[node_name]
+
+            }, TIMEOUT);
+        }
+
+        // Update Goal Color Button
+        function update_goal_color(node_name, goal_color_data) {
+            // console.log('Node Name:', node_name);
+            // console.log('Goal Color Data:', goal_color_data);
+
+            // Clear the goal color timer
+            clearTimeout(goal_color_timers[node_name]);
+
+            var centerDiv = document.querySelector('.goalButtonsContainer');
+
+            // Get goal color from the data
+            if (goal_color_data === 0) {
+                goal_color = 'orange';
+            } else {
+                goal_color = 'yellow';
+            }
+
+            // Get the goal color button for the specific blimp
+            let goal_color_button = document.getElementById(`goal_color_button_${node_name}`);
+
+            // Goal Color Button does not exist
+            if (!goal_color_button) {
+                // Create new button
+                goal_color_button = document.createElement('button');
+                goal_color_button.id = `goal_color_button_${node_name}`;
+                goal_color_button.style.backgroundColor = goal_color;
+                
+                // Attach the click event listener to the button
+                goal_color_button.addEventListener('click', (event) => {
+                    //if (client_ip === ip_allowed) {
+                      // Change the goal color and the data
+                      if (goal_color === 'orange') {
+                          goal_color = 'yellow';
+                          goal_color_data = 1;
+                      } else {
+                          goal_color = 'orange';
+                          goal_color_data = 0;
+                      }
+
+                      console.log(node_name, 'has a goal color:', goal_color)
+
+                      // Set goal color of the button
+                      goal_color_button.style.backgroundColor = goal_color;
+                      
+                      const data = {
+                          node_name: node_name,
+                          goal_color_data: goal_color_data
+                      };
+
+                      // Send the data to the backend to update over ROS
+                      socket.emit('update_goal_color', data);
+                    //}
+                });
+
+                // Create a div element that will be used to wrap the button and force it to a new line
+                const buttonWrapper = document.createElement('div');
+                buttonWrapper.appendChild(goal_color_button);
+
+                centerDiv.appendChild(buttonWrapper);
+            }
+            // Goal Color Button exists
+            else {
+                // Set the goal color of the button
+                goal_color_button.style.backgroundColor = goal_color;
+            }
+        }
+
+        var keys = { w: false, a: false, s: false, d: false };
+        var dot = document.getElementById("dot1");
+
+        window.onkeydown = function(e) {
+            if (keys.hasOwnProperty(e.key.toLowerCase())) {
+                keys[e.key.toLowerCase()] = true;
+            }
+            moveDot();
+        };
+
+        window.onkeyup = function(e) {
+            if (keys.hasOwnProperty(e.key.toLowerCase())) {
+                keys[e.key.toLowerCase()] = false;
+            }
+            moveDot();
+        };
+
+        function moveDot() {
+            dot.style.left = "50%";
+            dot.style.top = "50%";
+
+            if (keys['w'] && keys['a'] && keys['s'] && keys['d']) return;
+
+            if (keys['w'] && keys['s']) {
+                if (keys['a']) dot.style.left = "25%";
+                else if (keys['d']) dot.style.left = "75%";
+                return;
+            }
+
+            if (keys['a'] && keys['d']) {
+                if (keys['w']) dot.style.top = "25%";
+                else if (keys['s']) dot.style.top = "75%";
+                return;
+            }
+
+            if (keys['w'] && !keys['s']) dot.style.top = "25%";
+            if (!keys['w'] && keys['s']) dot.style.top = "75%";
+            if (keys['a'] && !keys['d']) dot.style.left = "25%";
+            if (!keys['a'] && keys['d']) dot.style.left = "75%";
+        }
+        var dot1 = document.getElementById('dot1');
+        var dot2 = document.getElementById('dot2');
+
+        var controllerCheck = setInterval(pollController, 0);
+
+        function pollController() {
+          var gamepads = navigator.getGamepads();
+          for (var i = 0; i < gamepads.length; i++) {
+            var gamepad = gamepads[i];
+            if (gamepad) {
+              moveDots(gamepad);
+            }
+          }
+        }
+
+        function moveDots(gamepad) {
+          // Gamepad.axes array contains the values for all axes of the controller.
+          // It's typical for the left stick to use axes 0 (X) and 1 (Y)
+          // and for the right stick to use axes 2 (X) and 3 (Y).
+          var leftStickX = gamepad.axes[0];
+          var leftStickY = gamepad.axes[1];
+          var rightStickX = gamepad.axes[2];
+          var rightStickY = gamepad.axes[3];
+
+          // Apply the joystick positions to the dot positions
+          // The joystick returns a value between -1 and 1.
+          // We shift this range to be 0 - 100% for use with the CSS styles.
+          dot3.style.left = `${50 + leftStickX * 45}%`;
+          dot3.style.top = `${50 + leftStickY * 45}%`;
+          dot4.style.left = `${50 + rightStickX * 45}%`;
+          dot4.style.top = `${50 + rightStickY * 45}%`;
+        }
+
+    </script>
+</body>
+</html>
