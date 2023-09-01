@@ -1,19 +1,29 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Bool, String
+from std_msgs.msg import Bool, String, Int64
 import sys
 
 class Blimp(Node):
 
     def __init__(self, blimpID):
+
+        # Blimp ID
         self.blimpID = blimpID
+
+        # State Machine
+        self.state_machine = -1
+
         # Define Fake Blimp's name
         self.node_name = str(blimpID)
+
         # Init node
         super().__init__(self.node_name)
 
         # Create publisher for /blimpID
         self.pub_blimpID = self.create_publisher(String, self.node_name + '/blimpID', 10)
+
+        # Create publisher for /state_machine
+        self.pub_state_machine = self.create_publisher(Int64, self.node_name + '/state_machine', 10)
 
         # Create subscriber for /autoPanic
         self.sub_identify = self.create_subscription(Bool, '/identify', self.identify_callback, 10)
@@ -29,10 +39,19 @@ class Blimp(Node):
         # Publish /blimpID
         self.publish_blimpID()
 
+        # Publish /state_machine
+        self.publish_state_machine()
+
     def publish_blimpID(self):
         msg = String()
         msg.data = str(self.blimpID)
         self.pub_blimpID.publish(msg)
+        self.get_logger().info("Published: %s" % msg.data)
+
+    def publish_state_machine(self):
+        msg = Int64()
+        msg.data = self.state_machine
+        self.pub_state_machine.publish(msg)
         self.get_logger().info("Published: %s" % msg.data)
 
 def main(args=None):
