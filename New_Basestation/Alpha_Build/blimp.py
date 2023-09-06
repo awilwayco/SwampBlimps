@@ -29,9 +29,8 @@ class Blimp:
         self.target_color = 0 # 0: Blue, 1: Red
 
         # State Machine
-        self.state_machine = -1
+        self.state_machine = 0
         """
-        -1: None
         0: searching
         1: approach
         2: catching

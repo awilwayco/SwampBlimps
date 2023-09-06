@@ -232,13 +232,13 @@
     <script>
 
         // IP Address Allowed
-        const ip_allowed = '10.140.72.58';
+        const ip_allowed = '192.168.0.203';
 
         // Connect to SocketIO server
         const socket = io();
 
         // Timeout
-        const TIMEOUT = 1000;
+        const TIMEOUT = 2000;
 
         // Timers
         const blimp_timers = {};
@@ -254,8 +254,9 @@
             //console.log(blimp_dict)
             update_basestation(blimp_dict);
         });
-
-        var blimpOrder = ["Catch 1", "Catch 2", "Attack 1", "Attack 2", "Burn Cream Blimp"];
+        
+        // Catching Blimps before Attack Blimps
+        var blimpOrder = ["Catch 1", "Catch 2", "Burn Cream Blimp", "Silly Ah Blimp", "Attack 1", "Attack 2"];
 
         var blimpList = [];
 
@@ -266,6 +267,10 @@
         var blimpsTableBody = document.getElementById('blimpsTableBody');
 
         var statesTableBody = document.getElementById('statesTableBody');
+
+        var goalButtonsContainer = document.querySelector('.goalButtonsContainer');
+
+        var targetButtonsContainer = document.querySelector('.targetButtonsContainer');
 
         function update_basestation(blimp_dict) {
           // Get data from blimp dictionary
@@ -284,8 +289,6 @@
 
           // Get the goal color button for the specific blimp
           let goal_color_button = document.getElementById(`goal_color_button_${blimp_name}`);
-
-          var goalButtonsContainer = document.querySelector('.goalButtonsContainer');
 
           // Number of targets
           let target_num;
@@ -316,8 +319,6 @@
               target_color = 'red';
             }
           }
-
-          var targetButtonsContainer = document.querySelector('.targetButtonsContainer');
 
           // Only proceed if the name is not in the table
           if (!(blimpList.includes(blimp_name))) {
@@ -371,12 +372,13 @@
             });
 
             if (target_num === 2) {
-              update_target_button_colors(blimp_dict, 'green', target_color_1_button, 'purple', target_color_2_button, targetButtonsContainer);
-              update_goal_button_color(blimp_dict, goal_color, goal_color_button, goalButtonsContainer);
+              update_target_button_colors(blimp_dict, 'green', target_color_1_button, 'purple', target_color_2_button);
+              update_goal_button_color(blimp_dict, goal_color, goal_color_button);
             }
             // Target number is 1 (Attack Blimps)
             else {
-              update_target_button_color(blimp_dict, target_color, target_color_1_button, targetButtonsContainer);
+              update_target_button_color(blimp_dict, target_color, target_color_1_button);
+              update_empty_button_color(blimp_dict, 'white', goal_color_button);
             }
             // Sort the target rows based on your desired order
             sortedTargetRows = Array.from(targetButtonsContainer.querySelectorAll('[blimp_name]'));
@@ -393,9 +395,14 @@
           }
           else {
             // Set goal color of the button for all clients to see
-            if (goal_color_button) {
-              goal_color_button.style.backgroundColor = goal_color;
-              // update_goal_button_color(blimp_dict, goal_color, goal_color_button, goalButtonsContainer);
+            if (blimp_type === 0) {
+              if (goal_color_button) {
+                goal_color_button.style.backgroundColor = goal_color;
+              }
+            }
+            else {
+              goal_color_button.style.backgroundColor = 'white';
+              goal_color_button.style.border = "1px solid white"; ;
             }
             // Set target color of the button for all clients to see
             if (target_color_1_button) {
@@ -448,7 +455,7 @@
           }, TIMEOUT);
         }
 
-        function update_target_button_color(blimp_dict, target_color, target_color_button, targetButtonsContainer) {
+        function update_target_button_color(blimp_dict, target_color, target_color_button) {
             // Get data from blimp dictionary
             let blimp_name = blimp_dict["blimp_name"];
             
@@ -474,7 +481,10 @@
                             blimp_dict["target_color"] = 0;
                         }
                         
-                        console.log(blimp_name, 'has a target color:', target_color)
+                        console.log(blimp_name, 'has a target color:', target_color);
+
+                        // Get the target color button for the specific blimp
+                        let target_color_button = document.getElementById(`target_color_1_button_${blimp_name}`);
                         
                         // Set target color of the button
                         target_color_button.style.backgroundColor = target_color;
@@ -497,7 +507,7 @@
             }
         }
 
-        function update_target_button_colors(blimp_dict, target_color_1, target_color_1_button, target_color_2, target_color_2_button, targetButtonsContainer) {
+        function update_target_button_colors(blimp_dict, target_color_1, target_color_1_button, target_color_2, target_color_2_button) {
           // Get data from blimp dictionary
           let blimp_name = blimp_dict["blimp_name"];
 
@@ -526,7 +536,7 @@
           targetButtonsContainer.appendChild(targetRowWrapper);
         }
 
-        function update_goal_button_color(blimp_dict, goal_color, goal_color_button, goalButtonsContainer) {
+        function update_goal_button_color(blimp_dict, goal_color, goal_color_button) {
           // Get data from blimp dictionary
           let blimp_name = blimp_dict["blimp_name"];
           
@@ -553,6 +563,9 @@
                   }
 
                   console.log(blimp_name, 'has a goal color:', goal_color)
+
+                  // Get the goal color button for the specific blimp
+                  let goal_color_button = document.getElementById(`goal_color_button_${blimp_name}`);
 
                   // Set goal color of the button
                   goal_color_button.style.backgroundColor = goal_color;
@@ -584,12 +597,43 @@
             }
         }
 
+        function update_empty_button_color(blimp_dict, goal_color, goal_color_button, goalButtonsContainer) {
+          // Get data from blimp dictionary
+          let blimp_name = blimp_dict["blimp_name"];
+          
+          // Goal Color Button does not exist
+          if (!goal_color_button) {
+              // Create new button
+              goal_color_button = document.createElement('button');
+              goal_color_button.id = `goal_color_button_${blimp_name}`;
+              goal_color_button.style.backgroundColor = goal_color;
+
+              // Create a div element that will be used to wrap the button and force it to a new line
+              const buttonWrapper = document.createElement('div');
+              buttonWrapper.appendChild(goal_color_button);
+              buttonWrapper.setAttribute('blimp_name', blimp_name); // Store the blimp name
+
+              goalButtonsContainer.appendChild(buttonWrapper);
+
+              // Sort the goal rows based on your desired order
+              sortedGoalRows = Array.from(goalButtonsContainer.querySelectorAll('[blimp_name]'));
+              sortedGoalRows.sort(function(a, b) {
+                  const blimpNameA = a.getAttribute('blimp_name');
+                  const blimpNameB = b.getAttribute('blimp_name');
+                  return blimpOrder.indexOf(blimpNameA) - blimpOrder.indexOf(blimpNameB);
+              });
+
+              goalButtonsContainer.innerHTML = ''; // Clear the container
+              sortedGoalRows.forEach(function(row) {
+                  goalButtonsContainer.appendChild(row);
+              });
+            }
+        }
+
         function get_state(number) {
           let state;
 
-          if (number === -1) {
-              state = "none"
-          } else if (number === 0) {
+          if (number === 0) {
               state = "searching";
           } else if (number === 1) {
               state = "approach";
@@ -666,6 +710,7 @@
             var gamepad = gamepads[i];
             if (gamepad) {
               moveDots(gamepad);
+              handleGamepadButtons(gamepad);
             }
           }
         }
@@ -686,7 +731,102 @@
           dot3.style.top = `${50 + leftStickY * 45}%`;
           dot4.style.left = `${50 + rightStickX * 45}%`;
           dot4.style.top = `${50 + rightStickY * 45}%`;
+
+          //console.log("Left Stick X: ", 50 + leftStickX * 45);
         }
+
+        // Initialize a variable to keep track of the previous state of the controller buttons and right trigger
+        let controllerState = {
+          up: false,
+          down: false,
+          left: false,
+          right: false,
+          rightTrigger: false,
+          leftTrigger: false,
+          rightBumper: false,
+          leftBumper: false,
+          xButton: false,
+          yButton: false,
+          bButton: false,
+          aButton: false
+        };
+
+        // Function to handle gamepad button presses and releases
+        function handleGamepadButtons(gamepad) {
+          // Check if the D-pad Up button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.up && !gamepad.buttons[12].pressed) {
+            console.log('Xbox D-Pad Up released.');
+          }
+          // Check if the D-pad Down button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.down && !gamepad.buttons[13].pressed) {
+            console.log('Xbox D-Pad Down released.');
+          }
+          // Check if the D-pad Left button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.left && !gamepad.buttons[14].pressed) {
+            console.log('Xbox D-Pad Left released.');
+          }
+          // Check if the D-pad Right button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.right && !gamepad.buttons[15].pressed) {
+            console.log('Xbox D-Pad Right released.');
+          }
+          
+          // Check if the right trigger was pressed in the previous state but is not pressed now (released)
+          if (controllerState.rightTrigger && gamepad.buttons[7].value === 0) {
+            console.log('Xbox Right Trigger released.');
+          }
+
+          // Check if the left trigger was pressed in the previous state but is not pressed now (released)
+          if (controllerState.leftTrigger && gamepad.buttons[6].value === 0) {
+            console.log('Xbox Left Trigger released.');
+          }
+
+          // Check if the right bumper was pressed in the previous state but is not pressed now (released)
+          if (controllerState.rightBumper && !gamepad.buttons[5].pressed) {
+            console.log('Xbox Right Bumper released.');
+          }
+
+          // Check if the left bumper was pressed in the previous state but is not pressed now (released)
+          if (controllerState.leftBumper && !gamepad.buttons[4].pressed) {
+            console.log('Xbox Left Bumper released.');
+          }
+
+          // Check if the X button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.xButton && !gamepad.buttons[2].pressed) {
+            console.log('Xbox X Button released.');
+          }
+
+          // Check if the Y button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.yButton && !gamepad.buttons[3].pressed) {
+            console.log('Xbox Y Button released.');
+          }
+
+          // Check if the B button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.bButton && !gamepad.buttons[1].pressed) {
+            console.log('Xbox B Button released.');
+          }
+
+          // Check if the A button was pressed in the previous state but is not pressed now (released)
+          if (controllerState.aButton && !gamepad.buttons[0].pressed) {
+            console.log('Xbox A Button released.');
+          }
+
+          // Update the previous state of the controller buttons and right trigger
+          controllerState = {
+            up: gamepad.buttons[12].pressed,
+            down: gamepad.buttons[13].pressed,
+            left: gamepad.buttons[14].pressed,
+            right: gamepad.buttons[15].pressed,
+            rightTrigger: gamepad.buttons[7].value !== 0,
+            leftTrigger: gamepad.buttons[6].value !== 0,
+            rightBumper: gamepad.buttons[5].pressed,
+            leftBumper: gamepad.buttons[4].pressed,
+            xButton: gamepad.buttons[2].pressed,
+            yButton: gamepad.buttons[3].pressed,
+            bButton: gamepad.buttons[1].pressed,
+            aButton: gamepad.buttons[0].pressed
+          };
+        }
+
 
     </script>
 </body>

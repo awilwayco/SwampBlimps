@@ -11,7 +11,7 @@ class Blimp(Node):
         self.blimpID = blimpID
 
         # State Machine
-        self.state_machine = -1
+        self.state_machine = 0
 
         # Define Fake Blimp's name
         self.node_name = str(blimpID)
