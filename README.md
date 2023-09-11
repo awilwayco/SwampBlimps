@@ -52,6 +52,7 @@ ESP32 Microcontroller cannot establish a persistent connection with the base sta
 
 Raspberry Pi does not accept Wi-Fi outside of laboratory’s secure router
 - Attempted SSH, ethernet cable, unzipping tar.gz files, using sudo raspi-config, and setting internet directly in wpa_supplicant.cnf file, to connect to the internet, but does not accept any Wi-Fi outside of the lab's Wi-Fi
+- (Resolved 6/22/2023) Transitioned over to ROS instead
 
 ## How to view Documentation folder
 1. Download zip file
