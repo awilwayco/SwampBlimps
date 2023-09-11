@@ -217,6 +217,7 @@ class BlimpNodeHandler:
         self.publish_target_color()
         self.publish_goal_color()
         self.publish_motorCommands()
+        self.publish_auto()
 
     # Continually Poll State Machine Data from Teensy
     def state_machine_callback(self, msg):
@@ -265,11 +266,18 @@ class BlimpNodeHandler:
 
     def publish_motorCommands(self):
         global blimps
-        # Publish goal color value to the ROS topic
+        # Publish motor commands value to the ROS topic
         msg = Float64MultiArray()
         #msg.data = blimps[self.blimp_name].motorCommands
-        msg.data = blimps['Catch 1'].motorCommands
+        msg.data = blimps['Burn Cream Blimp'].motorCommands
         self.pub_motorCommands.publish(msg)
+
+    def publish_auto(self):
+        global blimps
+        # Publish auto value to the ROS topic
+        msg = Bool()
+        msg.data = blimps[self.blimp_name].auto
+        self.pub_auto.publish(msg)
 
     # Update Target Color
     @socketio.on('update_motorCommands')
@@ -282,7 +290,7 @@ class BlimpNodeHandler:
         # Iterate through which blimp_name is connected
         global blimps
         # Hard-Coded for Testing
-        blimp_name = 'Catch 1'
+        blimp_name = 'Burn Cream Blimp'
         blimps[blimp_name].motorCommands = motorCommands
         print(blimps[blimp_name].motorCommands)
 

@@ -232,7 +232,7 @@
     <script>
 
         // IP Address Allowed
-        const ip_allowed = '10.140.11.225';
+        const ip_allowed = '192.168.0.203';
 
         // Connect to SocketIO server
         const socket = io();
@@ -742,13 +742,33 @@
           rightStickY = gamepad.axes[3];
 
           // Define a dead zone threshold (adjust as needed)
-          const deadZone = 0.1;
+          const deadZero = 0.1;
+          const deadOne = 0.01;
 
           // Apply tolerance by checking if values are within the dead zone
-          leftStickX = Math.abs(leftStickX) < deadZone ? 0 : leftStickX;
-          leftStickY = Math.abs(leftStickY) < deadZone ? 0 : leftStickY;
-          rightStickX = Math.abs(rightStickX) < deadZone ? 0 : rightStickX;
-          rightStickY = Math.abs(rightStickY) < deadZone ? 0 : rightStickY;
+          leftStickX = Math.abs(leftStickX) < deadZero ? 0 : leftStickX;
+          leftStickY = Math.abs(leftStickY) < deadZero ? 0 : leftStickY;
+          rightStickX = Math.abs(rightStickX) < deadZero ? 0 : rightStickX;
+          rightStickY = Math.abs(rightStickY) < deadZero ? 0 : rightStickY;
+
+          leftStickX = leftStickX > 1 - deadOne ? 1 : leftStickX;
+          leftStickY = leftStickY > 1 - deadOne ? 1 : leftStickY;
+          rightStickX = rightStickX > 1 - deadOne ? 1 : rightStickX;
+          rightStickY = rightStickY > 1 - deadOne ? 1 : rightStickY;
+
+          leftStickX = leftStickX < -1 + deadOne ? -1 : leftStickX;
+          leftStickY = leftStickY < -1 + deadOne ? -1 : leftStickY;
+          rightStickX = rightStickX < -1 + deadOne ? -1 : rightStickX;
+          rightStickY = rightStickY < -1 + deadOne ? -1 : rightStickY;
+
+          leftStickX = leftStickX.toFixed(2);
+          leftStickY = leftStickY.toFixed(2);
+          rightStickX = rightStickX.toFixed(2);
+          rightStickY = rightStickY.toFixed(2);
+
+          // Multiply by -1 to Invert the Y-Axes
+          leftStickY = leftStickY * -1;
+          rightStickY = rightStickY * -1;
 
           // Apply the joystick positions to the dot positions
           // The joystick returns a value between -1 and 1.
