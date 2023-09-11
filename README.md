@@ -12,6 +12,8 @@
 - (Assessment of potential software and circuit bugs in regards to controller issue).
 - Implemented Goal Alignment Detection using OpenCV.
 - Created Prototype of New Basestation using Flask and HTML.
+- Created machine learning pipeline
+- Replace UDP with ROS2 (Robotic Operating System 2)
 
 ## Project Architecture
 Attacking Blimp
