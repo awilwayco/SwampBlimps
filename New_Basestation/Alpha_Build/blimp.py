@@ -14,7 +14,7 @@ class Blimp:
         self.killed = False
 
         # Motor Commands
-        self.motor_commands = [0, 0, 0, 0]
+        self.motorCommands = [0.0, 0.0, 0.0, 0.0]
 
         # Grabbing
         self.grabbing = False
@@ -41,21 +41,25 @@ class Blimp:
         7: shooting
         8: scored
         """
-    
+
+        # Connected status
+        self.connected = False  # Initially not connected
+
     def to_dict(self):
         return {
             "blimp_name": self.blimp_name,
             "blimp_type": self.blimp_type,
             "auto": self.auto,
             "killed": self.killed,
-            "motor_commands": self.motor_commands,
+            "motorCommands": self.motorCommands,
             "grabbing": self.grabbing,
             "shooting": self.shooting,
             "goal_color": self.goal_color,
             "target_color": self.target_color,
-            "state_machine": self.state_machine
+            "state_machine": self.state_machine,
+            "connected": self.connected  # Include connected status
         }
-    
+
     def update_dict(self, data_dict):
         if "blimp_name" in data_dict:
             self.blimp_name = data_dict["blimp_name"]
@@ -65,8 +69,8 @@ class Blimp:
             self.auto = data_dict["auto"]
         if "killed" in data_dict:
             self.killed = data_dict["killed"]
-        if "motor_commands" in data_dict:
-            self.motorCommands = data_dict["motor_commands"]
+        if "motorCommands" in data_dict:
+            self.motorCommands = data_dict["motorCommands"]
         if "grabbing" in data_dict:
             self.grabbing = data_dict["grabbing"]
         if "shooting" in data_dict:
@@ -77,3 +81,5 @@ class Blimp:
             self.target_color = data_dict["target_color"]
         if "state_machine" in data_dict:
             self.state_machine = data_dict["state_machine"]
+        if "connected" in data_dict:
+            self.connected = data_dict["connected"]  # Update connected status

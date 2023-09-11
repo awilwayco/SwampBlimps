@@ -14,6 +14,8 @@ import threading
 import time
 import sys
 import signal
+import numpy as np
+import json
 
 # Blimp Class
 from blimp import Blimp
@@ -175,7 +177,7 @@ class BlimpNodeHandler:
         self.pub_auto = None
         self.pub_goal_color = None
         self.pub_killed = None
-        self.pub_motor_commands = None
+        self.pub_motorCommands = None
         self.pub_grabbing = None
         self.pub_shooting = None
         # self.pub_base_barometer = None
@@ -214,6 +216,7 @@ class BlimpNodeHandler:
         # Make this independent of the listener callback !!!
         self.publish_target_color()
         self.publish_goal_color()
+        self.publish_motorCommands()
 
     # Continually Poll State Machine Data from Teensy
     def state_machine_callback(self, msg):
@@ -260,6 +263,29 @@ class BlimpNodeHandler:
         msg.data = blimps[self.blimp_name].goal_color
         self.pub_goal_color.publish(msg)
 
+    def publish_motorCommands(self):
+        global blimps
+        # Publish goal color value to the ROS topic
+        msg = Float64MultiArray()
+        #msg.data = blimps[self.blimp_name].motorCommands
+        msg.data = blimps['Catch 1'].motorCommands
+        self.pub_motorCommands.publish(msg)
+
+    # Update Target Color
+    @socketio.on('update_motorCommands')
+    def update_motorCommands(data):
+        #print('\n')
+        array = np.frombuffer(data, dtype=np.float64)
+        motorCommands = array.tolist()
+        #print('Received Data:', motorCommands)
+        #print('\n')
+        # Iterate through which blimp_name is connected
+        global blimps
+        # Hard-Coded for Testing
+        blimp_name = 'Catch 1'
+        blimps[blimp_name].motorCommands = motorCommands
+        print(blimps[blimp_name].motorCommands)
+
     # Update Blimp Class with Dictionary Data
     @socketio.on('update_blimp_dict')
     def update_blimp_dict(data):
@@ -294,7 +320,7 @@ class BlimpNodeHandler:
         topic_goal_color =      "/" + self.nodeName + "/goal_color"
         topic_target_color =      "/" + self.nodeName + "/target_color"
         topic_killed =          "/" + self.nodeName + "/killed"
-        topic_motor_commands =  "/" + self.nodeName + "/motorCommands"
+        topic_motorCommands =  "/" + self.nodeName + "/motorCommands"
         topic_grabbing =        "/" + self.nodeName + "/grabbing"
         topic_shooting =        "/" + self.nodeName + "/shooting"
         # topic_base_barometer =   "/" + self.nodeName + "/base_barometer"
@@ -304,7 +330,7 @@ class BlimpNodeHandler:
         self.pub_goal_color = self.parentNode.create_publisher(Int64, topic_goal_color, bufferSize)
         self.pub_target_color = self.parentNode.create_publisher(Int64, topic_target_color, bufferSize)
         self.pub_killed = self.parentNode.create_publisher(Bool, topic_killed, bufferSize)
-        self.pub_motor_commands = self.parentNode.create_publisher(Float64MultiArray, topic_motor_commands, bufferSize)
+        self.pub_motorCommands = self.parentNode.create_publisher(Float64MultiArray, topic_motorCommands, bufferSize)
         self.pub_grabbing = self.parentNode.create_publisher(Bool, topic_grabbing, bufferSize)
         self.pub_shooting = self.parentNode.create_publisher(Bool, topic_shooting, bufferSize)
         # self.pub_base_barometer = self.parentNode.create_publisher(Float64, topic_base_barometer, bufferSize)
@@ -318,7 +344,7 @@ class BlimpNodeHandler:
         msg_auto = Bool(data=self.blimp.auto)
         msg_goal_color = Bool(data=self.blimp.auto)
         msg_killed = Bool(data=self.blimp.killed)
-        msg_motor_commands = Float64MultiArray(data=self.blimp.motor_commands)
+        msg_motorCommands = Float64MultiArray(data=self.blimp.motorCommands)
         msg_grabbing = Bool(data=self.blimp.grabbing)
         msg_shooting = Bool(data=self.blimp.shooting)
         msg_baseBarometer = Float64(data=self.blimp.baseBarometer)
@@ -326,7 +352,7 @@ class BlimpNodeHandler:
         self.pub_auto.publish(msg_auto)
         self.pub_goal_color.publish(msg_goal_color)
         self.pub_killed.publish(msg_killed)
-        self.pub_motor_commands.publish(msg_motor_commands)
+        self.pub_motorCommands.publish(msg_motorCommands)
         self.pub_grabbing.publish(msg_grabbing)
         self.pub_shooting.publish(msg_shooting)
         self.pub_baseBarometer.publish(msg_baseBarometer)

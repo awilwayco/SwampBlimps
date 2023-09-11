@@ -232,7 +232,7 @@
     <script>
 
         // IP Address Allowed
-        const ip_allowed = '192.168.0.203';
+        const ip_allowed = '10.140.11.225';
 
         // Connect to SocketIO server
         const socket = io();
@@ -271,6 +271,11 @@
         var goalButtonsContainer = document.querySelector('.goalButtonsContainer');
 
         var targetButtonsContainer = document.querySelector('.targetButtonsContainer');
+
+        var leftStickX = 0;
+        var leftStickY = 0;
+        var rightStickX = 0;
+        var rightStickY = 0;
 
         function update_basestation(blimp_dict) {
           // Get data from blimp dictionary
@@ -416,6 +421,15 @@
               sortedStateRows[blimp_name].textContent = state;
             }
           }
+          
+          // Convert the values to Float64
+          var motorCommands = new Float64Array([leftStickX, leftStickY, rightStickX, rightStickY]);
+          console.log(motorCommands);
+
+          // Convert the Float64Array to binary data
+          const binaryData = new Uint8Array(motorCommands.buffer)
+          // Add UI for only connected blimp eventually
+          socket.emit('update_motorCommands', binaryData);
 
           // Set a new timer for this blimp name
           blimp_timers[blimp_name] = setTimeout(() => {
@@ -722,10 +736,19 @@
           // Gamepad.axes array contains the values for all axes of the controller.
           // It's typical for the left stick to use axes 0 (X) and 1 (Y)
           // and for the right stick to use axes 2 (X) and 3 (Y).
-          var leftStickX = gamepad.axes[0];
-          var leftStickY = gamepad.axes[1];
-          var rightStickX = gamepad.axes[2];
-          var rightStickY = gamepad.axes[3];
+          leftStickX = gamepad.axes[0];
+          leftStickY = gamepad.axes[1];
+          rightStickX = gamepad.axes[2];
+          rightStickY = gamepad.axes[3];
+
+          // Define a dead zone threshold (adjust as needed)
+          const deadZone = 0.1;
+
+          // Apply tolerance by checking if values are within the dead zone
+          leftStickX = Math.abs(leftStickX) < deadZone ? 0 : leftStickX;
+          leftStickY = Math.abs(leftStickY) < deadZone ? 0 : leftStickY;
+          rightStickX = Math.abs(rightStickX) < deadZone ? 0 : rightStickX;
+          rightStickY = Math.abs(rightStickY) < deadZone ? 0 : rightStickY;
 
           // Apply the joystick positions to the dot positions
           // The joystick returns a value between -1 and 1.
