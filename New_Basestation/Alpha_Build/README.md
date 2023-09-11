@@ -1,4 +1,4 @@
-# BasestationV4 Guide 🌐📡🎮
+# Basestation V4 Guide 🌐📡🎮
 
 ## Start-up Tutorial (Basic)
 1. To host the web server, open a terminal in the V4 directory and run the command:
