@@ -401,8 +401,10 @@
               }
             }
             else {
-              goal_color_button.style.backgroundColor = 'white';
-              goal_color_button.style.border = "1px solid white"; ;
+              if (goal_color_button) {
+                goal_color_button.style.backgroundColor = 'white';
+                goal_color_button.style.border = "1px solid white";
+              }
             }
             // Set target color of the button for all clients to see
             if (target_color_1_button) {
@@ -613,6 +615,7 @@
               buttonWrapper.appendChild(goal_color_button);
               buttonWrapper.setAttribute('blimp_name', blimp_name); // Store the blimp name
 
+              // Error Currently !!!
               goalButtonsContainer.appendChild(buttonWrapper);
 
               // Sort the goal rows based on your desired order
