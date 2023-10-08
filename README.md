@@ -32,7 +32,7 @@ In terms of communication between the frontend and backend for the basestation, 
   
 ![Communication](https://github.com/awilwayco/SwampBlimps/assets/56363833/e5745c57-0006-4671-ab2f-39ad85e8a0d8)
 <p align="center">
-<em>Figure 3. A high-level overview of how the basestation and blimps handle communication through the use of the ROS 2 Network</em>
+<em>Figure 3. A high-level overview of how the basestation and blimps handle communication</em>
 </p>
 </p>
 
