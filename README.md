@@ -3,7 +3,7 @@
 ## Table of Contents
 
 ## Overview
-Our team works as part of a research organization in a laboratory that creates autonomous 
+Our team works as part of a research organization called "SWAMP Blimps" in a laboratory that creates autonomous 
 lighter-than-air (LTA) blimps. The goal of this project is to update the existing basestation by making it web-based for multiple users to access it at once. This will allow the pilot to use the basestation to select and control the blimps while other users can view blimp livestreams, machine learning data, etc.
 <p align="center">
   
