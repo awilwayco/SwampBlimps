@@ -38,6 +38,24 @@ In terms of communication between the frontend and backend for the basestation, 
 </p>
 </p>
 
-## How to Install
+## Requirements
+
+- A device with the Ubuntu 20.04 Operating System
+- Python 3.8.10 installed on the device
+- ROS2-Foxy installed on the device
+- Pip install the following packages: Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, and Numpy
 
 ## How to Use
+
+1. Run “./run.sh -o” within a terminal to startup basestation.
+2. Connect a controller to the administrator's computer.
+3. Activate a blimp to connect to the basestation by plugging in battery for 
+Orange Pi and Teensy.
+4. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select 
+which blimp to connect to.
+5. As an administrator, select the corresponding goal color for the 
+blimp by toggling the "Goal" button.
+6. Activate autonomous mode on blimp by pressing “RT” on controller. Press "LT" to send all the blimps into autonomous mode.
+7. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using 
+the left and right sticks on the controller.
+8. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp.
