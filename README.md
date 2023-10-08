@@ -1,5 +1,7 @@
 # Swamp Blimps
 
+## Table of Contents
+
 ## Overview
 Our team works as part of a research organization in a laboratory that creates autonomous 
 lighter-than-air (LTA) blimps. The goal of this project is to update the existing basestation by making it web-based for multiple users to access it at once. This will allow the pilot to use the basestation to select and control the blimps while other users can view blimp livestreams, machine learning data, etc.
@@ -21,3 +23,16 @@ This repository contains the basestation code. The basestation is primarily used
 <em>Figure 2. Basestation UI</em>
 </p>
 </p>
+
+## Communication
+<p align="center">
+  
+![Communication](https://github.com/awilwayco/SwampBlimps/assets/56363833/e5745c57-0006-4671-ab2f-39ad85e8a0d8)
+<p align="center">
+<em>Figure 3. A high-level overview of how the basestation and blimps handle communication through use of the ROS 2 Network</em>
+</p>
+</p>
+
+## How to Install
+
+## How to Use
