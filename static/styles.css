@@ -1,0 +1,174 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 1%;
+    font-family: Arial, sans-serif;
+  }
+  h1 {
+    text-align: center;
+    font-size: 50px;
+    margin-top: 20px;
+  }
+  button {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    margin-top: 20px;
+  }
+  table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid black;
+  }
+  .column-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow columns to wrap to a new line if needed */
+    /* justify-content: space-evenly; */
+    align-items: flex-start;
+  }
+  .column {
+    min-width: calc(100vw / 7); /* Each column is one-sixth of the page width */
+    flex-wrap: wrap; /* Allow columns to wrap to a new line if needed */
+    text-transform: uppercase; /* Capitalize the header name */
+    /* height: 50px; /* Adjust this height as needed */
+    flex-direction: column;
+  }
+  .blimp-column {
+    min-width: calc(100vw / 5); /* Each column is one-sixth of the page width */
+    flex-wrap: wrap; /* Allow columns to wrap to a new line if needed */
+    text-transform: uppercase; /* Capitalize the header name */
+    /* height: 50px; /* Adjust this height as needed */
+    flex-direction: column;
+  }
+  .inputs-column {
+    flex-basis: 100%; /* Take up the full width of other columns */
+    text-transform: uppercase; /* Capitalize the header name */
+  }
+  th {
+    font-size: 25px; /* Increase the text size of the column headers */
+  }
+  .input-display {
+    display: flex;
+    justify-content: center;
+  }
+  .grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1px;
+  }
+  #grid1, #grid2, #grid3, #grid4 {
+      position: relative;
+      height: 125px;
+      width: 125px;
+      border: 1px solid black;
+      box-sizing: border-box;
+  }
+  #grid2, #grid4 {
+      margin-left: -1px;
+      border-left: none;
+  }
+  #dot1, #dot2, #dot3, #dot4 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 15px;
+      width: 15px;
+      background: black;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+  }
+  #x-axis1, #y-axis1, #x-axis2, #y-axis2, #x-axis3, #y-axis3, #x-axis4, #y-axis4 {
+      position: absolute;
+      background: black;
+  }
+  #x-axis1, #x-axis2, #x-axis3, #x-axis4 {
+      top: 50%;
+      width: 100%;
+      height: 1px;
+  }
+  #y-axis1, #y-axis2, #y-axis3, #y-axis4 {
+      left: 50%;
+      height: 100%;
+      width: 1px;
+  }
+  .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 5px;
+      margin-bottom: 1px;
+  }
+  h2 {
+    text-align: center;
+    font-size: 20px;
+    /* text-transform: none; */
+  }
+  h3 {
+    text-align: center;
+    font-size: 27px;
+    margin-top: 39px;
+    margin-bottom: 39px;
+  }
+  h4 {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 15px;
+    margin-bottom: 39px;
+  }
+  h5 {
+    text-align: left;
+    font-size: 25px;
+    margin-bottom: 5px;
+  }
+  h6 {
+    text-align: left;
+    font-size: 21px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
+  a {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 39px;
+    margin-bottom: 39px;
+  }
+  .container {
+    text-align: center;
+  }
+  .container2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .video-stream {
+      flex: 0 0 100%;
+  }
+  .data-display {
+      flex: 0 0 50%;
+      padding: 20px;
+      border-left: 1px solid #ccc;
+  }
+  #goalButton {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+  }
+  #targetButton {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+  }
+  #targetButton2 {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    /* background-color: {{ target2_color }}; */
+  }

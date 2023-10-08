@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Include external style sheet-->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    
+    <!-- Include the SocketIO script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>SWAMP Blimps</h1>
+  <div class="column-container">
+    <div class="column">
+      <table>
+        <tr>
+          <th>Inputs</th>
+        </tr>
+      </table>
+      <div class="center">
+          <h2>KEYBOARD</h2>
+      </div>
+      <div class="grid-container">
+        <div id="grid1">
+          <div id="dot1"></div>
+          <div id="x-axis1"></div>
+          <div id="y-axis1"></div>
+        </div>
+        <div id="grid2">
+          <div id="dot2"></div>
+          <div id="x-axis2"></div>
+          <div id="y-axis2"></div>
+        </div>
+      </div>
+      <div class="center">
+          <h2 style="color: blue;">Controller 1</h2>
+      </div>
+      <div class="grid-container">
+          <div id="grid3">
+              <div id="dot3"></div>
+              <div id="x-axis3"></div>
+              <div id="y-axis3"></div>
+          </div>
+          <div id="grid4">
+              <div id="dot4"></div>
+              <div id="x-axis4"></div>
+              <div id="y-axis4"></div>
+          </div>
+        </div>
+    </div>
+    <div class="blimp-column">
+      <table>
+        <tr>
+          <th>Blimps</th>
+        </tr>
+        <tbody id="blimpsTableBody">
+          <!-- Blimp names will be added here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>State</th>
+        </tr>
+        <tbody id="statesTableBody">
+          <!-- State machine names will be added here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Target</th>
+        </tr>
+      </table>
+      <div class="center">
+        <div class="targetButtonsContainer">
+          <!-- Dynamic target buttons will be appended here -->
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Goal</th>
+        </tr>
+      </table>
+      <div class="center">
+        <div class="goalButtonsContainer">
+          <!-- Dynamic goal buttons will be appended here -->
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <table>
+        <tr>
+          <th>Stream</th>
+        </tr>        
+        <tbody id="streamTableBody">                    
+          <!--Stream links will be appended here-->           
+        </tbody>        
+      </table>
+    </div>
+  </div>
+
+  <!-- Include external JavaScript code-->
+  <script>
+    let client_ip = "{{ client_ip }}";
+  </script>
+  <script src="{{url_for('static', filename='main.js')}}"></script>
+</body>
+</html>
