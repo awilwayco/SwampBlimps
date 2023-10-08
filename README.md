@@ -6,9 +6,9 @@ lighter-than-air (LTA) blimps. The goal of this project is to update the existin
 <p align="center">
   
 ![Blimp](https://github.com/awilwayco/SwampBlimps/assets/56363833/ff6e067d-5df5-41a7-9ac8-dd0bc9154609)
-</p>
 <p align="center">
 <em>Figure 1. A blimp performing an autonomous catch</em>
+</p>
 </p>
 
 ## Summary
