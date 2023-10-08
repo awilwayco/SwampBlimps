@@ -15,6 +15,8 @@ lighter-than-air (LTA) blimps. The goal of this project is to update the existin
 
 ## Summary
 This repository contains the basestation code. The basestation is primarily used to view all available blimps and send commands to the currently connected blimp through the use of an Xbox controller or keyboard. A secondary feature of the basestation is the ability to view livestreams from each blimp, which is available through a hyperlink using the stream section of the main page on the basestation.
+
+The basestation uses Python with the Flask framework for the backend and HTML and JavaScript for the frontend. 
 <p align="center">
   
 ![Basestation_Pic](https://github.com/awilwayco/SwampBlimps/assets/56363833/863f8d6f-4043-4ccf-b854-9cc79f418d3e)
