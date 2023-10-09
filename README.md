@@ -1,5 +1,9 @@
 # Swamp Blimps
 
+## Authors
+- Austin Wilwayco | Email: awilwayco@ufl.edu
+- Bryan Ortiz | Email: ortizb@ufl.edu
+
 ## Overview
 Our team works as part of a research organization called "Swamp Blimps" in a laboratory that creates autonomous 
 lighter-than-air (LTA) blimps. Our team's goal is to update the existing basestation by making it web-based for multiple users to access it at once. This will allow the pilot to use the basestation to select and control the blimps while other users can view blimp livestreams, machine learning data, etc.
