@@ -1,62 +1,65 @@
+
 # Swamp Blimps
+![Logo](https://github.com/awilwayco/SwampBlimps/assets/56363833/e8eed94d-2a73-4e07-a487-f3db24324206)
 
-## Video Links
-- https://youtu.be/ogv464oKUCc (Pre-Alpha Build)
+## Authors
+- Austin Wilwayco | Email: awilwayco@ufl.edu
+- Bryan Ortiz | Email: ortizb@ufl.edu
 
-## Completed Work
-- Shift towards a robust and secure list of active blimps to avoid the phantom blimp bug.
-- Evaluation and recommendation of components to team leads.
-- Learned and applied process to flash and program Raspberry Pi.
-- Learned and applied process to define static IP address to Raspberry Pi.
-- (Implemented Lost State)
-- (Assessment of potential software and circuit bugs in regards to controller issue).
-- Implemented Goal Alignment Detection using OpenCV.
-- Created Prototype of New Basestation using Flask and HTML.
-- Created machine learning pipeline
-- Replace UDP with ROS2 (Robotic Operating System 2)
+## Overview
+Our team works as part of a research organization called "Swamp Blimps" in a laboratory that creates autonomous 
+lighter-than-air (LTA) blimps. Our team's goal is to update the existing basestation by making it web-based for multiple users to access it at once. This will allow the pilot to use the basestation to select and control the blimps while other users can view blimp livestreams, machine learning data, etc.
+<p align="center">
+  
+![Blimp](https://github.com/awilwayco/SwampBlimps/assets/56363833/ff6e067d-5df5-41a7-9ac8-dd0bc9154609)
+<p align="center">
+<em>Figure 1. A blimp performing an autonomous catch</em>
+</p>
+</p>
 
-## Project Architecture
-Attacking Blimp
-- Ultrasonic Sensor sends ultrasonic wave data used for height calculations through wires to Open Wide Angle Lens Camera. Ultrasonic Sensor is configured to use the universal asynchronous receiver / transmitter (UART) protocol for communication to Camera. Camera sends image processing and target recognition data through UART protocol to Teensy Microcontroller. Camera receives both power and ground from Electronic Speed Control (ESC) organized on a circuit board through wiring. Inertial Measurement Unit (IMU) collects gyroscope and accelerometer data and sends results to Teensy Microcontroller through the serial peripheral interface (SPI) protocol. ESC divides voltage passed in to 5 DC V for voltage regulation. ESC also sends direct current pulse width modulation (DC PWM) to ESP32 Microcontroller to control motor speed through wiring on circuit board. Teensy Microcontroller receives data from various components through pins connected to circuit board. The data is then used for internal calculations through programming. These include control calculations, filters, and state machines. ESP01 Microcontroller is used for Wi-Fi connectivity to connect to the router and communicate with the base station, the catching blimp, and other attacking blimps.
+## Summary
+This repository contains the basestation code. The basestation is primarily used to view all available blimps and send commands to the currently connected blimp through the use of an Xbox controller or keyboard. A secondary feature of the basestation is the ability to view livestreams from each blimp, which is available through a hyperlink using the stream section of the main page on the basestation.
 
-Catching Blimp
-- Stereo Camera uses image recognition and machine learning to learn colors and identify objects, in this case balloons and goals. The Stereo Camera sends information for calculations and state machine decisions to Raspberry Pi 4 Microprocessor and connects to the Raspberry Pi 4 Microprocessor using a micro-USB cable. The universal asynchronous receiver / transmitter (UART) protocol is used for communication between these devices. The Raspberry Pi 4 Microprocessor passes the data to the Teensy Microcontroller, again using UART. Additionally, the Raspberry Pi 4 Microprocessor offers Wi-Fi connectivity, thus facilitating the communication between the catching blimp, attacking blimps, and the base station. The Raspberry Pi 4 Microprocessor also receives power and ground from the Electronic Speed Control (ESC) from circuit board. An Optical Flow Sensor handles control calculations and passes the information to the Teensy Microcontroller by using the Inter-Integrated Circuit (I2C) protocol. The Electronic Speed Control (ESC) divides voltage passed in to 5 DC V before using Analog-to-Digital Conversion (ADC) to translate voltage from analog to digital to the Teensy Microcontroller. The ESC is also used to control motor speed. Inertial Measurement Unit (IMU) collects gyroscope and accelerometer data and sends data to Teensy Microcontroller through the serial peripheral interface (SPI) protocol. Teensy Microcontroller receives information from various components through its pins on a circuit board. The information is used for internal programming tasks, including control calculations, filters, state machines, and communication between the devices. Despite the Teensy Microcontroller not offering Wi-Fi capabilities like the ESP32 Microcontroller, the need for faster processing speed and greater amount of RAM that the Teensy Microcontroller provides lead to it being chosen over the ESP32 Microcontroller. 
+The basestation uses Python with the Flask framework for the backend and HTML and JavaScript for the frontend. 
+<p align="center">
+  
+![Basestation_Pic](https://github.com/awilwayco/SwampBlimps/assets/56363833/863f8d6f-4043-4ccf-b854-9cc79f418d3e)
 
-Network Architecture
--  The router defines the blimp's static IP and establishes connection between the base station and other connected blimps. The static IP must be known by the other blimps and basestation for them to receive information from the IP. Messages are sent amongst blimps themselves and to the base station by each blimp. The barometer does not receive messages, but rather only sends messages over the router to the base station for height and pressure analysis. Lastly, all of this connects to a private network on a router that is not connected to the internet for security purposes. 
+<p align="center">
+<em>Figure 2. Basestation UI</em>
+</p>
+</p>
 
-UDP Architecture
-- UDP Packet containing required data that is being sent both between the blimps and basestation and among the blimps themselves. Identifier indicates the message comes from an expected device. TargetID is the ID that transmits the message (based off the IP address’ assigned host ID). SourceID operates as a buffer between the TargetID, flags, and message. The flag section indicates how a device should receive the data, the options being as a data packet, a state change, or a barometer reading. Data indicates parameter message codes which verifies whether the device used to grab balloons is active or not and whether the blimp is in autonomous mode or not. 
+## Communication
+The basestation uses a communication network called ROS 2 to publish and subscribe to data. When data is being published (sent) by a device with ROS 2, other devices with ROS 2 can subscribe (access) that data. For our use case, this allows the basestation to know when a blimp is online since a blimp ID is being published by the blimps, which the basestation subscribes to. This communication network allows for bidirectional communication between the basestation and blimps.
 
-## Known Bugs
-Phantom Blimp Bug
-- A blimp that the user cannot connect to appears.
-- System that uses maps for verifying, adding, and removing blimps should offer a robust and secure list of active blimps, removing this bug from potentially occurring.
+In terms of communication between the frontend and backend for the basestation, we use Flask's SocketIO library in order to have ROS 2 data appear on our UI.
+<p align="center">
+  
+![Communication](https://github.com/awilwayco/SwampBlimps/assets/56363833/e5745c57-0006-4671-ab2f-39ad85e8a0d8)
+<p align="center">
+<em>Figure 3. A high-level overview of how the basestation and blimps handle communication</em>
+</p>
+</p>
 
-Camera communication with Raspberry
-- Requires enabling (RESOLVED on 3/04/2023).
+## Requirements
 
-Depth Calibration Issue
-- Improper calculations occurring on depth are resulting in inconsistent results during catching of balloons and approaching goals.
-- Issue would be in either the PyStereoVision or PyBlimpVision files.
-- (RESOLVED on 4/11/2023) New masking and application of SIFT algorithm seems to have provided acceptable results for competition
+- A device with the Ubuntu 20.04 Operating System (https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)
+- Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
+- ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
+- Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, and Numpy
 
-Catching Blimp's Raspberry Pi is not recognized by the base station. 
-- Raspberry Pi appears as "New Blimp" on Display despite already being assigned a static local IP address.
-- Problem due to Raspberry Pi. UDP message displays "N" is being sent as the targetID. 
-- (RESOLVED on 3/28/2023) Raspberry Pi program updated. UDP now sends IP address as string variable and is properly understood and displayed by the base station.
+## How to Use
 
-ESP32 Microcontroller cannot establish a persistent connection with the base station.
-- This is likely due to a mishandling of the UDP message from the Attacking Blimp side. (Note: May not be necessary to fix due to decision to change Attacking Blimp over to the Teensy Microcontroller and a WiFi card).
-- (Resolved on 4/12/2023) Transitioned over to Teensy and ESP 01 instead.
-
-Raspberry Pi does not accept Wi-Fi outside of laboratory’s secure router
-- Attempted SSH, ethernet cable, unzipping tar.gz files, using sudo raspi-config, and setting internet directly in wpa_supplicant.cnf file, to connect to the internet, but does not accept any Wi-Fi outside of the lab's Wi-Fi
-- (Resolved 6/22/2023) Transitioned over to ROS instead
-
-## How to view Documentation folder
-1. Download zip file
-2. Unzip file
-3. Enter into the desired file
-4. Enter into the html folder
-5. Open the index.html file within the html folder. This should open the file in a local web browser
+1. Run “./run.sh -o” within a terminal to startup basestation.
+2. Connect a controller to the administrator's computer.
+3. Activate a blimp to connect to the basestation by plugging in battery for 
+Orange Pi and Teensy.
+4. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select 
+which blimp to connect to.
+5. As an administrator, select the corresponding goal color for the 
+blimp by toggling the "Goal" button.
+6. Activate autonomous mode on blimp by pressing “RT” on controller. Press "LT" to send all the blimps into autonomous mode.
+7. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using 
+the left and right sticks on the controller.
+8. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp.
