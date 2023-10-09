@@ -149,7 +149,7 @@ body {
     align-items: center;
   }
   .video-stream {
-      flex: 0 0 100%;
+      flex: 0 0 50%;
   }
   .data-display {
       flex: 0 0 50%;

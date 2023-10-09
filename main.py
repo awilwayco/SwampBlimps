@@ -113,7 +113,7 @@ class Basestation(Node):
 
             if blimpNodeHandler.blimpID is not None:
                 if blimpNodeHandler.lastReceived_blimpID is not None:
-                    print(blimpNodeHandler.blimpID + ": " + str(self.getElapsedTime(blimpNodeHandler.lastReceived_blimpID)))
+                    # print(blimpNodeHandler.blimpID + ": " + str(self.getElapsedTime(blimpNodeHandler.lastReceived_blimpID)))
                     # Check if Blimp Timed Out
                     if self.getElapsedTime(blimpNodeHandler.lastReceived_blimpID) > self.timeout:
                         self.removeBlimpNodeHandler(blimpNodeHandler)
@@ -173,10 +173,9 @@ class Basestation(Node):
         if blimpNodeHandler is not None:
             if blimpNodeHandler.blimpID is not None:
                 if blimpNodeHandler.blimpID in self.currentBlimps:
-                    self.get_logger().info('Detected timeout of blimp ID "%s"' % blimpNodeHandler.blimpID)
-                    self.numBlimps -= 1
-
                     if blimpNodeHandler.blimpID in self.currentBlimps:
+                        self.get_logger().info('Detected timeout of blimp ID "%s"' % blimpNodeHandler.blimpID)
+                        self.numBlimps -= 1
                         socketio.emit('remove', blimpNodeHandler.blimp_name)
                         self.currentBlimps.remove(blimpNodeHandler.blimpID)
                     del blimpNodeHandler
@@ -305,7 +304,7 @@ class BlimpNodeHandler:
         global blimps
         bb_dict = self.bounding_box_to_dict(msg)
         if self.blimp_name is not None:
-            if blimps[self.blimp_name] in blimps:
+            if self.blimp_name in blimps:
                 if self.blimpID is not None:
                     if bb_dict is not None:
                         blimps[self.blimp_name].bounding_box = bb_dict
@@ -658,7 +657,7 @@ def check_wifi_ssid():
 
 if __name__ == '__main__':
     
-    if(check_wifi_ssid()):
+    # if(check_wifi_ssid()):
         # Create init function for the following values
         # Initialize default value i.e. goal color value (default: 0)
         # Could make these read from a text file to make them permanent profiles
