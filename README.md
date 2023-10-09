@@ -1,4 +1,6 @@
+
 # Swamp Blimps
+![Logo](https://github.com/awilwayco/SwampBlimps/assets/56363833/e8eed94d-2a73-4e07-a487-f3db24324206)
 
 ## Authors
 - Austin Wilwayco | Email: awilwayco@ufl.edu
