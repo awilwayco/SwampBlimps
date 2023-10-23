@@ -24,7 +24,6 @@ The basestation uses Python with the Flask framework for the backend and HTML an
 <p align="center">
   
 ![image](https://github.com/awilwayco/SwampBlimps/assets/56363833/875e026e-f347-4f2d-b7b3-f68b752b5665)
-
 <p align="center">
 <em>Figure 2. Basestation UI</em>
 </p>
