@@ -9,7 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-  <h1>SWAMP Blimps</h1>
+  <div class="image_container">
+    <img  src="static/images/SwampBlimpsLogo.png" width="400" height="144" ></img>
+  </div>
   <div class="column-container">
     <div class="column">
       <table>
@@ -17,7 +19,7 @@
           <th>Inputs</th>
         </tr>
       </table>
-      <div class="center">
+      <!-- <div class="center">
           <h2>KEYBOARD</h2>
       </div>
       <div class="grid-container">
@@ -31,7 +33,7 @@
           <div id="x-axis2"></div>
           <div id="y-axis2"></div>
         </div>
-      </div>
+      </div> -->
       <div class="center">
           <h2 style="color: blue;">Controller 1</h2>
       </div>
@@ -46,6 +48,31 @@
               <div id="x-axis4"></div>
               <div id="y-axis4"></div>
           </div>
+        </div>
+        <div class="image_container2">
+          <!-- <img  src="static/images/Dpad_Right.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Connect</div></h7> <h7 style="color: black;"><div class="center"> </div></h7> <img  src="static/images/Dpad_Left.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Disconnect</div></h7> -->
+          <img  src="static/images/Dpad_Right.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center"> </div></h7> <img  src="static/images/Dpad_Left.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Connect/Disconnect</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Dpad_Up.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center"> </div></h7> <img  src="static/images/Dpad_Down.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Toggle Up/Down</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_RT.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Single Toggle Auto</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_LT.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">All Toggle Auto</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_RB.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Manual Catch</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_LB.png" width="30" height="30" ></img> <h7 style="color: black;"><div class="center">Manual Shoot</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_A.png" width="25" height="25" ></img> <h7 style="color: black;"><div class="center">Reload Page</div></h7>
+        </div>
+        <div class="image_container2">
+          <img  src="static/images/Xbox_Button_Home.png" width="25" height="25" ></img> <h7 style="color: black;"><div class="center">Kill Basestation</div></h7>
         </div>
     </div>
     <div class="blimp-column">
@@ -71,7 +98,7 @@
     <div class="column">
       <table>
         <tr>
-          <th>Target</th>
+          <th>Target <img src="static/images/Xbox_Button_X.png" width="20" height="20" ></img></th>
         </tr>
       </table>
       <div class="center">
@@ -83,7 +110,7 @@
     <div class="column">
       <table>
         <tr>
-          <th>Goal</th>
+          <th>Goal <img  src="static/images/Xbox_Button_Y.png" width="20" height="20" ></img></th>
         </tr>
       </table>
       <div class="center">
@@ -95,7 +122,7 @@
     <div class="column">
       <table>
         <tr>
-          <th>Stream</th>
+          <th>Stream <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img></th>
         </tr>        
         <tbody id="streamTableBody">                    
           <!--Stream links will be appended here-->           
