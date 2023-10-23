@@ -46,7 +46,7 @@ In terms of communication between the frontend and backend for the basestation, 
 - A device with the Ubuntu 20.04 Operating System (https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)
 - Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
 - ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
-- Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, and Numpy
+- Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, Pyserial, and Numpy
 
 ## How to Use
 
