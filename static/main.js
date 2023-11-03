@@ -4,18 +4,11 @@ const ip_allowed = '192.168.0.200';
 // Connect to SocketIO server
 const socket = io();
 
-// Timeout
-const TIMEOUT = 2000;
-
-// Timers
-const blimp_timers = {};
-
 // Receive Connection
 socket.on('connect', () => {
     // Client IP Address
     //let client_ip = "{{ client_ip }}";
     console.log('Client connected with IP:', client_ip);
-    Controller_1_currConnection = -1;
 });
 
 socket.on('update', (blimp_dict) => {
@@ -26,6 +19,16 @@ socket.on('update', (blimp_dict) => {
 socket.on('remove', (blimp_id) => {
   //console.log(blimp_id)
   remove_blimp(blimp_id);
+});
+
+socket.on('start', () => {
+  window.location.reload();
+  console.log('Starting up Basestation');
+});
+
+socket.on('kill', () => {
+  window.location.reload();
+  console.log('Shutting down Basestation');
 });
 
 // Catching Blimps before Attack Blimps
@@ -59,16 +62,14 @@ var rightStickX = 0;
 var rightStickY = 0;
 
 //Keeps track of which blimp the controller is connected to
-var Controller_1_currConnection;
+var Controller_1_currConnection = localStorage.getItem('Controller_1_currConnection') ? parseInt(localStorage.getItem('Controller_1_currConnection')) : -1; // Default value if not set
 
 function update_basestation(blimp_dict) {
   // Get data from blimp dictionary
   let blimp_id = blimp_dict["blimp_id"];
 
-  console.log(blimp_dict);
-
-  // Clear the timers
-  clearTimeout(blimp_timers[blimp_id]);
+  // Debugging
+  //console.log(blimp_dict);
 
   // Get goal color from the data
   let goal_color;
@@ -222,8 +223,6 @@ function update_basestation(blimp_dict) {
       streamTableBody.appendChild(sortedLinkRows[rowKey]);
     });
 
-    // Append the sorted rows to streamTableBody
-    //hyperlink.href = "https://" + client_ip + "/" + blimp_id;    
   }
   else {
 
@@ -251,15 +250,16 @@ function update_basestation(blimp_dict) {
     }
 
     //Verify if controller is connected to this blimp
-    if(blimp_dict["connected"])
+    if(blimp_dict["connected"] === 'True' || blimpList[Controller_1_currConnection] === blimp_dict['blimp_id'])
     {
-      //console.log(blimp_id + " is connected");
+      socket.emit('update_total_disconnection');
+      socket.emit('update_connection', blimp_dict['blimp_id']);
       sortedNameRows[blimp_id].style.color = 'blue';
       sortedStateRows[blimp_id].style.color = 'blue';
     }
     else
     {
-      //console.log(blimp_id + " Not working");
+      socket.emit('update_disconnection', blimp_dict['blimp_id']);
       sortedNameRows[blimp_id].style.color = 'black';  
       sortedStateRows[blimp_id].style.color = 'black';
     }
@@ -273,54 +273,6 @@ function update_basestation(blimp_dict) {
       sortedNameRows[blimp_id].textContent = blimp_dict["blimp_name"]
     }
   }
-
-  // Set a new timer for this blimp name
-  // blimp_timers[blimp_id] = setTimeout(() => {
-  //     console.log(blimp_id);
-  //     // Check if the blimp name is in the list
-  //     if (blimpList.includes(blimp_id)) {
-  //       // Remove the name row from the map if the key matches blimp_id
-  //       Object.entries(sortedNameRows).forEach(([key, value]) => {
-  //         if (key === blimp_id) {
-  //           value.textContent = ''; // Set the value to ''
-  //         }
-  //       });
-
-  //       blimpList = blimpList.filter(item => item !== blimp_id);
-
-  //       // Remove the state row from the map if the key matches blimp_id
-  //       Object.entries(sortedStateRows).forEach(([key, value]) => {
-  //         if (key === blimp_id) {
-  //           value.textContent = ''; // Set the value to ''
-  //         }
-  //       });
-
-  //       let goal_color_button = document.getElementById(`goal_color_button_${blimp_id}`);
-  //       if (goal_color_button) {
-  //         goal_color_button.remove();
-  //       }
-
-  //       let target_color_1_button = document.getElementById(`target_color_1_button_${blimp_id}`);
-  //       let target_color_2_button = document.getElementById(`target_color_2_button_${blimp_id}`);
-  //       if (target_color_1_button) {
-  //         target_color_1_button.remove();
-  //       }
-  //       if (target_color_2_button) {
-  //         target_color_2_button.remove();
-  //       }
-
-  //       // Remove the link row from the map if the key matches blimp_id
-  //       Object.entries(sortedLinkRows).forEach(([key, value]) => {
-  //         if (key === blimp_id) {
-  //           value.textContent = ''; // Set the value to ''
-  //         }
-  //       });
-  //     }
-
-  //     // Clear the timer entry
-  //     delete blimp_timers[blimp_id];
-
-  // }, TIMEOUT);
 }
 
 function update_target_button_color(blimp_dict, target_color, target_color_button) {
@@ -430,7 +382,7 @@ function update_goal_button_color(blimp_dict, goal_color, goal_color_button) {
               blimp_dict["goal_color"] = 0;
           }
 
-          console.log(blimp_id, 'has a goal color:', goal_color)
+          console.log(blimp_id, 'has a goal color:', goal_color);
 
           // Get the goal color button for the specific blimp
           let goal_color_button = document.getElementById(`goal_color_button_${blimp_id}`);
@@ -612,6 +564,22 @@ function moveDot() {
 
 var dot1 = document.getElementById('dot1');
 var dot2 = document.getElementById('dot2');
+
+let toggler = document.querySelector(".toggler");
+
+window.addEventListener("click", event => {
+  if(event.target.className == "toggler" || event.target.className == "toggle") {
+    document.body.classList.toggle("show-nav");
+  } else if (event.target.className == "overlay") {
+    document.body.classList.remove("show-nav");
+  }
+  // Change Toggler Icon
+  if(document.body.className == "show-nav") {
+    toggler.innerHTML = "&laquo";
+  } else {
+    toggler.innerHTML = "&raquo";
+  }
+});
 
 var controllerCheck = setInterval(pollController, 0);
 
@@ -896,3 +864,10 @@ function handleGamepadButtons(gamepad) {
   // Add UI for only connected blimp eventually
   socket.emit('update_motorCommands', binaryData);
 }
+
+// Listen for the beforeunload event on the window
+window.addEventListener('beforeunload', function() {
+  // Save connected_blimp_id to localStorage right before the page is unloaded
+  Controller_1_currConnection = -1;
+  localStorage.setItem('Controller_1_currConnection', Controller_1_currConnection);
+});

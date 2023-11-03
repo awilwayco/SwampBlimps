@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Barometer Data</title>
+    <link rel="icon" type="image/png" sizes="515x512" href="static/images/Blimp.png">
+
+    <!-- Include external style sheet-->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    
+    <!-- Include the SocketIO script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Sliding Drawer !-->
+    <div class="overlay"></div>
+    <nav class="nav">
+        <div class="toggle">
+        <span class="toggler">»</span>
+        </div>
+        <div class="logo">
+        <a href="">Menu</a>
+        </div>
+        <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/Barometer">Barometer</a></li>
+        <li><a href="/Logs">Logs</a></li>
+        <li><a href="/Documentation">Documentation (Coming Soon!)</a></li>
+        </ul>
+    </nav>
+    <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
+    <h4>Barometer Data</h4>
+    <div id="baseBarometer">Base Barometer: 100700.0</div>
+    <div id="blimps-container">
+        <!-- Blimp rows will be added here by JavaScript -->
+    </div>
+</body>
+    <script>
+        // Connect to SocketIO server
+        const socket = io();
+
+        socket.on('barometer', (all_blimps) => {
+            //console.log(all_blimps)
+            let barometer = document.getElementById('baseBarometer');
+            newValue = "Base Barometer: " + all_blimps[Object.keys(all_blimps)[0]]["barometer"];
+            barometer.textContent = newValue;
+            update_barometer_data(all_blimps);
+        });
+
+        function update_barometer_data(blimps) {
+            const sortedKeys = Object.keys(blimps).sort();
+            const blimpsContainer = document.getElementById('blimps-container');
+            
+            // Get all current rows as a map for quick access
+            const rows = {};
+            blimpsContainer.querySelectorAll('.blimp-row').forEach(row => {
+                rows[row.dataset.blimpName] = row;
+            });
+
+            // Iterate through the sorted keys array
+            sortedKeys.forEach(function(key) {
+                let row = rows[key];
+                let button;
+                let height;
+                let z_velocity;
+
+                if (!row) {
+                    // Create a new row for each key
+                    row = document.createElement('div');
+                    row.className = 'blimp-row';
+                    row.dataset.blimpName = key; // Store the key in a data attribute
+
+                    // Create a span for the key text
+                    const name = document.createElement('span');
+                    name.className = 'blimp-name';
+                    name.textContent = key;
+                    row.appendChild(name);
+
+                    // Create a new button for each key
+                    button = document.createElement('button');
+                    button.id = `button_${key}`;
+                    button.className = 'barometer-calibration';
+                    button.textContent = 'Calibrate';
+                    button.style.backgroundColor = 'red';
+                    row.appendChild(button);
+
+                    height = document.createElement('span');
+                    height.className = 'blimp-height';
+                    height.textContent = blimps[key]["height"].toFixed(2);
+                    row.appendChild(height);
+
+                    z_velocity = document.createElement('span');
+                    z_velocity.className = 'blimp-z_velocity';
+                    z_velocity.textContent = blimps[key]["z_velocity"].toFixed(2);
+                    row.appendChild(z_velocity);
+
+                    // Append the new row to the container
+                    blimpsContainer.appendChild(row);
+                } else {
+                    // If the row already exists, find the button in it
+                    button = row.querySelector(`.barometer-calibration`);
+                    height = row.querySelector('.blimp-height');
+                    z_velocity = row.querySelector('.blimp-z_velocity');
+                }
+
+                // Set or update the height text content
+                height.textContent = 'Height: ' + blimps[key]["height"].toFixed(2);
+
+                // Set or update the height text content
+                z_velocity.textContent = 'Z-Velocity: ' + blimps[key]["z_velocity"].toFixed(2);
+
+                // Add or update the button event listener
+                button.onclick = function(event) {
+                    console.log('Barometer Calibrated for ' + key);
+                    button.style.backgroundColor = 'green';
+                    socket.emit('calibrate_barometer', key);
+                };
+            });
+
+            // Remove rows that no longer exist in the data
+            Object.keys(rows).forEach(existingKey => {
+                if (!blimps.hasOwnProperty(existingKey)) {
+                    const rowToDelete = rows[existingKey];
+                    blimpsContainer.removeChild(rowToDelete);
+                }
+            });
+        }
+
+        let toggler = document.querySelector(".toggler");
+
+        window.addEventListener("click", event => {
+        if(event.target.className == "toggler" || event.target.className == "toggle") {
+            document.body.classList.toggle("show-nav");
+        } else if (event.target.className == "overlay") {
+            document.body.classList.remove("show-nav");
+        }
+        // Change Toggler Icon
+        if(document.body.className == "show-nav") {
+            toggler.innerHTML = "&laquo";
+        } else {
+            toggler.innerHTML = "&raquo";
+        }
+        });
+
+        var controllerCheck = setInterval(pollController, 0);
+
+        function pollController() {
+            var gamepads = navigator.getGamepads();
+            for (var i = 0; i < gamepads.length; i++) {
+                var gamepad = gamepads[i];
+                if (gamepad) {
+                    handleGamepadButtons(gamepad);
+                }
+            }
+        }
+
+        // Initialize a variable to keep track of the previous state of the controller buttons and right trigger
+        let controllerState = {
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+        rightTrigger: false,
+        leftTrigger: false,
+        rightBumper: false,
+        leftBumper: false,
+        xButton: false,
+        yButton: false,
+        bButton: false,
+        aButton: false
+        };
+
+        // Function to handle gamepad button presses and releases
+        function handleGamepadButtons(gamepad) {
+            
+            // Check if the D-pad Up button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.up && !gamepad.buttons[12].pressed) {
+                console.log('Xbox D-Pad Up released.');
+            }
+            // Check if the D-pad Down button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.down && !gamepad.buttons[13].pressed) {
+                console.log('Xbox D-Pad Down released.');
+            }
+            // Check if the D-pad Left button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.left && !gamepad.buttons[14].pressed) {
+                console.log('Xbox D-Pad Left released.');
+            }
+            // Check if the D-pad Right button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.right && !gamepad.buttons[15].pressed) {
+                console.log('Xbox D-Pad Right released.');
+            }
+            
+            // Check if the right trigger was pressed in the previous state but is not pressed now (released)
+            if (controllerState.rightTrigger && gamepad.buttons[7].value === 0) {
+                console.log('Xbox Right Trigger released.');
+            }
+
+            // Check if the left trigger was pressed in the previous state but is not pressed now (released)
+            if (controllerState.leftTrigger && gamepad.buttons[6].value === 0) {
+                console.log('Xbox Left Trigger released.');
+            }
+
+            // Check if the right bumper was pressed in the previous state but is not pressed now (released)
+            if (controllerState.rightBumper && !gamepad.buttons[5].pressed) {
+                console.log('Xbox Right Bumper released.');
+            }
+
+            // Check if the left bumper was pressed in the previous state but is not pressed now (released)
+            if (controllerState.leftBumper && !gamepad.buttons[4].pressed) {
+                console.log('Xbox Left Bumper released.');
+            }
+
+            // Check if the X button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.xButton && !gamepad.buttons[2].pressed) {
+                console.log('Xbox X Button released.');
+            }
+
+            // Check if the Y button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.yButton && !gamepad.buttons[3].pressed) {
+                console.log('Xbox Y Button released.');
+            }
+
+            // Check if the B button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.bButton && !gamepad.buttons[1].pressed) {
+                console.log('Xbox B Button released.');
+                window.history.back();
+            }
+
+            // Check if the A button was pressed in the previous state but is not pressed now (released)
+            if (controllerState.aButton && !gamepad.buttons[0].pressed) {
+                console.log('Xbox A Button released.');
+                window.location.reload();
+            }
+
+            // Update the previous state of the controller buttons and right trigger
+            controllerState = {
+                up: gamepad.buttons[12].pressed,
+                down: gamepad.buttons[13].pressed,
+                left: gamepad.buttons[14].pressed,
+                right: gamepad.buttons[15].pressed,
+                rightTrigger: gamepad.buttons[7].value !== 0,
+                leftTrigger: gamepad.buttons[6].value !== 0,
+                rightBumper: gamepad.buttons[5].pressed,
+                leftBumper: gamepad.buttons[4].pressed,
+                xButton: gamepad.buttons[2].pressed,
+                yButton: gamepad.buttons[3].pressed,
+                bButton: gamepad.buttons[1].pressed,
+                aButton: gamepad.buttons[0].pressed
+            };
+        }
+    </script>
+</html>

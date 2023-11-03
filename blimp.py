@@ -53,10 +53,23 @@ class Blimp:
         # Bounding Box Values
         self.bounding_box = None
 
-        # Barometer
+        # Barometer Value
         self.barometer = 100700.0
 
+        # Calibrate Barometer
+        self.calibrateBarometer = False
+
+        # Height
+        self.height = None
+
+        # Z Velocity
+        self.z_velocity = None
+
+        # Last Online
         self.last_online = 0
+
+        # Last Message
+        self.log = None
 
     def to_dict(self):
         return {
@@ -72,7 +85,11 @@ class Blimp:
             "target_color": self.target_color,
             "state_machine": self.state_machine,
             "connected": self.connected,
-            "barometer": self.barometer
+            "barometer": self.barometer,
+            "calibrateBarometer": self.calibrateBarometer,
+            "height": self.height,
+            "z_velocity": self.z_velocity,
+            "log": self.log
         }
 
     def update_dict(self, data_dict):
@@ -101,4 +118,12 @@ class Blimp:
         if "connected" in data_dict:
             self.connected = data_dict["connected"]   
         if "barometer" in data_dict:
-            self.connected = data_dict["barometer"]
+            self.barometer = data_dict["barometer"]
+        if "calibrateBarometer" in data_dict:
+            self.calibrateBarometer = data_dict["calibrateBarometer"]
+        if "height" in data_dict:
+            self.height = data_dict["height"]
+        if "z_velocity" in data_dict:
+            self.z_velocity = data_dict["z_velocity"]
+        if "log" in data_dict:
+            self.log = data_dict["log"]

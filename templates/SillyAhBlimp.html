@@ -15,7 +15,7 @@
         <h4>Silly Ah Blimp Livestream</h4>
         <div class="container2">
             <div class="video-stream">
-                <img src="{{ url_for('video_feed', feed_name='Silly Ah Blimp') }}" alt="Stream Unavailable">
+                <img src="{{ url_for('video_feed', feed_name='SillyAhBlimp') }}" alt="Stream Unavailable">
             </div>
             <div class="data-display">
                 <h5>Bounding Box Data</h5>
@@ -147,6 +147,7 @@
             // Check if the A button was pressed in the previous state but is not pressed now (released)
             if (controllerState.aButton && !gamepad.buttons[0].pressed) {
                 console.log('Xbox A Button released.');
+                window.location.reload();
             }
 
             // Update the previous state of the controller buttons and right trigger

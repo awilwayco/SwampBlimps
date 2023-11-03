@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Include external style sheet-->
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-    
-    <!-- Include the SocketIO script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Basestation</title>
+  <link rel="icon" type="image/png" sizes="515x512" href="static/images/Blimp.png">
+  
+  <!-- Include external style sheet-->
+  <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+  
+  <!-- Include the SocketIO script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+
+  <!-- Sliding Drawer !-->
+  <div class="overlay"></div>
+  <nav class="nav">
+    <div class="toggle">
+      <span class="toggler">»</span>
+    </div>
+    <div class="logo">
+      <a href="">Menu</a>
+    </div>
+    <ul>
+      <li><a href="">Home</a></li>
+      <li><a href="/Barometer">Barometer</a></li>
+      <li><a href="/Logs">Logs</a></li>
+      <li><a href="/Documentation">Documentation (Coming Soon!)</a></li>
+    </ul>
+  </nav>
+
   <div class="image_container">
     <img  src="static/images/SwampBlimpsLogo.png" width="400" height="144" ></img>
   </div>
@@ -78,7 +100,7 @@
     <div class="blimp-column">
       <table>
         <tr>
-          <th>Blimps</th>
+          <th>Blimp Name</th>
         </tr>
         <tbody id="blimpsTableBody">
           <!-- Blimp names will be added here -->

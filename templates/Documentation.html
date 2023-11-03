@@ -1,63 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Five Guys Blimp Livestream</title>
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+    <link rel="icon" type="image/png" sizes="515x512" href="static/images/Blimp.png">
 
-        <!-- Include external style sheet-->
-        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-        
-        <!-- Include the SocketIO script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <body>
-        <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div>
-        <h4>Five Guys Blimp Livestream</h4>
-        <div class="container2">
-            <div class="video-stream">
-                <img src="{{ url_for('video_feed', feed_name='FiveGuysBlimp') }}" alt="Stream Unavailable">
-            </div>
-            <div class="data-display">
-                <h5>Bounding Box Data</h5>
-                <h6>Balloon Data</h6>
-                <div id="balloon-x-center"></div>
-                <div id="balloon-y-center"></div>
-                <div id="balloon-width"></div>
-                <div id="balloon-height"></div>
-                
-                <h6>Yellow Goal Data</h6>
-                <div id="y-goal-x-center"></div>
-                <div id="y-goal-y-center"></div>
-                <div id="y-goal-width"></div>
-                <div id="y-goal-height"></div>
-                
-                <h6>Orange Goal Data</h6>
-                <div id="o-goal-x-center"></div>
-                <div id="o-goal-y-center"></div>
-                <div id="o-goal-width"></div>
-                <div id="o-goal-height"></div>
-            </div>
+    <!-- Include external style sheet-->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    
+    <!-- Include the SocketIO script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Sliding Drawer !-->
+    <div class="overlay"></div>
+    <nav class="nav">
+        <div class="toggle">
+        <span class="toggler">»</span>
         </div>
-    </body>
+        <div class="logo">
+        <a href="">Menu</a>
+        </div>
+        <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/Barometer">Barometer</a></li>
+        <li><a href="/Logs">Logs</a></li>
+        <li><a href="/Documentation">Documentation (Coming Soon!)</a></li>
+        </ul>
+    </nav>
+    <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
+    <h4>Documentation</h4>
+</body>
     <script>
         // Connect to SocketIO server
         const socket = io();
-        
-        socket.on('bounding_box', (bounding_box) => {
-            document.getElementById('balloon-x-center').textContent = 'X-CENTER:  ' + bounding_box.balloon.x_center;
-            document.getElementById('balloon-y-center').textContent = 'Y-CENTER:  ' + bounding_box.balloon.y_center;
-            document.getElementById('balloon-width').textContent = 'WIDTH:  ' + bounding_box.balloon.width;
-            document.getElementById('balloon-height').textContent = 'HEIGHT:  ' + bounding_box.balloon.height;
-            
-            document.getElementById('y-goal-x-center').textContent = 'X-CENTER:  ' + bounding_box.y_goal.x_center;
-            document.getElementById('y-goal-y-center').textContent = 'Y-CENTER:  ' + bounding_box.y_goal.y_center;
-            document.getElementById('y-goal-width').textContent = 'WIDTH:  ' + bounding_box.y_goal.width;
-            document.getElementById('y-goal-height').textContent = 'HEIGHT:  ' + bounding_box.y_goal.height;
-            
-            document.getElementById('o-goal-x-center').textContent = 'X-CENTER:  ' + bounding_box.o_goal.x_center;
-            document.getElementById('o-goal-y-center').textContent = 'Y-CENTER:  ' + bounding_box.o_goal.y_center;
-            document.getElementById('o-goal-width').textContent = 'WIDTH:  ' + bounding_box.o_goal.width;
-            document.getElementById('o-goal-height').textContent = 'HEIGHT:  ' + bounding_box.o_goal.height;
+
+        let toggler = document.querySelector(".toggler");
+
+        window.addEventListener("click", event => {
+        if(event.target.className == "toggler" || event.target.className == "toggle") {
+            document.body.classList.toggle("show-nav");
+        } else if (event.target.className == "overlay") {
+            document.body.classList.remove("show-nav");
+        }
+        // Change Toggler Icon
+        if(document.body.className == "show-nav") {
+            toggler.innerHTML = "&laquo";
+        } else {
+            toggler.innerHTML = "&raquo";
+        }
         });
 
         var controllerCheck = setInterval(pollController, 0);
@@ -141,7 +133,7 @@
             // Check if the B button was pressed in the previous state but is not pressed now (released)
             if (controllerState.bButton && !gamepad.buttons[1].pressed) {
                 console.log('Xbox B Button released.');
-                window.close();
+                window.history.back();
             }
 
             // Check if the A button was pressed in the previous state but is not pressed now (released)
