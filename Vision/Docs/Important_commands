@@ -1,0 +1,90 @@
+How to start the MicroRos Agent on pi:
+
+./openDocker.sh 
+./ros_entrypoint.sh 
+cd /home/ 
+source install/setup.bash 
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0
+
+record video:
+ros2 run image_view video_recorder --ros-args -r image:=/BurnCreamBlimp/left/image_raw
+
+get on one of the orange pis:
+ssh orangepi1@192.168.0.111
+
+Naming
+Orange pi 1 is 111 (BurnCreamBlimp)
+pi2 is 112 (SillyAhBlimp)
+pi3 is 113 (TurboAhBlimp)
+pi4 is 114 (GameChamberBlimp)
+pi5 is 115 (FiveGuysBlimp)
+
+===============================================================================
+How to start vision code:
+
+1. camera node launch sript:
+
+./runCamera1 (camera1 is the testing camera,mapped to burncreamblimp)
+./runCamera2 (cameras2-5 are uncalibrated)
+./runCamera3
+./runCamera4
+./runCamera5
+
+subsequently, on all the pis run:
+
+./turnEyesOn
+
+2. split node launch comands: (cameras and blimp matching is subjected to change,these are set as default)
+
+ros2 launch opencv_telemetry split_node.launch.py namespace:=BurnCreamBlimp calibration_file:=camera1 camera_ns:=BurnCreamBlimp
+ros2 launch opencv_telemetry split_node.launch.py namespace:=SillyAhBlimp calibration_file:=camera2 camera_ns:=SillyAhBlimp
+ros2 launch opencv_telemetry split_node.launch.py namespace:=TurboBlimp calibration_file:=camera3 camera_ns:=TurboBlimp
+ros2 launch opencv_telemetry split_node.launch.py namespace:=GameChamberBlimp calibration_file:=camera4 camera_ns:=GameChamberBlimp
+ros2 launch opencv_telemetry split_node.launch.py namespace:=FiveGuysBlimp calibration_file:=camera5 camera_ns:=FiveGuysBlimp
+
+
+3. rectification node launch commands:
+
+ros2 launch image_proc image_proc.launch.py namespace:=BurnCreamBlimp
+ros2 launch image_proc image_proc.launch.py namespace:=SillyAhBlimp
+ros2 launch image_proc image_proc.launch.py namespace:=TurboBlimp
+ros2 launch image_proc image_proc.launch.py namespace:=GameChamberBlimp
+ros2 launch image_proc image_proc.launch.py namespace:=FiveGuysBlimp
+
+4. disparity node launch commands
+
+ros2 launch stereo_image_proc disparity.launch.py namespace:=BurnCreamBlimp
+ros2 launch stereo_image_proc disparity.launch.py namespace:=SillyAhBlimp
+ros2 launch stereo_image_proc disparity.launch.py namespace:=TurboBlimp
+ros2 launch stereo_image_proc disparity.launch.py namespace:=GameChamberBlimp
+ros2 launch stereo_image_proc disparity.launch.py namespace:=FiveGuysBlimp
+
+5. point cloud launch commands:
+
+ros2 launch stereo_image_proc point_cloud.launch.py namespace:=BurnCreamBlimp
+ros2 launch stereo_image_proc point_cloud.launch.py namespace:=SillyAhBlimp
+ros2 launch stereo_image_proc point_cloud.launch.py namespace:=TurboBlimp
+ros2 launch stereo_image_proc point_cloud.launch.py namespace:=GameChamberBlimp
+ros2 launch stereo_image_proc point_cloud.launch.py namespace:=FiveGuysBlimp
+
+6.ML node launch commands:
+
+ros2 launch track_ros2 track_ros2_node.launch.py namespace:=BurnCreamBlimp
+ros2 launch track_ros2 track_ros2_node.launch.py namespace:=SillyAhBlimp
+ros2 launch track_ros2 track_ros2_node.launch.py namespace:=TurboBlimp
+ros2 launch track_ros2 track_ros2_node.launch.py namespace:=GameChamberBlimp
+ros2 launch track_ros2 track_ros2_node.launch.py namespace:=FiveGuysBlimp
+
+To record, run:
+ros2 run image_view video_recorder --ros-args --remap image:=BurnCreamBlimp/left/image_raw
+
+
+
+
+
+
+
+
+ 
+
+

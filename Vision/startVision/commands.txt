@@ -1,0 +1,2 @@
+#Verifies if ML has a value of zero
+num2=$(./../Viewers/checkML1.sh | egrep "nanosec: 0" | wc -l)
