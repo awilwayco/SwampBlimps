@@ -23,8 +23,7 @@ This repository contains the basestation code. The basestation is primarily used
 The basestation uses Python with the Flask framework for the backend and HTML and JavaScript for the frontend. 
 <p align="center">
   
-![Basestation_Pic](https://github.com/awilwayco/SwampBlimps/assets/56363833/863f8d6f-4043-4ccf-b854-9cc79f418d3e)
-
+![Basestation_MainPage](https://github.com/awilwayco/SwampBlimps/assets/56363833/caebd954-32cd-4be2-afc8-6283b00b8699)
 <p align="center">
 <em>Figure 2. Basestation UI</em>
 </p>
@@ -47,7 +46,7 @@ In terms of communication between the frontend and backend for the basestation, 
 - A device with the Ubuntu 20.04 Operating System (https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)
 - Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
 - ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
-- Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, and Numpy
+- Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, Pyserial, and Numpy
 
 ## How to Use
 
