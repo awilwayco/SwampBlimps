@@ -26,14 +26,17 @@ class Blimp(Node):
         self.pub_state_machine = self.create_publisher(Int64, self.node_name + '/state_machine', 10)
 
         # Create subscriber for /autoPanic
-        self.sub_identify = self.create_subscription(Bool, '/identify', self.identify_callback, 10)
+        self.pub_identify = self.create_publisher(String, '/identify', 10)
 
         # Create timer
         timer_period = 0.01  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-    def identify_callback(self, msg):
+    def identify_callback(self):
         self.get_logger().info('Identify: %s' % str(msg.data))
+        msg = String()
+        msg.data = str(self.blimpID)
+        self.pub_identify.publish(msg)
 
     def timer_callback(self):
         # Publish /blimpID
@@ -41,6 +44,10 @@ class Blimp(Node):
 
         # Publish /state_machine
         self.publish_state_machine()
+
+        msg = String()
+        msg.data = str(self.blimpID)
+        self.pub_identify.publish(msg)
 
     def publish_blimpID(self):
         msg = String()

@@ -32,7 +32,7 @@ socket.on('kill', () => {
 });
 
 // Catching Blimps before Attack Blimps
-var blimpOrder = ["BurnCreamBlimp", "SillyAhBlimp", "TurboBlimp", "GameChamberBlimp", "FiveGuysBlimp", "Catch1", "Catch2", "Attack1", "Attack2"];
+var blimpOrder = ["BurnCreamBlimp", "SillyAhBlimp", "TurboBlimp", "GameChamberBlimp", "FiveGuysBlimp", "Catch1", "Catch2", "Yoshi", "Attack1", "Attack2"];
 
 // Unordered List of Blimp Names
 
@@ -310,7 +310,7 @@ function update_target_button_color(blimp_dict, target_color, target_color_butto
                 target_color_button.style.backgroundColor = target_color;
                 
                 // Send the data to the backend to update over ROS
-                socket.emit('update_target_color', blimp_id);
+                socket.emit('update_target_color', blimp_dict);
             }
         });
         
@@ -786,6 +786,7 @@ function handleGamepadButtons(gamepad) {
   // Check if the X button was pressed in the previous state but is not pressed now (released)
   if (controllerState.xButton && !gamepad.buttons[2].pressed) {
     console.log('Xbox X Button released.');
+    socket.emit('update_all_target_colors');
   }
 
   // Check if the Y button was pressed in the previous state but is not pressed now (released)

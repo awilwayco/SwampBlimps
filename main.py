@@ -278,6 +278,9 @@ class BlimpNodeHandler:
         self.sub_z_velocity = None
         self.sub_logs = None
 
+        # Begin timer
+        self.one_hz_timer = time.time() # Start time 
+
         # Livestream Most Recent Frame
         self.frame = None
         self.bridge = CvBridge()
@@ -293,7 +296,7 @@ class BlimpNodeHandler:
         blimp.blimp_name = self.blimp_name
 
         # Set the blimp type
-        self.get_blimp_type(blimp)
+        self.blimp_type = self.get_blimp_type(blimp)
 
         #Update the global blimp dictionary with this blimp
         blimps[self.blimp_id] = blimp
@@ -309,18 +312,34 @@ class BlimpNodeHandler:
             # Get All Current Blimps
             for blimp in blimps:
                 self.all_blimps[blimp] = blimps[blimp].to_dict()
+
             # Emit Barometer Data
             socketio.emit('barometer', self.all_blimps)
         
             # Publish the target and/or goal color values to ROS
             self.publish_motorCommands()
 
-            # Need to publish this as needed
-            self.publish_auto()
-
             # Publish barometer data
             self.publish_barometer()
+           
+            # Check 1 Hz timer 
+            # if (time.time() - self.one_hz_timer) >= 1.0:
+            #     # Reset timer
+            #     self.one_hz_timer = time.time()
+                
+            #     # Need to publish this as needed
+            #     self.publish_auto()
 
+            #     if (blimps[self.blimp_id].blimp_type == True):
+            #         # If blimp is an attack blimp, publish the target color
+            #         self.publish_target_color()
+            #     else:
+            #         # Otherwise, publish catching blimp stuff
+            #         self.publish_goal_color()
+
+            #         # Need to publish these as needed!
+            #         self.publish_grabbing()
+            #         self.publish_shooting()
             if (blimps[self.blimp_id].blimp_type == True):
                 # If blimp is an attack blimp, publish the target color
                 self.publish_target_color()
@@ -484,6 +503,8 @@ class BlimpNodeHandler:
         # Only need to check for Attack Blimps since default is catching type (0)
         if self.blimp_id in self.parent_node.attack_blimp_ids:
             blimp.blimp_type = 1
+        
+        return blimp.blimp_type
 
     def get_blimp_name(self, blimp_id):
         # Blimp Name not Recognized (This should not happen!)
@@ -673,6 +694,17 @@ class BlimpNodeHandler:
                 blimps[blimp].auto = False
         auto_panic = not auto_panic
 
+    # Update All Target Colors
+    @socketio.on('update_all_target_colors')
+    def update_target_colors():
+        global blimps
+        global all_target_color
+
+        all_target_color = not all_target_color
+
+        for blimp in blimps:
+            blimps[blimp].target_color = 1 if all_target_color else 0
+
     # Update Target Color
     @socketio.on('update_target_color')
     def update_target_color(data):
@@ -838,6 +870,10 @@ if __name__ == '__main__':
         # All Goal Colors
         global all_goal_color
         all_goal_color = False
+
+        # All Target Colors
+        global all_target_color
+        all_target_color = False
 
         # Terminate if Ctrl+C Caught
         signal.signal(signal.SIGINT, terminate)
