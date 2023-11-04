@@ -50,15 +50,12 @@ In terms of communication between the frontend and backend for the basestation, 
 
 ## How to Use
 
-1. Run “./run.sh -o” within a terminal to startup basestation.
-2. Connect a controller to the administrator's computer.
-3. Activate a blimp to connect to the basestation by plugging in battery for 
-Orange Pi and Teensy.
-4. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select 
-which blimp to connect to.
-5. As an administrator, select the corresponding goal color for the 
-blimp by toggling the "Goal" button.
-6. Activate autonomous mode on blimp by pressing “RT” on controller. Press "LT" to send all the blimps into autonomous mode.
-7. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using 
-the left and right sticks on the controller.
-8. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp.
+1. Run “./run.sh -o” within a terminal to startup basestation. 
+2. Connect a controller to the administrator's computer. 
+3. Activate a blimp to connect to the basestation by plugging in batteries for Orange Pi and Teensy. 
+4. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select which blimp to connect to. 
+5. As an administrator, select the corresponding goal color for catching blimps by toggling the "Goal" button by clicking it with a mouse or pressing “Y” on the controller. For attack blimps, they can toggle the “Target” button by clicking it with a mouse or pressing “X” on the controller. 
+6. Activate autonomous mode on the blimp by pressing “RT” on the controller. Press "LT" to send all the blimps into autonomous mode. 
+7. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using the left and right sticks on the controller. 
+8. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp. 
+9. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages. 
