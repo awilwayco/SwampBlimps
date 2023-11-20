@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Burn Cream Blimp Livestream</title>
+        <title>Super Beef Blimp Livestream</title>
 
         <!-- Include external style sheet-->
         <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
@@ -12,10 +12,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <body>
         <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
-        <h4>Burn Cream Blimp Livestream</h4>
+        <h4>Super Beef Blimp Livestream</h4>
         <div class="container2">
             <div class="video-stream">
-                <img src="{{ url_for('video_feed', feed_name='BurnCreamBlimp') }}" alt="Stream Unavailable">
+                <img src="{{ url_for('video_feed', feed_name='SuperBeefBlimp') }}" alt="Stream Unavailable">
             </div>
             <div class="data-display">
                 <h5>Bounding Box Data</h5>
@@ -43,7 +43,7 @@
         // Connect to SocketIO server
         const socket = io();
 
-        var blimp_id = 'BurnCreamBlimp';
+        var blimp_id = 'SuperBeefBlimp';
 
         socket.emit('show_image', blimp_id);
         
@@ -94,7 +94,7 @@
 
         // Function to handle gamepad button presses and releases
         function handleGamepadButtons(gamepad) {
-
+            
             // Check if the D-pad Up button was pressed in the previous state but is not pressed now (released)
             if (controllerState.up && !gamepad.buttons[12].pressed) {
                 console.log('Xbox D-Pad Up released.');

@@ -1,29 +1,42 @@
-// IP Address Allowed
-const ip_allowed = '192.168.0.200';
-
 // Connect to SocketIO server
 const socket = io();
 
 // Receive Connection
 socket.on('connect', () => {
     // Client IP Address
-    //let client_ip = "{{ client_ip }}";
     console.log('Client connected with IP:', client_ip);
+
+    // Load current backend state
+    socket.emit('update_frontend');
 });
 
 socket.on('update', (blimp_dict) => {
+
+    // Debugging
     //console.log(blimp_dict)
+
     update_basestation(blimp_dict);
 });
 
 socket.on('remove', (blimp_id) => {
+
+  // Debugging
   //console.log(blimp_id)
+
   remove_blimp(blimp_id);
 });
+
+socket.on('reload', () => {
+  window.location.reload();
+})
 
 socket.on('start', () => {
   window.location.reload();
   console.log('Starting up Basestation');
+});
+
+socket.on('kill_backend', () => {
+  socket.emit('kill_basestation');
 });
 
 socket.on('kill', () => {
@@ -31,8 +44,10 @@ socket.on('kill', () => {
   console.log('Shutting down Basestation');
 });
 
+socket.on('update_controlled')
+
 // Catching Blimps before Attack Blimps
-var blimpOrder = ["BurnCreamBlimp", "SillyAhBlimp", "TurboBlimp", "GameChamberBlimp", "FiveGuysBlimp", "Catch1", "Catch2", "Yoshi", "Attack1", "Attack2"];
+var blimpOrder = ["BurnCreamBlimp", "SillyAhBlimp", "TurboBlimp", "GameChamberBlimp", "FiveGuysBlimp", "SuperBeefBlimp", "Catch1", "Catch2", 'Yoshi', 'Luigi', 'Geoph', 'ThisGuy', "Attack1", "Attack2"];
 
 // Unordered List of Blimp Names
 
@@ -60,9 +75,6 @@ var leftStickX = 0;
 var leftStickY = 0;
 var rightStickX = 0;
 var rightStickY = 0;
-
-//Keeps track of which blimp the controller is connected to
-var Controller_1_currConnection = localStorage.getItem('Controller_1_currConnection') ? parseInt(localStorage.getItem('Controller_1_currConnection')) : -1; // Default value if not set
 
 function update_basestation(blimp_dict) {
   // Get data from blimp dictionary
@@ -176,7 +188,6 @@ function update_basestation(blimp_dict) {
     // Target number is 1 (Attack Blimps)
     else {
       update_target_button_color(blimp_dict, target_color, target_color_1_button);
-      update_empty_button_color(blimp_dict, 'white', goal_color_button);
     }
     // Sort the target rows based on your desired order
     sortedTargetRows = Array.from(targetButtonsContainer.querySelectorAll('[blimp_id]'));
@@ -194,24 +205,27 @@ function update_basestation(blimp_dict) {
     // Clear the existing content of streamTableBody
     streamTableBody.innerHTML = '';
     
-    // Create hyperlink on basestation
-    var newRow = document.createElement('h3');
-    var newCell = document.createElement('h3');
-    var hyperlink = document.createElement('a');
+    if (blimp_dict['blimp_type'] === 0) {
+      // Create hyperlink on basestation
+      var newRow = document.createElement('h3');
+      var newCell = document.createElement('h3');
+      var hyperlink = document.createElement('a');
 
-    // Set the hyperlink attributes
-    hyperlink.href = "/" + blimp_id;
-    hyperlink.target = "_blank";  // This will open the link in a new tab/window
-    hyperlink.textContent = "View Stream";
-    hyperlink.setAttribute("blimp_id", blimp_id);
+      // Set the hyperlink attributes
+      hyperlink.href = "/" + blimp_id;
+      hyperlink.target = "_blank";  // This will open the link in a new tab/window
+      hyperlink.textContent = "View Stream";
+      hyperlink.setAttribute("blimp_id", blimp_id);
 
-    // Append the hyperlink to the newCell and then to the newRow
-    newCell.appendChild(hyperlink);
-    newRow.appendChild(newCell);
-    streamTableBody.appendChild(newRow);
+      // Append the hyperlink to the newCell and then to the newRow
+      newCell.appendChild(hyperlink);
+      newRow.appendChild(newCell);
+      streamTableBody.appendChild(newRow);
 
-    // Store the link in sortedLinkRows using blimp_id as the key
-    sortedLinkRows[blimp_id] = newRow;
+      // Store the link in sortedLinkRows using blimp_id as the key
+      sortedLinkRows[blimp_id] = newRow;
+
+    }
 
     // Sort the link rows based on the blimp names
     var sortedRows = Object.keys(sortedLinkRows).sort(function (a, b) {
@@ -225,7 +239,6 @@ function update_basestation(blimp_dict) {
 
   }
   else {
-
     // Set goal color of the button for all clients to see
     if (blimp_type === 0) {
       if (goal_color_button) {
@@ -249,27 +262,19 @@ function update_basestation(blimp_dict) {
       sortedStateRows[blimp_id].textContent = state;
     }
 
-    //Verify if controller is connected to this blimp
-    if(blimp_dict["connected"] === 'True' || blimpList[Controller_1_currConnection] === blimp_dict['blimp_id'])
-    {
-      socket.emit('update_total_disconnection');
-      socket.emit('update_connection', blimp_dict['blimp_id']);
+    //Update controller connection
+    if (blimp_dict['selected']) {
       sortedNameRows[blimp_id].style.color = 'blue';
       sortedStateRows[blimp_id].style.color = 'blue';
-    }
-    else
-    {
-      socket.emit('update_disconnection', blimp_dict['blimp_id']);
+    } else {
       sortedNameRows[blimp_id].style.color = 'black';  
       sortedStateRows[blimp_id].style.color = 'black';
     }
 
-    if(blimp_dict["auto"])
-    {
+    //Update autonomous state
+    if (blimp_dict["auto"]) {
       sortedNameRows[blimp_id].textContent = blimp_dict["blimp_name"] + ' - A';
-    }
-    else
-    {
+    } else {
       sortedNameRows[blimp_id].textContent = blimp_dict["blimp_name"]
     }
   }
@@ -288,36 +293,16 @@ function update_target_button_color(blimp_dict, target_color, target_color_butto
         
         // Attach the click event listener to the button
         target_color_button.addEventListener('click', (event) => {
-            // Client IP Address
-            //let client_ip = client_ip;
-            
-            if (client_ip === ip_allowed) {
-                // Change the target color and the data
-                if (target_color === 'blue') {
-                    target_color = 'red';
-                    blimp_dict["target_color"] = 1;
-                } else {
-                    target_color = 'blue';
-                    blimp_dict["target_color"] = 0;
-                }
-                
-                console.log(blimp_id, 'has a target color:', target_color);
-
-                // Get the target color button for the specific blimp
-                let target_color_button = document.getElementById(`target_color_1_button_${blimp_id}`);
-                
-                // Set target color of the button
-                target_color_button.style.backgroundColor = target_color;
-                
-                // Send the data to the backend to update over ROS
-                socket.emit('update_target_color', blimp_dict);
-            }
+              
+              // Send the data to the backend to update over ROS
+              socket.emit('update_all_target_colors');
         });
         
         // Create a div element that will be used to wrap the button and force it to a new line
         const buttonWrapper = document.createElement('div');
         buttonWrapper.appendChild(target_color_button);
-        buttonWrapper.setAttribute('blimp_id', blimp_id); // Store the blimp name
+        // Store the blimp name
+        buttonWrapper.setAttribute('blimp_id', blimp_id);
         
         // Center the button horizontally
         buttonWrapper.style.display = 'flex';
@@ -327,6 +312,7 @@ function update_target_button_color(blimp_dict, target_color, target_color_butto
     }
 }
 
+// Function Currently Not Used; Target Colors for Attack Blimps Hard Set from ML/on Teensy //
 function update_target_button_colors(blimp_dict, target_color_1, target_color_1_button, target_color_2, target_color_2_button) {
   // Get data from blimp dictionary
   let blimp_id = blimp_dict["blimp_id"];
@@ -369,30 +355,10 @@ function update_goal_button_color(blimp_dict, goal_color, goal_color_button) {
       
       // Attach the click event listener to the button
       goal_color_button.addEventListener('click', (event) => {
-        // Client IP Address
-        //let client_ip = "{{ client_ip }}";
-
-        if (client_ip === ip_allowed) {
-          // Change the goal color and the data
-          if (goal_color === 'orange') {
-              goal_color = 'yellow';
-              blimp_dict["goal_color"] = 1;
-          } else {
-              goal_color = 'orange';
-              blimp_dict["goal_color"] = 0;
-          }
-
-          console.log(blimp_id, 'has a goal color:', goal_color);
-
-          // Get the goal color button for the specific blimp
-          let goal_color_button = document.getElementById(`goal_color_button_${blimp_id}`);
-
-          // Set goal color of the button
-          goal_color_button.style.backgroundColor = goal_color;
 
           // Send the data to the backend to update over ROS
-          socket.emit('update_goal_color', blimp_dict);
-        }
+          socket.emit('update_all_goal_colors');
+        // }
       });
 
       // Create a div element that will be used to wrap the button and force it to a new line
@@ -417,6 +383,7 @@ function update_goal_button_color(blimp_dict, goal_color, goal_color_button) {
     }
 }
 
+// Function Not Used; Has Error; Not Needed Currently //
 function update_empty_button_color(blimp_dict, goal_color, goal_color_button, goalButtonsContainer) {
   // Get data from blimp dictionary
   let blimp_id = blimp_dict["blimp_id"];
@@ -497,7 +464,7 @@ function get_state(number) {
   let state;
 
   if (number === 0) {
-      state = "searching";
+      state = "searching"; // Default Value
   } else if (number === 1) {
       state = "approach";
   } else if (number === 2) {
@@ -515,56 +482,17 @@ function get_state(number) {
   } else if (number === 8) {
       state = "scored";
   } else {
-      state = "error"; // Default state if the number doesn't match any of the provided values
+      state = "error"; // Error, should not happen
   }
 
   return state;
 }
 
-var keys = { w: false, a: false, s: false, d: false };
-var dot = document.getElementById("dot1");
-
-window.onkeydown = function(e) {
-    if (keys.hasOwnProperty(e.key.toLowerCase())) {
-        keys[e.key.toLowerCase()] = true;
-    }
-    moveDot();
-};
-
-window.onkeyup = function(e) {
-    if (keys.hasOwnProperty(e.key.toLowerCase())) {
-        keys[e.key.toLowerCase()] = false;
-    }
-    moveDot();
-};
-
-function moveDot() {
-    dot.style.left = "50%";
-    dot.style.top = "50%";
-
-    if (keys['w'] && keys['a'] && keys['s'] && keys['d']) return;
-
-    if (keys['w'] && keys['s']) {
-        if (keys['a']) dot.style.left = "25%";
-        else if (keys['d']) dot.style.left = "75%";
-        return;
-    }
-
-    if (keys['a'] && keys['d']) {
-        if (keys['w']) dot.style.top = "25%";
-        else if (keys['s']) dot.style.top = "75%";
-        return;
-    }
-
-    if (keys['w'] && !keys['s']) dot.style.top = "25%";
-    if (!keys['w'] && keys['s']) dot.style.top = "75%";
-    if (keys['a'] && !keys['d']) dot.style.left = "25%";
-    if (!keys['a'] && keys['d']) dot.style.left = "75%";
-}
-
+// Controller 1 UI Dots
 var dot1 = document.getElementById('dot1');
 var dot2 = document.getElementById('dot2');
 
+// Toggler
 let toggler = document.querySelector(".toggler");
 
 window.addEventListener("click", event => {
@@ -581,27 +509,39 @@ window.addEventListener("click", event => {
   }
 });
 
-var controllerCheck = setInterval(pollController, 0);
+socket.on('view_stream', (selected_blimp_id) => {
 
-function pollController() {
-  var gamepads = navigator.getGamepads();
-  for (var i = 0; i < gamepads.length; i++) {
-    var gamepad = gamepads[i];
-    if (gamepad) {
-      moveDots(gamepad);
-      handleGamepadButtons(gamepad);
-    }
+  // Debugging
+  //console.log(selected_blimp_id);
+
+  var allLinks = document.getElementsByTagName("a");
+
+  // Loop through each anchor element and extract the href attribute
+  for (var i = 0; i < allLinks.length; i++) {
+      var link = allLinks[i];
+      let blimp_id = link.getAttribute("blimp_id");
+      if (blimp_id === selected_blimp_id) {
+        link.click();
+      }
   }
-}
+});
 
-function moveDots(gamepad) {
+socket.on('motor_commands', (controller_cmd) => {
+
+  // Debugging
+  //console.log(controller_cmd);
+
+  moveDots(controller_cmd);
+});
+
+function moveDots(controller_cmd) {
   // Gamepad.axes array contains the values for all axes of the controller.
   // It's typical for the left stick to use axes 0 (X) and 1 (Y)
   // and for the right stick to use axes 2 (X) and 3 (Y).
-  leftStickX = gamepad.axes[0];
-  leftStickY = gamepad.axes[1];
-  rightStickX = gamepad.axes[2];
-  rightStickY = gamepad.axes[3];
+  leftStickX = controller_cmd[0];
+  leftStickY = controller_cmd[1];
+  rightStickX = controller_cmd[2];
+  rightStickY = controller_cmd[3];
 
   // Define a dead zone threshold (adjust as needed)
   const deadZero = 0.1;
@@ -629,8 +569,9 @@ function moveDots(gamepad) {
   rightStickY = rightStickY.toFixed(2);
 
   // Multiply by -1 to Invert the Y-Axes
-  leftStickY = leftStickY * -1;
-  rightStickY = rightStickY * -1;
+  // leftStickY = leftStickY * -1;
+  // rightStickY = rightStickY * -1;
+  rightStickX = rightStickX * -1;
 
   // Apply the joystick positions to the dot positions
   // The joystick returns a value between -1 and 1.
@@ -640,235 +581,75 @@ function moveDots(gamepad) {
   dot4.style.left = `${50 + rightStickX * 45}%`;
   dot4.style.top = `${50 + rightStickY * -45}%`;
 
+  // Debugging
   //console.log("Left Stick X: ", 50 + leftStickX * 45);
 }
 
-// Initialize a variable to keep track of the previous state of the controller buttons and right trigger
-let controllerState = {
-  up: false,
-  down: false,
-  left: false,
-  right: false,
-  rightTrigger: false,
-  leftTrigger: false,
-  rightBumper: false,
-  leftBumper: false,
-  xButton: false,
-  yButton: false,
-  bButton: false,
-  aButton: false,
-  homeButton: false,
-  helpButton: false,
-  menuButton: false
-};
+// function requestFullScreen(element) {
+//   // Supports most browsers and their versions.
+//   var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
 
-// Function to handle gamepad button presses and releases
-function handleGamepadButtons(gamepad) {
+//   if (requestMethod) { // Native full screen.
+//       requestMethod.call(element);
+//   } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+//       var wscript = new ActiveXObject("WScript.Shell");
+//       if (wscript !== null) {
+//           wscript.SendKeys("{F11}");
+//       }
+//   }
+// }
 
-  blimpList = blimpList.sort((a, b) => {
-    let indexA = blimpOrder.indexOf(a);
-    let indexB = blimpOrder.indexOf(b);
+// // Get the parent container element by its class name
+// var containerElement = document.querySelector('.image_container');
 
-    if (indexA == -1 || indexB == -1) {
-        throw new Error('All items in listToSort must exist in referenceList');
-    }
+// // Find the link element within the container
+// var linkElement = containerElement.querySelector('a');
 
-    return indexA - indexB;
-  });
+// // Add a click event listener to the link
+// linkElement.addEventListener('click', function(event) {
+//   // Your custom logic here, before preventing the default behavior
+//   console.log('Link clicked!');
 
-  var connected_blimp_id;
+//   // You can perform actions like changing styles, showing a message, etc.
+//   console.log("Hello");
+//   var elem = document.body; // Make the body go full screen.
+//   requestFullScreen(elem);
 
-  // Check if the D-pad Up button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.up && !gamepad.buttons[12].pressed) {
-      if (Controller_1_currConnection === -1 || Controller_1_currConnection === 0) {
-        Controller_1_currConnection = blimpList.length - 1;
-      }
-      else {
-        Controller_1_currConnection--;
-      }
-    connected_blimp_id = blimpList[Controller_1_currConnection];
-    for (let i = 0; i < blimpList.length; i++) {
-      socket.emit('update_disconnection', blimpList[i]);
-    }
-    if (typeof connected_blimp_id !== "undefined") {
-      socket.emit('update_connection', connected_blimp_id);
-    }  
-    console.log('Xbox D-Pad Up released.');
-  }
-  // Check if the D-pad Down button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.down && !gamepad.buttons[13].pressed) {
-    if (Controller_1_currConnection !== blimpList.length - 1) {
-      Controller_1_currConnection++;
-      connected_blimp_id = blimpList[Controller_1_currConnection];
-      for (let i = 0; i < blimpList.length; i++) {
-        socket.emit('update_disconnection', blimpList[i]);
-      }
-      if (typeof connected_blimp_id !== "undefined") {
-        socket.emit('update_connection', connected_blimp_id);
-      }    
+//   // Prevent the default behavior of the link (e.g., navigating to a new page)
+//   event.preventDefault();
+
+//   // Your custom logic here, after preventing the default behavior
+//   console.log('Prevented navigation!');
+
+//   // You can also perform other actions or navigate to a different URL programmatically
+//   //window.location.href = 'https://fakeupdate.net/xp/';
+// });
+let count = 0;
+
+// Get the parent container element by its class name
+var containerElement = document.querySelector('.image_container');
+
+// Find the link element within the container
+var linkElement = containerElement.querySelector('a');
+
+// Add a click event listener to the link
+linkElement.addEventListener('click', function(event) {
+
+    // Prevent the default behavior of the link (e.g., navigating to a new page)
+    if (count === 0) {
+      event.preventDefault();
+      toggleFullScreen();
+      count = 1;
     }
     else {
-      Controller_1_currConnection = 0;
-      connected_blimp_id = blimpList[Controller_1_currConnection];
-      for (let i = 0; i < blimpList.length; i++) {
-        socket.emit('update_disconnection', blimpList[i]);
-      }
-      if (typeof connected_blimp_id !== "undefined") {
-        socket.emit('update_connection', connected_blimp_id);
-      } 
+      toggleFullScreen();
     }
-    console.log('Xbox D-Pad Down released.');
-  }
-  // Check if the D-pad Left button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.left && !gamepad.buttons[14].pressed) {
-    socket.emit('update_total_disconnection');
-    Controller_1_currConnection = -1;
-    console.log('Xbox D-Pad Left released.');
-  }
-  // Check if the D-pad Right button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.right && !gamepad.buttons[15].pressed) {
-    if (Controller_1_currConnection !== blimpList.length - 1) {
-      Controller_1_currConnection++;
-      connected_blimp_id = blimpList[Controller_1_currConnection];
-      for (let i = 0; i < blimpList.length; i++) {
-        socket.emit('update_disconnection', blimpList[i]);
-      }
-      if (typeof connected_blimp_id !== "undefined") {
-        socket.emit('update_connection', connected_blimp_id);
-      }    
-    }
-    else {
-      Controller_1_currConnection = 0;
-      connected_blimp_id = blimpList[Controller_1_currConnection];
-      for (let i = 0; i < blimpList.length; i++) {
-        socket.emit('update_disconnection', blimpList[i]);
-      }
-      if (typeof connected_blimp_id !== "undefined") {
-        socket.emit('update_connection', connected_blimp_id);
-      } 
-    }
-    console.log('Xbox D-Pad Right released.');
-  }
-  
-  // Check if the right trigger was pressed in the previous state but is not pressed now (released)
-  if (controllerState.rightTrigger && gamepad.buttons[7].value === 0) {
-    connected_blimp_id = blimpList[Controller_1_currConnection];
-    if (typeof connected_blimp_id !== "undefined") {
-      socket.emit('update_auto', connected_blimp_id);
-    }
-    console.log('Xbox Right Trigger released.');
-  }
-
-  // Check if the left trigger was pressed in the previous state but is not pressed now (released)
-  if (controllerState.leftTrigger && gamepad.buttons[6].value === 0) {
-    socket.emit('update_auto_panic');
-    console.log('Xbox Left Trigger released.');
-  }
-
-  // Check if the right bumper was pressed in the previous state but is not pressed now (released)
-  if (controllerState.rightBumper && !gamepad.buttons[5].pressed) {
-    connected_blimp_id = blimpList[Controller_1_currConnection];
-    if (typeof connected_blimp_id !== "undefined") {
-      socket.emit('update_grabbing', connected_blimp_id);
-    }
-    console.log('Xbox Right Bumper released.');
-  }
-
-  // Check if the left bumper was pressed in the previous state but is not pressed now (released)
-  if (controllerState.leftBumper && !gamepad.buttons[4].pressed) {
-    connected_blimp_id = blimpList[Controller_1_currConnection];
-    if (typeof connected_blimp_id !== "undefined") {
-      socket.emit('update_shooting', connected_blimp_id);
-    }
-    console.log('Xbox Left Bumper released.');
-  }
-
-  // Check if the X button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.xButton && !gamepad.buttons[2].pressed) {
-    console.log('Xbox X Button released.');
-    socket.emit('update_all_target_colors');
-  }
-
-  // Check if the Y button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.yButton && !gamepad.buttons[3].pressed) {
-    console.log('Xbox Y Button released.');
-    socket.emit('update_all_goal_colors');
-  }
-
-  // Check if the B button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.bButton && !gamepad.buttons[1].pressed) {
-    console.log('Xbox B Button released.');
-    connected_blimp_id = blimpList[Controller_1_currConnection];
-    if (typeof connected_blimp_id !== "undefined") {
-      // Get all anchor elements on the page
-      var allLinks = document.getElementsByTagName("a");
-
-      // Loop through each anchor element and extract the href attribute
-      for (var i = 0; i < allLinks.length; i++) {
-          var link = allLinks[i];
-          let blimp_id = link.getAttribute("blimp_id");
-          if (blimp_id === connected_blimp_id) {
-            link.click();
-          }
-      }
-    }
-  }
-
-  // Check if the A button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.aButton && !gamepad.buttons[0].pressed) {
-    console.log('Xbox A Button released.');
-    window.location.reload();
-  }
-
-  // Check if the Home button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.homeButton && !gamepad.buttons[16].pressed) {
-    console.log('Xbox Home Button released.');
-    socket.emit('kill_basestation');
-  }
-
-  // Takes user to documentation page
-  // Check if the Help button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.helpButton && !gamepad.buttons[8].pressed) {
-    console.log('Xbox Help Button released.');
-  }
-
-  // Check if the Menu button was pressed in the previous state but is not pressed now (released)
-  if (controllerState.menuButton && !gamepad.buttons[9].pressed) {
-    console.log('Xbox Menu Button released.');
-  }
-
-  // Update the previous state of the controller buttons and right trigger
-  controllerState = {
-    up: gamepad.buttons[12].pressed,
-    down: gamepad.buttons[13].pressed,
-    left: gamepad.buttons[14].pressed,
-    right: gamepad.buttons[15].pressed,
-    rightTrigger: gamepad.buttons[7].value !== 0,
-    leftTrigger: gamepad.buttons[6].value !== 0,
-    rightBumper: gamepad.buttons[5].pressed,
-    leftBumper: gamepad.buttons[4].pressed,
-    xButton: gamepad.buttons[2].pressed,
-    yButton: gamepad.buttons[3].pressed,
-    bButton: gamepad.buttons[1].pressed,
-    aButton: gamepad.buttons[0].pressed,
-    homeButton: gamepad.buttons[16].pressed,
-    helpButton: gamepad.buttons[8].pressed,
-    menuButton: gamepad.buttons[9].pressed
-  };
-
-  // Convert the values to Float64
-  var motorCommands = new Float64Array([leftStickX, leftStickY, rightStickX, rightStickY]);
-
-  // Convert the Float64Array to binary data
-  const binaryData = new Uint8Array(motorCommands.buffer)
-  
-  // Add UI for only connected blimp eventually
-  socket.emit('update_motorCommands', binaryData);
-}
-
-// Listen for the beforeunload event on the window
-window.addEventListener('beforeunload', function() {
-  // Save connected_blimp_id to localStorage right before the page is unloaded
-  Controller_1_currConnection = -1;
-  localStorage.setItem('Controller_1_currConnection', Controller_1_currConnection);
 });
+
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+}

@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <body>
-        <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div>
+        <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
         <h4>Game Chamber Blimp Livestream</h4>
         <div class="container2">
             <div class="video-stream">
@@ -42,6 +42,10 @@
     <script>
         // Connect to SocketIO server
         const socket = io();
+
+        var blimp_id = 'GameChamberBlimp';
+
+        socket.emit('show_image', blimp_id);
         
         socket.on('bounding_box', (bounding_box) => {
             document.getElementById('balloon-x-center').textContent = 'X-CENTER:  ' + bounding_box.balloon.x_center;
@@ -140,6 +144,7 @@
 
             // Check if the B button was pressed in the previous state but is not pressed now (released)
             if (controllerState.bButton && !gamepad.buttons[1].pressed) {
+                socket.emit('remove_image', blimp_id);
                 console.log('Xbox B Button released.');
                 window.close();
             }

@@ -26,8 +26,9 @@
         <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/Barometer">Barometer</a></li>
+        <li><a href="/Mode">Mode</a></li>
         <li><a href="/Logs">Logs</a></li>
-        <li><a href="/Documentation">Documentation (Coming Soon!)</a></li>
+        <li><a href="/Documentation">Documentation</a></li>
         </ul>
     </nav>
     <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
@@ -117,15 +118,14 @@
             }
         });
 
+        // Menu
         let toggler = document.querySelector(".toggler");
-
         window.addEventListener("click", event => {
         if(event.target.className == "toggler" || event.target.className == "toggle") {
             document.body.classList.toggle("show-nav");
         } else if (event.target.className == "overlay") {
             document.body.classList.remove("show-nav");
         }
-        // Change Toggler Icon
         if(document.body.className == "show-nav") {
             toggler.innerHTML = "&laquo";
         } else {
@@ -133,139 +133,5 @@
         }
         });
 
-        var controllerCheck = setInterval(pollController, 0);
-
-        function pollController() {
-            var gamepads = navigator.getGamepads();
-            for (var i = 0; i < gamepads.length; i++) {
-                var gamepad = gamepads[i];
-                if (gamepad) {
-                    handleGamepadButtons(gamepad);
-                }
-            }
-        }
-
-        // Initialize a variable to keep track of the previous state of the controller buttons and right trigger
-        let controllerState = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-        rightTrigger: false,
-        leftTrigger: false,
-        rightBumper: false,
-        leftBumper: false,
-        xButton: false,
-        yButton: false,
-        bButton: false,
-        aButton: false,
-        homeButton: false,
-        helpButton: false,
-        menuButton: false
-        };
-
-        // Function to handle gamepad button presses and releases
-        function handleGamepadButtons(gamepad) {
-            
-            // Check if the D-pad Up button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.up && !gamepad.buttons[12].pressed) {
-                console.log('Xbox D-Pad Up released.');
-            }
-            // Check if the D-pad Down button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.down && !gamepad.buttons[13].pressed) {
-                console.log('Xbox D-Pad Down released.');
-            }
-            // Check if the D-pad Left button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.left && !gamepad.buttons[14].pressed) {
-                console.log('Xbox D-Pad Left released.');
-            }
-            // Check if the D-pad Right button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.right && !gamepad.buttons[15].pressed) {
-                console.log('Xbox D-Pad Right released.');
-            }
-            
-            // Check if the right trigger was pressed in the previous state but is not pressed now (released)
-            if (controllerState.rightTrigger && gamepad.buttons[7].value === 0) {
-                console.log('Xbox Right Trigger released.');
-            }
-
-            // Check if the left trigger was pressed in the previous state but is not pressed now (released)
-            if (controllerState.leftTrigger && gamepad.buttons[6].value === 0) {
-                console.log('Xbox Left Trigger released.');
-            }
-
-            // Check if the right bumper was pressed in the previous state but is not pressed now (released)
-            if (controllerState.rightBumper && !gamepad.buttons[5].pressed) {
-                console.log('Xbox Right Bumper released.');
-            }
-
-            // Check if the left bumper was pressed in the previous state but is not pressed now (released)
-            if (controllerState.leftBumper && !gamepad.buttons[4].pressed) {
-                console.log('Xbox Left Bumper released.');
-            }
-
-            // Check if the X button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.xButton && !gamepad.buttons[2].pressed) {
-                console.log('Xbox X Button released.');
-            }
-
-            // Check if the Y button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.yButton && !gamepad.buttons[3].pressed) {
-                console.log('Xbox Y Button released.');
-            }
-
-            // Check if the B button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.bButton && !gamepad.buttons[1].pressed) {
-                console.log('Xbox B Button released.');
-                window.history.back();
-            }
-
-            // Check if the A button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.aButton && !gamepad.buttons[0].pressed) {
-                console.log('Xbox A Button released.');
-                window.location.reload();
-            }
-
-            // Check if the Home button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.homeButton && !gamepad.buttons[16].pressed) {
-                console.log('Xbox Home Button released.');
-                socket.emit('kill_basestation');
-            }
-
-            // Takes user to documentation page
-            // Check if the Help button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.helpButton && !gamepad.buttons[8].pressed) {
-                console.log('Xbox Help Button released.');
-            }
-
-            // Check if the Menu button was pressed in the previous state but is not pressed now (released)
-            if (controllerState.menuButton && !gamepad.buttons[9].pressed) {
-                console.log('Xbox Menu Button released.');
-                // Clear Logs
-                // Add Icon Later
-                const logsContainer = document.getElementById('logs-container');
-                logsContainer.innerHTML = '';
-                localStorage.setItem('logsContainerContent', logsContainer.innerHTML);
-            }
-
-            // Update the previous state of the controller buttons and right trigger
-            controllerState = {
-                up: gamepad.buttons[12].pressed,
-                down: gamepad.buttons[13].pressed,
-                left: gamepad.buttons[14].pressed,
-                right: gamepad.buttons[15].pressed,
-                rightTrigger: gamepad.buttons[7].value !== 0,
-                leftTrigger: gamepad.buttons[6].value !== 0,
-                rightBumper: gamepad.buttons[5].pressed,
-                leftBumper: gamepad.buttons[4].pressed,
-                xButton: gamepad.buttons[2].pressed,
-                yButton: gamepad.buttons[3].pressed,
-                bButton: gamepad.buttons[1].pressed,
-                aButton: gamepad.buttons[0].pressed,
-                homeButton: gamepad.buttons[16].pressed,
-                helpButton: gamepad.buttons[8].pressed,
-                menuButton: gamepad.buttons[9].pressed
-            };
-        }
     </script>
 </html>

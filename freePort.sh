@@ -20,3 +20,4 @@ else
     echo "Failed to terminate the process with PID $pid using port $port_number."
   fi
 fi
+echo ""

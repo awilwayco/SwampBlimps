@@ -1,13 +1,13 @@
 class Blimp:
     def __init__(self, blimp_id):
         # Blimp ID
-        self.blimp_id = blimp_id
+        self.id = blimp_id
 
         # Blimp Name (will be set by node handler)
-        self.blimp_name = None
+        self.name = None
 
         # Blimp Type
-        self.blimp_type = 0 # 0: Catching, 1: Attacking
+        self.type = 0 # 0: Catching, 1: Attacking
 
         # Auto 
         self.auto = False
@@ -16,7 +16,7 @@ class Blimp:
         self.killed = False
 
         # Motor Commands
-        self.motorCommands = [0.0, -0.0, 0.0, -0.0]
+        self.motor_commands = [0.0, -0.0, 0.0, -0.0]
 
         # Grabbing
         self.grabbing = False
@@ -44,8 +44,8 @@ class Blimp:
         8: scored
         """
 
-        # Connected status
-        self.connected = False  # Initially not connected
+        # Controlled status
+        self.selected = False  # Initially not selected
 
         # Blimp Livestream Current Frame
         self.frame = None
@@ -54,10 +54,10 @@ class Blimp:
         self.bounding_box = None
 
         # Barometer Value
-        self.barometer = 100700.0
+        self.barometer = 99668.2 # Competition Default Value
 
         # Calibrate Barometer
-        self.calibrateBarometer = False
+        self.calibrate_barometer = False
 
         # Height
         self.height = None
@@ -71,22 +71,27 @@ class Blimp:
         # Last Message
         self.log = None
 
+        # Show Image
+        self.show_image = False
+
+        self.frontend_update_auto = False
+
     def to_dict(self):
         return {
-            "blimp_id": self.blimp_id,
-            "blimp_name": self.blimp_name,
-            "blimp_type": self.blimp_type,
+            "blimp_id": self.id,
+            "blimp_name": self.name,
+            "blimp_type": self.type,
             "auto": self.auto,
             "killed": self.killed,
-            "motorCommands": self.motorCommands,
+            "motorCommands": self.motor_commands,
             "grabbing": self.grabbing,
             "shooting": self.shooting,
             "goal_color": self.goal_color,
             "target_color": self.target_color,
             "state_machine": self.state_machine,
-            "connected": self.connected,
+            "selected": self.selected,
             "barometer": self.barometer,
-            "calibrateBarometer": self.calibrateBarometer,
+            "calibrateBarometer": self.calibrate_barometer,
             "height": self.height,
             "z_velocity": self.z_velocity,
             "log": self.log
@@ -94,17 +99,17 @@ class Blimp:
 
     def update_dict(self, data_dict):
         if "blimp_id" in data_dict:
-            self.blimp_id = data_dict["blimp_id"]
+            self.id = data_dict["blimp_id"]
         if "blimp_name" in data_dict:
-            self.blimp_name = data_dict["blimp_name"]
+            self.name = data_dict["blimp_name"]
         if "blimp_type" in data_dict:
-            self.blimp_type = data_dict["blimp_type"]
+            self.type = data_dict["blimp_type"]
         if "auto" in data_dict:
             self.auto = data_dict["auto"]
         if "killed" in data_dict:
             self.killed = data_dict["killed"]
         if "motorCommands" in data_dict:
-            self.motorCommands = data_dict["motorCommands"]
+            self.motor_commands = data_dict["motorCommands"]
         if "grabbing" in data_dict:
             self.grabbing = data_dict["grabbing"]
         if "shooting" in data_dict:
@@ -115,8 +120,8 @@ class Blimp:
             self.target_color = data_dict["target_color"]
         if "state_machine" in data_dict:
             self.state_machine = data_dict["state_machine"]
-        if "connected" in data_dict:
-            self.connected = data_dict["connected"]   
+        if "selected" in data_dict:
+            self.selected = data_dict["selected"]   
         if "barometer" in data_dict:
             self.barometer = data_dict["barometer"]
         if "calibrateBarometer" in data_dict:
@@ -127,3 +132,4 @@ class Blimp:
             self.z_velocity = data_dict["z_velocity"]
         if "log" in data_dict:
             self.log = data_dict["log"]
+
