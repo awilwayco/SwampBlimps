@@ -62,7 +62,7 @@ In terms of communication between the frontend and backend for the basestation, 
 10. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages.
 
 ## Flashing Teensy Wirelessly Requirements
-- Teensy 4.0
+- Teensy 4.0 Microcontroller (https://www.pjrc.com/store/teensy40.html)
 - PlatformIO for VSCode (https://platformio.org/install/ide?install=vscode)
 - Teensy Loader CLI (https://www.pjrc.com/teensy/loader_cli.html)
 
