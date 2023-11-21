@@ -32,7 +32,7 @@ The basestation uses Python with the Flask framework for the backend and HTML an
 ## Communication
 The basestation uses a communication network called ROS 2 to publish and subscribe to data. When data is being published (sent) by a device with ROS 2, other devices with ROS 2 can subscribe (access) that data. For our use case, this allows the basestation to know when a blimp is online since a blimp ID is being published by the blimps, which the basestation subscribes to. This communication network allows for bidirectional communication between the basestation and blimps.
 
-In terms of communication between the frontend and backend for the basestation, we use Flask's SocketIO library in order to have ROS 2 data appear on our UI.
+In terms of communication between the frontend and backend for the basestation, we use Flask's SocketIO library to have ROS 2 data appear on our UI.
 <p align="center">
   
 ![Communication](https://github.com/awilwayco/SwampBlimps/assets/56363833/e5745c57-0006-4671-ab2f-39ad85e8a0d8)
@@ -50,12 +50,13 @@ In terms of communication between the frontend and backend for the basestation, 
 
 ## How to Use
 
-1. Run “./run.sh -o” within a terminal to startup basestation. 
-2. Connect a controller to the administrator's computer. 
-3. Activate a blimp to connect to the basestation by plugging in batteries for Orange Pi and Teensy. 
-4. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select which blimp to connect to. 
-5. As an administrator, select the corresponding goal color for catching blimps by toggling the "Goal" button by clicking it with a mouse or pressing “Y” on the controller. For attack blimps, they can toggle the “Target” button by clicking it with a mouse or pressing “X” on the controller. 
-6. Activate autonomous mode on the blimp by pressing “RT” on the controller. Press "LT" to send all the blimps into autonomous mode. 
-7. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using the left and right sticks on the controller. 
-8. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp. 
-9. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages. 
+1. Run “./run.sh” within a terminal to startup basestation.
+2. Click the URL link provided in the terminal to navigate to the basestation.
+3. Connect a controller to the administrator's computer. 
+4. Activate a blimp to connect to the basestation by plugging in batteries for Orange Pi and Teensy. 
+5. Connect a controller to the blimp by using the Xbox controller's d-pad’s up or down arrows to select which blimp to connect to. 
+6. As an administrator, select the corresponding goal color for catching blimps by toggling the "Goal" button by clicking it with a mouse or pressing “Y” on the controller. For attack blimps, they can toggle the “Target” button by clicking it with a mouse or pressing “X” on the controller. 
+7. Activate autonomous mode on the blimp by pressing “RT” on the controller. Press "LT" to send all the blimps into autonomous mode. 
+8. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using the left and right sticks on the controller. 
+9. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp. 
+10. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages. 
