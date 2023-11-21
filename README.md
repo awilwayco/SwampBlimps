@@ -75,7 +75,7 @@ In terms of communication between the frontend and backend for the basestation, 
 - Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
 - ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
 - YoloV5 installed on the device (https://github.com/ultralytics/yolov5)
-- Xdotool package installed on device (How to install xdotool ubuntu package on Ubuntu 20.04/Ubuntu 18.04/Ubuntu 19.04/Ubuntu 16.04 (zoomadmin.com))
+- Xdotool package installed on device ([How to install xdotool ubuntu package on Ubuntu 20.04/Ubuntu 18.04/Ubuntu 19.04/Ubuntu 16.04 (zoomadmin.com)](https://zoomadmin.com/HowToInstall/UbuntuPackage/xdotool)) 
 
 ## How to Startup Vision Code
 1.	In the Vision folder, run ./startVision.sh # with the ‘#’ being the number of the orange pi you want to flash. Please note that this code runs machine learning code that is not available on our GitHub that is not our code to disclose. Terminator is another program required to run this bash script. This script has also been made to run for specific hardware with static IP addresses for security reasons. The use of this bash script can be seen in the YouTube video we provided.
