@@ -41,14 +41,14 @@ In terms of communication between the frontend and backend for the basestation, 
 </p>
 </p>
 
-## Requirements
+## Basestation Requirements
 
 - A device with the Ubuntu 20.04 Operating System (https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)
 - Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
 - ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
 - Pip install the following packages: Rclpy, Flask, Flask-SocketIO, Simple-Websocket, OpenCV-Python, Pyserial, and Numpy
 
-## How to Use
+## How to Use Basestation
 
 1. Run “./run.sh” within a terminal to startup basestation.
 2. Click the URL link provided in the terminal to navigate to the basestation.
@@ -59,4 +59,21 @@ In terms of communication between the frontend and backend for the basestation, 
 7. Activate autonomous mode on the blimp by pressing “RT” on the controller. Press "LT" to send all the blimps into autonomous mode. 
 8. To maneuver manually, deactivate autonomous mode by pressing “RT” or "LT" again and using the left and right sticks on the controller. 
 9. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp. 
-10. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages. 
+10. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages.
+
+## Flashing Teensy Requirments
+- Teensy 4.0
+- PlatformIO for VSCode (https://platformio.org/install/ide?install=vscode)
+- Teensy Loader CLI (https://www.pjrc.com/teensy/loader_cli.html)
+
+## How to Flash Teensy Wirelessly
+1.	In the BlimpV8/BlimpV8_Teensy folder containing the Teensy code, run ./flashTeensy.sh # with the ‘#’ being the number of the orange pi you want to flash. Alternatively, you can run ./allFlashTeensys.sh to flash all Teensys that are currently powered on. Please note that this has been made to run for specific hardware with static IP addresses for security reasons.
+
+## Vision Code Requirements
+- A device with the Ubuntu 20.04 Operating System (https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)
+- Python 3.8.10 installed on the device (https://www.python.org/downloads/release/python-3810/)
+- ROS2-Foxy installed on the device (https://docs.ros.org/en/foxy/Installation.html)
+- YoloV5 installed on the device (https://github.com/ultralytics/yolov5)
+
+## How to Startup Vision Code
+1.	In the Vision folder, run ./startVision.sh # with the ‘#’ being the number of the orange pi you want to flash. Please note that this code runs machine learning code that is not available on our GitHub that is not our code to disclose. Terminator is another program required to run this bash script. This script has also been made to run for specific hardware with static IP addresses for security reasons. The use of this bash script can be seen in the YouTube video we provided.
