@@ -25,7 +25,7 @@
         <li><a href="/Barometer">Barometer</a></li>
         <li><a href="/Mode">Mode</a></li>
         <li><a href="/Logs">Logs</a></li>
-        <li><a href="/Documentation">Documentation</a></li>
+        <li><a href="/Checklist">Pre-Flight Checklist</a></li>
         </ul>
     </nav>
     <!-- <div class="left-corner-text"> Return to Main Page <img  src="static/images/Xbox_Button_B.png" width="20" height="20" ></img> </div> -->
@@ -43,28 +43,12 @@
         // Connect to SocketIO server
         const socket = io();
 
+        var blimps;
+
         socket.on('mode', (all_blimps) => {
+            console.log("Updated")
             update_mode(all_blimps);
         });
-
-        // socket.on('remove', (blimp_id) => {
-        //     // Debugging
-        //     console.log(blimp_id)
-
-        //     remove_blimp(blimp_id);
-        // });
-
-        // function remove_blimp(blimp_id) {
-        //     const blimpsContainer = document.getElementById('blimps-container');
-        //     const rows = {};
-        //     blimpsContainer.querySelectorAll('.blimp-row').forEach(row => {
-        //         rows[row.dataset.blimpName] = row;
-        //         console.log(row.dataset.blimpName);
-        //         if (row.dataset.blimpName == blimp_id) {
-        //             row.remove();
-        //         }
-        //     });
-        // }
 
         // Add or update the all auto button event listener
         const allAutoButton = document.getElementById('all-auto-button');
@@ -172,17 +156,28 @@
                 } else {
                     // If the row already exists, find the button in it
                     name = row.querySelector(`.blimp-name`);
-                    auto_button = row.querySelector(`.blimp-auto`);
-                    manual_button = row.querySelector(`.blimp-manual`);
                     mode = row.querySelector('.blimp-mode');
                     connected = row.querySelector('.blimp-connected');
+                    
+                    auto_button = document.getElementById(`auto_button_${key}`);
+                    manual_button = document.getElementById(`manual_button_${key}`);
+                    if (blimps[key]["auto"] !== null) {
+                        if (blimps[key]["auto"] === true) {
+                            auto_button.style.backgroundColor = 'green';
+                            manual_button.style.backgroundColor = 'red';
+                        }
+                        else {
+                            auto_button.style.backgroundColor = 'red';
+                            manual_button.style.backgroundColor = 'green';
+                        }
+                    }
                 }
                 // Set or update the mode text content
                 if (mode !== null && blimps[key]["auto"] !== null) {
                     mode.textContent = 'Mode: ' + blimps[key]["auto"];
                 }
                 // Set or update the connected blimp
-                if (blimps[key]["connected"] === true) {
+                if (blimps[key]["selected"] === true) {
                     name.style.color = 'blue';
                 }
                 else {

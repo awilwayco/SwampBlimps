@@ -212,7 +212,7 @@ class Basestation(Node):
         global blimps
 
         # Debugging
-        #print(msg.data)
+        self.get_logger().info(msg.data)
 
         # Identify message is just a string with the blimp ID
         blimp_id = msg.data
@@ -1247,9 +1247,9 @@ def modePage():
 def logsPage():
     return render_template('Logs.html')
 
-@app.route('/Documentation')
+@app.route('/Checklist')
 def docsPage():
-    return render_template('Documentation.html')
+    return render_template('Checklist.html')
 
 # ROS 2 Thread
 def ros_node():

@@ -151,6 +151,17 @@ h8 {
   margin-bottom: 20px;
   word-wrap: break-word; /* This will ensure that the text wraps within the container */
 }
+h9 {
+  /* text-align: center; */
+  display: block;
+  font-size: 22px;
+  margin-left: 20%; /* Left margin */
+  margin-right: 20%; /* Right margin */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  word-wrap: break-word; /* This will ensure that the text wraps within the container */
+  font-weight: bold;
+}
 .left-corner-text {
   font-size: 20px;
   font-weight: bold;
