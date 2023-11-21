@@ -61,7 +61,7 @@ In terms of communication between the frontend and backend for the basestation, 
 9. Click the "View Stream" hyperlink for the corresponding blimp to navigate to the livestream for that blimp. 
 10. Use the sidebar menu to navigate to the Main, Logs, Barometer, or Documentation pages.
 
-## Flashing Teensy Requirments
+## Flashing Teensy Wirelessly Requirements
 - Teensy 4.0
 - PlatformIO for VSCode (https://platformio.org/install/ide?install=vscode)
 - Teensy Loader CLI (https://www.pjrc.com/teensy/loader_cli.html)
